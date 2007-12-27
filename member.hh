@@ -18,6 +18,7 @@ class member
 		sex_ get_sex () const;
 		health_ get_health () const;
 		int get_hunting_skill () const;
+		string get_name () const;
 		member (sex_ its_sex, string its_name);
 };
 #endif
