@@ -19,7 +19,6 @@ int main (int argc, char **argv)
 
 void main_loop ()
 {
-	//cout << "Please pick an option:\n";
 }
 
 party* init_recruit ()
