@@ -15,7 +15,6 @@ party::party () : food(100), ammo (50), oxen (0), money (1000)
 
 void party::init_party ()
 {
-	bool is_done = false;
 	short choice = 0;
 	sex_ their_sex;
 	string name;
@@ -57,7 +56,7 @@ void party::init_party ()
 		"2) Food ($" << PRICE_OF_FOOD << " / 50lb)" <<
 			"\t (You have " << food << "lbs)\n" <<
 		"3) Ammo ($" << PRICE_OF_AMMO << " / 10lb)" <<
-			"\t (You have " << ammo << ")\n";
+			"\t (You have " << ammo << ")\n" <<
 		"0) Done\n";
 	cout << "\nYou have $" << money << endl;
 	cout << select_one;

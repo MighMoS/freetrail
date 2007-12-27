@@ -1,5 +1,7 @@
 #ifndef COMMON
 #define COMMON
+#include <string>
+using std::string;
 
 enum sex_ {MALE, FEMALE};
 enum health_ {DEAD, DYING, POOR, FAIR, GOOD, EXCELLENT};

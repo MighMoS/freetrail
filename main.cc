@@ -1,24 +1,20 @@
 #include <iostream>
 
+#include "main.hh"
 #include "party.hh"
+#include "world.hh"
 
 using std::cin;
 using std::cout;
 using std::endl;
 
-void main_loop ();
-party* init_recruit ();
-
 int main (int argc, char **argv)
 {
 	party* the_party;
+	world* the_world = new world (75); //XXX: Replace with randomness
 	the_party = init_recruit ();
-	main_loop();
-	return 0;
-}
 
-void main_loop ()
-{
+	return 0;
 }
 
 party* init_recruit ()
