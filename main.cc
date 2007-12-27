@@ -24,7 +24,7 @@ void main_loop ()
 
 party* init_recruit ()
 {
-	party* some_party;
+	party* some_party = new party;
 	some_party->init_party();
 	return some_party;
 }

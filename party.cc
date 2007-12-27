@@ -20,5 +20,7 @@ void party::init_party ()
 		their_sex = FEMALE;
 	cout << "What is " << (their_sex == MALE ? "his " : "her ") << "name? ";
 	cin >> name;
+
+	members.push_back (member(their_sex, name));
 }
 
