@@ -11,8 +11,10 @@ class party
 	int food; // in LB
 	int ammo; // in shots
 	int oxen;
+	int money;
 
 	public:
 	void init_party ();
+	party();
 };
 #endif 
