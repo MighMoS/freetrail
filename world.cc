@@ -107,7 +107,7 @@ static void parse_locations(vector<location>& map, char* filename = "map.ini")
 }
 
 world::world(int temp, weather conditions) : temperature(temp), 
-	the_weather(conditions), distance_travelled = 0;
+	the_weather(conditions)
 {
 	parse_locations(map);
 }

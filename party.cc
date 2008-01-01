@@ -10,7 +10,8 @@ const int PRICE_OF_OXEN = 175;
 const int PRICE_OF_FOOD = 25;
 const int PRICE_OF_AMMO = 10;
 
-party::party () : food(100), ammo (50), oxen (0), money (1000)
+party::party () : food(100), ammo (50), oxen (0), money (1000), 
+	distance_travelled (0)
 {}
 
 void party::init_party ()
@@ -40,16 +41,18 @@ add_members:
 	cin >> choice;
 	}
 	while (choice == 1);
+	cout << horizrule;
 
 	vector<member>::iterator iter;
-	cout << "\nYou have the following people in your party:";
+	cout << "You have the following people in your party:\n";
 	for (iter = members.begin(); iter != members.end(); iter++)
 		cout << "\n\t" << iter->get_name();
-	cout << "\nAre you sure this is it?\n1) Yes\n2) No\n";
+	cout << "\n\nAre you sure this is it?\n1) Yes\n2) No\n";
 	cout << select_one;
 	cin >> choice;
 	if (choice == 2)
 		goto add_members;
+	cout << horizrule;
 
 	// We call shop first at init party
 	shop();
