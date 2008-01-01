@@ -2,6 +2,10 @@
 #define WORLD
 #include <vector>
 using std::vector;
+#ifdef DEBUG
+#include <iostream>
+using std::ostream;
+#endif
 
 #include "party.hh"
 #include "common.hh"
@@ -16,6 +20,9 @@ class location
 	bool can_recruit;
 	bool can_hunt;
 	location(const string& its_name);
+#ifdef DEBUG
+	friend ostream& operator <<(ostream& os, const location& loc);
+#endif
 };
 
 class world
@@ -26,7 +33,6 @@ class world
 	weather the_weather;
 	public:
 	world(int temp, weather conditions=SUNNY);
-	~world();
 	int get_temp() const;
 	weather get_conditions() const;
 	void set_temp(int);
