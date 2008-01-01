@@ -15,6 +15,7 @@ class party
 
 	public:
 	void init_party ();
+	void shop ();
 	party();
 };
 #endif 
