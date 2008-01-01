@@ -14,6 +14,12 @@ int main (int argc, char **argv)
 	world* the_world = new world (75); //XXX: Replace with randomness
 	the_party = init_recruit ();
 
+	if (the_party == NULL || the_world == NULL)
+	{
+		std::cerr << "Could not allocate resources.\n";
+		exit (1);
+	}
+
 	delete the_world;
 	delete the_party;
 	return 0;
