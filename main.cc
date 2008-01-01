@@ -14,6 +14,8 @@ int main (int argc, char **argv)
 	world* the_world = new world (75); //XXX: Replace with randomness
 	the_party = init_recruit ();
 
+	delete the_world;
+	delete the_party;
 	return 0;
 }
 
