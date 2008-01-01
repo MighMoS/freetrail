@@ -30,8 +30,9 @@ add_members:
 		their_sex = MALE;
 	else
 		their_sex = FEMALE;
+	cin.ignore();
 	cout << "What is " << (their_sex == MALE ? "his " : "her ") << "name? ";
-	cin >> name;
+	getline (cin, name);
 
 	members.push_back (member(their_sex, name));
 	cout << "\nDo you wish to have another member?\n1) Yes\n2) No\n";
@@ -44,10 +45,10 @@ add_members:
 	cout << "\nYou have the following people in your party:";
 	for (iter = members.begin(); iter != members.end(); iter++)
 		cout << "\n\t" << iter->get_name();
-	cout << "\nAre you sure this is it?\n1) Yes\n2) No";
+	cout << "\nAre you sure this is it?\n1) Yes\n2) No\n";
 	cout << select_one;
 	cin >> choice;
-	if (choice == 1)
+	if (choice == 2)
 		goto add_members;
 
 	// We call shop first at init party
@@ -56,6 +57,7 @@ add_members:
 
 void party::shop()
 {
+	short choice;
 	do
 	{
 	cout << "\nWhat would you like to buy?\n" <<
