@@ -9,6 +9,7 @@ using std::endl;
 
 /* Runs the party through one 'instance
  * Takes a party, and is free to modify it as it sees fit
+ *   That's bad, I know
  */
 void run_instance(party* the_party, world* the_world)
 {
