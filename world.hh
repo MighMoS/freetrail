@@ -29,6 +29,7 @@ class world
 	vector<location> map;
 	int temperature; // In degrees F
 	weather the_weather;
+
 	public:
 	world(int temp, weather conditions=SUNNY);
 	int get_temp() const;

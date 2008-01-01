@@ -95,3 +95,8 @@ string member::get_name () const
 {
 	return name;
 }
+
+int party::operator + (int mileage)
+{
+	return distance_travelled + mileage;
+}

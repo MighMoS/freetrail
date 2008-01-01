@@ -31,10 +31,12 @@ class party
 	int ammo; // in shots
 	int oxen;
 	int money;
+	int distance_travelled;
 
 	public:
 	void init_party ();
 	void shop ();
 	party();
+	int operator + (int mileage);
 };
 #endif 

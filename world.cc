@@ -73,10 +73,7 @@ static void parse_locations(vector<location>& map, char* filename = "map.ini")
 			string temp_name = buffer;
 			temp_name.erase(temp_name.begin());
 			temp_name.erase(temp_name.end()-1);
-#ifdef DEBUG
-			cout << "Pushing back new location with name: " 
-				<< temp_name << endl;
-#endif
+
 			location temp_location (temp_name);
 			map.push_back(temp_location);
 			continue;
@@ -110,7 +107,7 @@ static void parse_locations(vector<location>& map, char* filename = "map.ini")
 }
 
 world::world(int temp, weather conditions) : temperature(temp), 
-	the_weather(conditions)
+	the_weather(conditions), distance_travelled = 0;
 {
 	parse_locations(map);
 }
