@@ -1,4 +1,6 @@
 #include <iostream>
+using std::cout;
+using std::endl;
 #include <fstream>
 #include <string>
 using std::string;
@@ -8,12 +10,9 @@ using std::vector;
 #include "common.hh"
 #include "world.hh"
 
-static void parse_locations(vector<location>* map, char* filename = "map.ini")
+static void parse_locations(vector<location>& map, char* filename = "map.ini")
 {
 	string location_name, buffer;
-	location* temp_loc;
-	int loc_distance;
-	bool can_buy, can_sell, can_hunt;
 	std::ifstream mapfile;
 	mapfile.open (filename);
 	if (!mapfile)
@@ -23,12 +22,30 @@ static void parse_locations(vector<location>* map, char* filename = "map.ini")
 	}
 	while (getline (mapfile, buffer))
 	{
-		if (buffer[0] == '[' && buffer[buffer.length() - 1 ] == ']')
+		if (buffer.length() == 0) // Blank line
+			continue;
+		string::iterator last_char = buffer.end();
+		last_char--;
+#ifdef DEBUG
+		cout << "Got buffer of size " << buffer.length() <<endl;
+		cout << "\tIt read "<< buffer << endl;
+		cout << "\tBuffer[0] is " << buffer[0] 
+			<< "\tand buffer[last] is " << *last_char << endl;
+#endif
+
+		// We got a name
+		if (buffer[0] == '[' && *last_char == ']')
 		{
-			string uncut_name = buffer;
-			uncut_name.erase(0, 1); // Trim off [
-			uncut_name.erase(uncut_name.length() - 1, 1); // Trim off ]
-			temp_loc = new location (uncut_name);
+			string temp_name = buffer;
+			temp_name.erase(temp_name.begin());
+			temp_name.erase(temp_name.end()-1);
+#ifdef DEBUG
+			cout << "Pushing back new location with name: " 
+				<< temp_name << endl;
+#endif
+			location temp_location (temp_name);
+			map.push_back(temp_location);
+			continue;
 		}
 	}
 }
@@ -41,8 +58,6 @@ world::world(int temp, weather conditions) : temperature(temp),
 
 world::~world()
 {
-	if (map)
-		delete [] map;
 }
 
 int world::get_temp () const

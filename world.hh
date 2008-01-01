@@ -9,7 +9,7 @@ using std::vector;
 class location
 {
 	public:
-	const string name;
+	string name;
 	int distance;
 	bool can_buy;
 	bool can_sell;
@@ -21,7 +21,7 @@ class location
 class world
 {
 	private:
-	vector<location>* map;
+	vector<location> map;
 	int temperature; // In degrees F
 	weather the_weather;
 	public:
