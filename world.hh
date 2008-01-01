@@ -15,9 +15,7 @@ class location
 	public:
 	string name;
 	int distance;
-	bool can_buy;
-	bool can_sell;
-	bool can_recruit;
+	bool is_outpost;
 	bool can_hunt;
 	location(const string& its_name);
 #ifdef DEBUG

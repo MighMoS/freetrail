@@ -7,7 +7,6 @@ using std::string;
 using std::vector;
 
 #include "common.hh"
-#include "member.hh"
 
 class member
 {
