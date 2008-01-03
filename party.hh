@@ -21,7 +21,7 @@ class member
 		health_ get_health () const;
 		int get_hunting_skill () const;
 		string get_name () const;
-		member (sex_ its_sex, string its_name);
+		member (const sex_ its_sex, const string& its_name);
 };
 
 class party
@@ -32,11 +32,15 @@ class party
 	int oxen;
 	int money;
 	int distance_travelled;
+	int speed;
 
 	public:
+	int get_speed () const;
+	int get_distance () const;
+	void add_distance (const int mileage);
 	void init_party ();
 	void shop ();
+
 	party();
-	int operator + (int mileage);
 };
 #endif 

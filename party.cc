@@ -88,7 +88,26 @@ void party::shop()
 	cout << "You begin your journey...\n";
 }
 
-member::member (sex_ its_sex, string its_name)
+/* In the future this will calculate speed base on some formula
+ *   I'm thinking (oxen * 15)-(weight * 0.3), or something of that nature
+ * Right now, just travel us oxen * 15
+ */
+int party::get_speed() const
+{
+	return oxen * 15;
+}
+
+int party::get_distance() const
+{
+	return distance_travelled;
+}
+
+void party::add_distance (const int mileage)
+{
+	distance_travelled += mileage;
+}
+
+member::member (const sex_ its_sex, const string& its_name)
 {
         sex = its_sex;
         name = its_name;
@@ -99,7 +118,3 @@ string member::get_name () const
 	return name;
 }
 
-int party::operator + (int mileage)
-{
-	return distance_travelled + mileage;
-}
