@@ -49,7 +49,7 @@ static inline string get_field_value (const string& buffer)
  *      appropriate field of the last entry
  *   Else the string is ignored, and a warning is printed out.
  */
-static void parse_locations(vector<location>& map, char* filename = "map.ini")
+static void parse_locations(vector<location>& map, const char filename[] = "map.ini")
 {
 	string location_name, buffer;
 	std::ifstream mapfile;
@@ -106,8 +106,8 @@ static void parse_locations(vector<location>& map, char* filename = "map.ini")
 #endif
 }
 
-world::world(int temp, weather conditions) : temperature(temp), 
-	the_weather(conditions)
+world::world(const int temp, const weather conditions) : 
+	temperature(temp), the_weather(conditions)
 {
 	parse_locations(map);
 }
@@ -122,12 +122,12 @@ weather world::get_conditions () const
 	return the_weather;
 }
 
-void world::set_temp (int k)
+void world::set_temp (const int k)
 {
 	temperature = k;
 }
 
-void world::set_conditions (weather k)
+void world::set_conditions (const weather k)
 {
 	the_weather = k;
 }

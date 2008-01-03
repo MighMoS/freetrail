@@ -30,11 +30,11 @@ class world
 	weather the_weather;
 
 	public:
-	world(int temp, weather conditions=SUNNY);
+	world(const int temp, const weather conditions=SUNNY);
 	int get_temp() const;
 	weather get_conditions() const;
-	void set_temp(int);
-	void set_conditions(weather);
+	void set_temp(const int);
+	void set_conditions(const weather);
 };
 
 #endif
