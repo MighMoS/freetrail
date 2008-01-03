@@ -7,7 +7,6 @@ using std::vector;
 using std::ostream;
 #endif
 
-#include "party.hh"
 #include "common.hh"
 
 class location

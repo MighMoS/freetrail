@@ -14,6 +14,11 @@ party::party () : food(100), ammo (50), oxen (0), money (1000),
 	distance_travelled (0)
 {}
 
+/* Initializes the party with members.
+ * The user is prompted for player's sex and names, and they are added.
+ * Once the user is done, we confirm to make sure
+ * XXX: Presently shop() is called, ideally we would call this elsewhere
+ */
 void party::init_party ()
 {
 	short choice = 0;
@@ -85,7 +90,6 @@ void party::shop()
 	} // switch
 	} //do ... while()
 	while (choice);
-	cout << "You begin your journey...\n";
 }
 
 /* In the future this will calculate speed base on some formula
