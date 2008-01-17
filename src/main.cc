@@ -3,6 +3,7 @@
 #include "main.hh"
 #include "party.hh"
 #include "world.hh"
+#include "journey.hh"
 
 using std::cin;
 using std::cout;
@@ -18,6 +19,11 @@ int main (int argc, char **argv)
 	{
 		std::cerr << "Could not allocate resources.\n";
 		exit (1);
+	}
+
+	while (the_world->get_next_loc())
+	{
+		run_instance(the_party, the_world);
 	}
 
 	delete the_world;

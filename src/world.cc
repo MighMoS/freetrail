@@ -132,6 +132,16 @@ void world::set_conditions (const weather k)
 	the_weather = k;
 }
 
+location* world::get_curr_loc()
+{
+	return &map[0];
+}
+
+location* world::get_next_loc()
+{
+	return &map[1];
+}
+
 location::location(const string& its_name) : name(its_name) {};
 
 std::ostream& operator << (std::ostream& os, const location& loc)

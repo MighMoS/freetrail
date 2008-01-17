@@ -35,6 +35,9 @@ class world
 	weather get_conditions() const;
 	void set_temp(const int);
 	void set_conditions(const weather);
+
+	location* get_next_loc();
+	location* get_curr_loc();
 };
 
 #endif
