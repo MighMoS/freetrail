@@ -13,7 +13,7 @@ class location
 {
 	public:
 	string name;
-	int distance;
+	unsigned int distance;
 	bool is_outpost;
 	bool can_hunt;
 	location(const string& its_name);
