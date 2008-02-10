@@ -12,7 +12,9 @@ using std::endl;
 int main (int argc, char **argv)
 {
 	party* the_party;
-	world* the_world = new world (75); //XXX: Replace with randomness
+	world* the_world;
+	the_world  = new world (75); //XXX: Replace with randomness
+	party* some_party = new party;
 	the_party = init_recruit ();
 
 	if (the_party == NULL || the_world == NULL)
@@ -33,7 +35,6 @@ int main (int argc, char **argv)
 
 party* init_recruit ()
 {
-	party* some_party = new party;
 	some_party->init_party();
 	return some_party;
 }

@@ -12,7 +12,7 @@ using std::vector;
 #include "world.hh"
 
 /* Takes a field to search, and a filename.  
- * Makes sure that nothing funnny is going on.
+ * Makes sure that nothing funny is going on.
  */
 static inline bool check_field(const char field[], const string& buffer)
 {
@@ -20,7 +20,7 @@ static inline bool check_field(const char field[], const string& buffer)
 	if (buffer.find(field) == string::npos)
 		return false;
 
-	for (int i = 0; i < sizeof(field) - 1; i++)
+	for (unsigned int i = 0; i < sizeof(field) - 1; i++)
 	{
 		if (buffer[i] != field[i])
 			return false;
@@ -41,8 +41,8 @@ static inline string get_field_value (const string& buffer)
 	return value;
 }
 /* Utility function for parsing our map file.
- * Reads in lines one at a time and then performes the following actions
- * based on the cotents of getline():
+ * Reads in lines one at a time and then performs the following actions
+ * based on the contents of getline():
  *   If the string is blank, ignore it, get another one
  *   If the string begins with [ or ] it processed as a new entry
  *   If the string contains Buy, Hunt, or Distance, it is added to the 

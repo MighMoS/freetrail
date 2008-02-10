@@ -12,9 +12,9 @@ using std::endl;
  * Takes a party, and is free to modify it as it sees fit
  *   That's bad, I know
  * Steps: 
- *   Add distance travelled for that [period of time]
- *   Stop at outposts, if nessisary (and end)
- *   Otherwise, run random events (sickness, etc), and present options
+ *   Add distance traveled for that [period of time]
+ *   Stop at outposts, if necessary (and end)
+ *   Otherwise, run random events (sickness, etc.), and present options
  */
 void run_instance(party* the_party, world* the_world)
 {
@@ -28,7 +28,7 @@ void run_instance(party* the_party, world* the_world)
 		the_party->add_distance (speed);
 	else
 		speed = next_landmark->distance - the_party->get_distance();
-	cout << "You travelled " << speed << " miles today.\n";
+	cout << "You traveled " << speed << " miles today.\n";
 
 	if (the_party->get_distance() == current_landmark->distance)
 	{
