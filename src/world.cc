@@ -40,6 +40,7 @@ static inline string get_field_value (const string& buffer)
 	value.erase(chop_range, chop_range + 3);
 	return value;
 }
+
 /* Utility function for parsing our map file.
  * Reads in lines one at a time and then performs the following actions
  * based on the contents of getline():
@@ -147,8 +148,8 @@ location::location(const string& its_name) : name(its_name) {};
 std::ostream& operator << (std::ostream& os, const location& loc)
 {
 	os << "\n  Name: " << loc.name;
-	os << "\n\tIs an Outpost: " << loc.is_outpost ? "Yes" : "No";
-	os << "\n\tCan Hunt: " << loc.can_hunt ? "Yes" : "No";
+	os << "\n\tIs an Outpost: " << (loc.is_outpost ? "Yes" : "No");
+	os << "\n\tCan Hunt: " << (loc.can_hunt ? "Yes" : "No");
 	return os << "\n\tDistance: " << loc.distance << endl;
 }
 

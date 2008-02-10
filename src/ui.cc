@@ -1,6 +1,9 @@
 #include <iostream>
 #include "ui.hh"
 
+/* Waits the user to press a key. This is used to give the illusion of 
+ * ``slowly progressing''.
+ */
 void user_interface::wait_for_key()
 {
 	char ch;

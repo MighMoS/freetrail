@@ -38,18 +38,17 @@ void journey::run_instance()
 	bool reached_landmark;
 
 	const location* current_landmark = the_world->get_curr_loc();
-	//const location* next_landmark = the_world->get_next_loc();
 
 	// Don't run past an outpost
 	speed = the_party->get_speed();
-	if (journey::get_distance() > speed)
+	if (journey::get_remaining_distance() > speed)
 	{
 		distance_traveled = speed;
 		reached_landmark = false;
 	}
 	else
 	{
-		distance_traveled = journey::get_distance();
+		distance_traveled = journey::get_remaining_distance();
 		reached_landmark = true;
 	}
 	the_party->add_distance(speed);
@@ -59,7 +58,7 @@ void journey::run_instance()
 
 	if (reached_landmark)
 	{
-		cout << "You've arrived at " << current_landmark->name;
+		cout << "You've arrived at " << current_landmark->name << endl;
 		user_interface::wait_for_key();
 		journey::stop_and_shop();
 		return;
@@ -84,7 +83,7 @@ void journey::run_instance()
  * real landmark.
  */
 // ToDO: This should be fixed to not really need parameters
-const unsigned int journey::get_distance()
+const unsigned int journey::get_remaining_distance()
 {
 	return (the_world->get_next_loc()->distance - the_party->get_distance());
 }

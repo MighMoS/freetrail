@@ -36,7 +36,9 @@ add_members:
 		their_sex = MALE;
 	else
 		their_sex = FEMALE;
-	cin.ignore();
+
+	cin.ignore(); // Needed to avoid getline screwing up
+
 	cout << "What is " << (their_sex == MALE ? "his " : "her ") << "name? ";
 	getline (cin, name);
 
@@ -56,13 +58,15 @@ add_members:
 	cout << select_one;
 	cin >> choice;
 	if (choice == 2)
-		goto add_members;
+		goto add_members; // Goto avoids horrible nested logic. 
 	cout << horizrule;
 
 	// We call shop first at init party
 	shop();
 }
 
+/* Offers the party a chance to buy stuffs. 
+ */
 void party::shop()
 {
 	short choice;
