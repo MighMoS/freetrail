@@ -23,10 +23,11 @@ int main (int argc, char **argv)
 	}
 
 	the_party->init_party();
+	journey::init(the_party, the_world);
 
 	while (the_world->get_next_loc())
 	{
-		journey::run_instance(the_party, the_world);
+		journey::run_instance();
 	}
 
 	delete the_world;

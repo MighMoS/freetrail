@@ -9,6 +9,19 @@ using std::endl;
 #include "world.hh"
 #include "journey.hh"
 
+/* Initializes our journey class so that we don't have to keep passing
+ * in party and world pointers. 
+ */
+// TODO: Ideally this function would do any other initialization that's needed,
+// but we're not there, yet.
+world* journey::the_world = NULL;
+party* journey::the_party = NULL;
+void journey::init(party* _party,  world* _world)
+{
+	the_party = _party;
+	the_world = _world;
+}
+
 /* Runs the party through one 'instance
  * Takes a party, and is free to modify it as it sees fit
  *   That's bad, I know
@@ -17,7 +30,7 @@ using std::endl;
  *   Stop at outposts, if necessary (and end)
  *   Otherwise, run random events (sickness, etc.), and present options
  */
-void journey::run_instance(party* the_party, world* the_world)
+void journey::run_instance()
 {
 	unsigned int speed;
 	unsigned int distance_traveled;
@@ -28,14 +41,14 @@ void journey::run_instance(party* the_party, world* the_world)
 
 	// Don't run past an outpost
 	speed = the_party->get_speed();
-	if (journey::get_distance(the_party, the_world) > speed)
+	if (journey::get_distance() > speed)
 	{
 		distance_traveled = speed;
 		reached_landmark = false;
 	}
 	else
 	{
-		distance_traveled = journey::get_distance(the_party, the_world);
+		distance_traveled = journey::get_distance();
 		reached_landmark = true;
 	}
 	the_party->add_distance(speed);
@@ -45,7 +58,7 @@ void journey::run_instance(party* the_party, world* the_world)
 	if (reached_landmark)
 	{
 		cout << "You've arrived at " << current_landmark->name;
-		journey::stop_and_shop(the_party, the_world);
+		journey::stop_and_shop();
 		return;
 	}
 
@@ -68,12 +81,12 @@ void journey::run_instance(party* the_party, world* the_world)
  * real landmark.
  */
 // ToDO: This should be fixed to not really need parameters
-const unsigned int journey::get_distance(party* the_party, world* the_world)
+const unsigned int journey::get_distance()
 {
 	return (the_world->get_next_loc()->distance - the_party->get_distance());
 }
 
-void journey::stop_and_shop(party* the_party, world* the_world)
+void journey::stop_and_shop()
 {
 	the_world->pop_curr_loc();
 	the_party->shop();

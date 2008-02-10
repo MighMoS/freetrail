@@ -6,11 +6,14 @@
 class journey
 {
 	private:
-	static const unsigned int get_distance(party* the_party, world* the_world);
+	static const unsigned int get_distance();
+	static world* the_world;
+	static party* the_party;
 
 	public:
-	static void run_instance(party* the_party, world* the_world);
-	static void stop_and_shop(party* the_party, world* the_world);
+	static void init(party* _party, world* _world);
+	static void run_instance();
+	static void stop_and_shop();
 };
 
 #endif
