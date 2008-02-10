@@ -5,9 +5,10 @@ using std::cin;
 using std::endl;
 
 #include "common.hh"
-#include "party.hh"
-#include "world.hh"
 #include "journey.hh"
+#include "party.hh"
+#include "ui.hh"
+#include "world.hh"
 
 /* Initializes our journey class so that we don't have to keep passing
  * in party and world pointers. 
@@ -54,10 +55,12 @@ void journey::run_instance()
 	the_party->add_distance(speed);
 
 	cout << "You traveled " << distance_traveled << " miles today.\n";
+	user_interface::wait_for_key();
 
 	if (reached_landmark)
 	{
 		cout << "You've arrived at " << current_landmark->name;
+		user_interface::wait_for_key();
 		journey::stop_and_shop();
 		return;
 	}
