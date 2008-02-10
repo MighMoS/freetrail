@@ -7,6 +7,7 @@ using std::endl;
 #include "common.hh"
 #include "party.hh"
 #include "world.hh"
+#include "journey.hh"
 
 /* Runs the party through one 'instance
  * Takes a party, and is free to modify it as it sees fit
@@ -16,7 +17,7 @@ using std::endl;
  *   Stop at outposts, if necessary (and end)
  *   Otherwise, run random events (sickness, etc.), and present options
  */
-void run_instance(party* the_party, world* the_world)
+void journey::run_instance(party* the_party, world* the_world)
 {
 	short speed;
 	const location* current_landmark = the_world->get_curr_loc();

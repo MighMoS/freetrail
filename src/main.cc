@@ -14,8 +14,7 @@ int main (int argc, char **argv)
 	party* the_party;
 	world* the_world;
 	the_world  = new world (75); //XXX: Replace with randomness
-	party* some_party = new party;
-	the_party = init_recruit ();
+	the_party = new party;
 
 	if (the_party == NULL || the_world == NULL)
 	{
@@ -23,9 +22,11 @@ int main (int argc, char **argv)
 		exit (1);
 	}
 
+	the_party->init_party();
+
 	while (the_world->get_next_loc())
 	{
-		run_instance(the_party, the_world);
+		journey::run_instance(the_party, the_world);
 	}
 
 	delete the_world;
@@ -33,8 +34,3 @@ int main (int argc, char **argv)
 	return 0;
 }
 
-party* init_recruit ()
-{
-	some_party->init_party();
-	return some_party;
-}
