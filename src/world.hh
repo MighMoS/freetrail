@@ -38,6 +38,8 @@ class world
 
 	location* get_next_loc();
 	location* get_curr_loc();
+
+	void pop_curr_loc();
 };
 
 #endif

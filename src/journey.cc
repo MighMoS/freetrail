@@ -19,22 +19,33 @@ using std::endl;
  */
 void journey::run_instance(party* the_party, world* the_world)
 {
-	short speed;
+	unsigned int speed;
+	unsigned int distance_traveled;
+	bool reached_landmark;
+
 	const location* current_landmark = the_world->get_curr_loc();
-	const location* next_landmark = the_world->get_next_loc();
+	//const location* next_landmark = the_world->get_next_loc();
 
 	// Don't run past an outpost
 	speed = the_party->get_speed();
-	if (the_party->get_distance() + speed < next_landmark->distance)
-		the_party->add_distance (speed);
+	if (journey::get_distance(the_party, the_world) > speed)
+	{
+		distance_traveled = speed;
+		reached_landmark = false;
+	}
 	else
-		speed = next_landmark->distance - the_party->get_distance();
-	cout << "You traveled " << speed << " miles today.\n";
+	{
+		distance_traveled = journey::get_distance(the_party, the_world);
+		reached_landmark = true;
+	}
+	the_party->add_distance(speed);
 
-	if (the_party->get_distance() == current_landmark->distance)
+	cout << "You traveled " << distance_traveled << " miles today.\n";
+
+	if (reached_landmark)
 	{
 		cout << "You've arrived at " << current_landmark->name;
-		the_party->shop();
+		journey::stop_and_shop(the_party, the_world);
 		return;
 	}
 
@@ -50,4 +61,20 @@ void journey::run_instance(party* the_party, world* the_world)
 	boost::variate_generator<boost::mt19937&, boost::uniform_int<> > weather (rng, weather_);
 	boost::variate_generator<boost::mt19937&, boost::uniform_int<> > temp_mod (rng, temp_mod_);
 #endif
+
+}
+
+/* Gets the distance between the party's at and the next
+ * real landmark.
+ */
+// ToDO: This should be fixed to not really need parameters
+const unsigned int journey::get_distance(party* the_party, world* the_world)
+{
+	return (the_world->get_next_loc()->distance - the_party->get_distance());
+}
+
+void journey::stop_and_shop(party* the_party, world* the_world)
+{
+	the_world->pop_curr_loc();
+	the_party->shop();
 }

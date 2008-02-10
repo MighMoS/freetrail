@@ -151,3 +151,8 @@ std::ostream& operator << (std::ostream& os, const location& loc)
 	os << "\n\tCan Hunt: " << loc.can_hunt ? "Yes" : "No";
 	return os << "\n\tDistance: " << loc.distance << endl;
 }
+
+void world::pop_curr_loc()
+{
+	map.erase(map.begin());
+}
