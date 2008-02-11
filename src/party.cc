@@ -126,12 +126,18 @@ string member::get_name () const
 	return name;
 }
 
+// TODO: Make people hungry if they can't eat.
 unsigned int party::eat_food ()
 {
-	unsigned int food_eaten;
-	food_eaten = food - (3 * members.size());
-	if ((signed int)food - food_eaten < 0)
+	int food_eaten;
+	food_eaten = 3 * members.size();
+	// Don't descend into negatives, etc.
+	if (food - food_eaten < 0)
+	{
 		food = 0;
+		// XXX If we need to eat 20 lbs and only have 2, this shoudl be penalized.
+		food_eaten = food;
+	}
 	food -= food_eaten;
 
 	return food_eaten;
