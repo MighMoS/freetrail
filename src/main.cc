@@ -32,7 +32,7 @@ int main (int argc, char **argv)
 	journey::init(the_party, the_world);
 
 	//XXX This is wrong
-	while (the_world->get_next_loc())
+	while (!(the_world->no_more()))
 	{
 		journey::run_instance();
 	}

@@ -40,6 +40,7 @@ class world
 	location* get_curr_loc();
 
 	void pop_curr_loc();
+	bool no_more() const;
 };
 
 #endif

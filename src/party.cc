@@ -126,3 +126,18 @@ string member::get_name () const
 	return name;
 }
 
+unsigned int party::eat_food ()
+{
+	unsigned int food_eaten;
+	food_eaten = food - (3 * members.size());
+	if ((signed int)food - food_eaten < 0)
+		food = 0;
+	food -= food_eaten;
+
+	return food_eaten;
+}
+
+unsigned int party::get_food () const
+{
+	return food;
+}

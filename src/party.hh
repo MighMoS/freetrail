@@ -38,6 +38,8 @@ class party
 	public:
 	int get_speed () const;
 	int get_distance () const;
+	unsigned int get_food () const;
+	unsigned int eat_food ();
 	void add_distance (const int mileage);
 	void init_party ();
 	void shop ();

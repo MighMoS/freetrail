@@ -35,6 +35,7 @@ void journey::run_instance()
 {
 	unsigned int speed;
 	unsigned int distance_traveled;
+	unsigned int food_eaten;
 	bool reached_landmark;
 
 	const location* current_landmark = the_world->get_curr_loc();
@@ -52,8 +53,10 @@ void journey::run_instance()
 		reached_landmark = true;
 	}
 	the_party->add_distance(speed);
+	food_eaten = the_party->eat_food();
 
-	cout << "You traveled " << distance_traveled << " miles today.\n";
+	cout << "You traveled " << distance_traveled << " miles today and have "
+		<< the_party->get_food() << " lbs of food remaining.\n";
 	user_interface::wait_for_key();
 
 	if (reached_landmark)
@@ -82,7 +85,7 @@ void journey::run_instance()
 /* Gets the distance between the party's at and the next
  * real landmark.
  */
-// ToDO: This should be fixed to not really need parameters
+// TODO: This should be fixed to not really need parameters
 const unsigned int journey::get_remaining_distance()
 {
 	return (the_world->get_next_loc()->distance - the_party->get_distance());

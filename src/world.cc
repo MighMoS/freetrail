@@ -143,6 +143,11 @@ location* world::get_next_loc()
 	return &map[1];
 }
 
+bool world::no_more() const
+{
+	return map.empty();
+}
+
 location::location(const string& its_name) : name(its_name) {};
 
 std::ostream& operator << (std::ostream& os, const location& loc)
