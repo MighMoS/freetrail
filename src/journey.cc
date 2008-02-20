@@ -15,9 +15,9 @@ using std::endl;
  */
 // TODO: Ideally this function would do any other initialization that's needed,
 // but we're not there, yet.
-world* journey::the_world = NULL;
-party* journey::the_party = NULL;
-void journey::init(party* _party,  world* _world)
+World* Journey::the_world = NULL;
+Party* Journey::the_party = NULL;
+void Journey::init(Party* _party,  World* _world)
 {
 	the_party = _party;
 	the_world = _world;
@@ -31,7 +31,7 @@ void journey::init(party* _party,  world* _world)
  *   Stop at outposts, if necessary (and end)
  *   Otherwise, run random events (sickness, etc.), and present options
  */
-void journey::run_instance()
+void Journey::run_instance()
 {
 	unsigned int speed;
 	unsigned int distance_traveled;
@@ -42,14 +42,14 @@ void journey::run_instance()
 
 	// Don't run past an outpost
 	speed = the_party->get_speed();
-	if (journey::get_remaining_distance() > speed)
+	if (Journey::get_remaining_distance() > speed)
 	{
 		distance_traveled = speed;
 		reached_landmark = false;
 	}
 	else
 	{
-		distance_traveled = journey::get_remaining_distance();
+		distance_traveled = Journey::get_remaining_distance();
 		reached_landmark = true;
 	}
 	the_party->add_distance(speed);
@@ -63,7 +63,7 @@ void journey::run_instance()
 	{
 		cout << "You've arrived at " << current_landmark->name << endl;
 		user_interface::wait_for_key();
-		journey::stop_and_shop();
+		Journey::stop_and_shop();
 		return;
 	}
 
@@ -86,12 +86,12 @@ void journey::run_instance()
  * real landmark.
  */
 // TODO: This should be fixed to not really need parameters
-const unsigned int journey::get_remaining_distance()
+const unsigned int Journey::get_remaining_distance()
 {
 	return (the_world->get_next_loc()->distance - the_party->get_distance());
 }
 
-void journey::stop_and_shop()
+void Journey::stop_and_shop()
 {
 	the_world->pop_curr_loc();
 	the_party->shop();

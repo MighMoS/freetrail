@@ -22,7 +22,7 @@ class location
 #endif
 };
 
-class world
+class World
 {
 	private:
 	vector<location> map;
@@ -30,7 +30,7 @@ class world
 	weather the_weather;
 
 	public:
-	world(const int temp, const weather conditions=SUNNY);
+	World(const int temp, const weather conditions=SUNNY);
 	int get_temp() const;
 	weather get_conditions() const;
 	void set_temp(const int);

@@ -107,43 +107,43 @@ static void parse_locations(vector<location>& map, const char filename[] = "map.
 #endif
 }
 
-world::world(const int temp, const weather conditions) : 
+World::World(const int temp, const weather conditions) : 
 	temperature(temp), the_weather(conditions)
 {
 	parse_locations(map);
 }
 
-int world::get_temp () const
+int World::get_temp () const
 {
 	return temperature;
 }
 
-weather world::get_conditions () const
+weather World::get_conditions () const
 {
 	return the_weather;
 }
 
-void world::set_temp (const int k)
+void World::set_temp (const int k)
 {
 	temperature = k;
 }
 
-void world::set_conditions (const weather k)
+void World::set_conditions (const weather k)
 {
 	the_weather = k;
 }
 
-location* world::get_curr_loc()
+location* World::get_curr_loc()
 {
 	return &map[0];
 }
 
-location* world::get_next_loc()
+location* World::get_next_loc()
 {
 	return &map[1];
 }
 
-bool world::no_more() const
+bool World::no_more() const
 {
 	return map.empty();
 }
@@ -158,7 +158,7 @@ std::ostream& operator << (std::ostream& os, const location& loc)
 	return os << "\n\tDistance: " << loc.distance << endl;
 }
 
-void world::pop_curr_loc()
+void World::pop_curr_loc()
 {
 	map.erase(map.begin());
 }

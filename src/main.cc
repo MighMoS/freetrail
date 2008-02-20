@@ -12,10 +12,10 @@ using std::endl;
 
 int main (int argc, char **argv)
 {
-	party* the_party;
-	world* the_world;
-	the_world  = new world (75); //XXX: Replace with randomness
-	the_party = new party;
+	Party* the_party;
+	World* the_world;
+	the_world  = new World (75); //XXX: Replace with randomness
+	the_party = new Party;
 
 	if (the_party == NULL || the_world == NULL)
 	{
@@ -29,12 +29,12 @@ int main (int argc, char **argv)
 	user_interface::wait_for_key();
 
 	the_party->init_party();
-	journey::init(the_party, the_world);
+	Journey::init(the_party, the_world);
 
 	//XXX This is wrong
 	while (!(the_world->no_more()))
 	{
-		journey::run_instance();
+		Journey::run_instance();
 	}
 
 	delete the_world;

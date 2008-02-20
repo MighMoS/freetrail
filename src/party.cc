@@ -10,7 +10,7 @@ const int PRICE_OF_OXEN = 175;
 const int PRICE_OF_FOOD = 25;
 const int PRICE_OF_AMMO = 10;
 
-party::party () : food(100), ammo (50), oxen (0), money (1000), 
+Party::Party () : food(100), ammo (50), oxen (0), money (1000), 
 	distance_travelled (0)
 {}
 
@@ -19,15 +19,14 @@ party::party () : food(100), ammo (50), oxen (0), money (1000),
  * Once the user is done, we confirm to make sure
  * XXX: Presently shop() is called, ideally we would call this elsewhere
  */
-void party::init_party ()
+void Party::init_party ()
 {
 	short choice = 0;
 	sex_ their_sex;
 	string name;
 
 	cout << "Who do you want in your party?\n";
-add_members:
-	do 
+add_members: do 
 	{
 	cout << "\nIs your party member\n1) Male\n2) Female\n";
 	cout << select_one;
@@ -42,7 +41,7 @@ add_members:
 	cout << "What is " << (their_sex == MALE ? "his " : "her ") << "name? ";
 	getline (cin, name);
 
-	members.push_back (member(their_sex, name));
+	members.push_back (Member(their_sex, name));
 	cout << "\nDo you wish to have another member?\n1) Yes\n2) No\n";
 	cout << select_one;
 	cin >> choice;
@@ -50,7 +49,7 @@ add_members:
 	while (choice == 1);
 	cout << horizrule;
 
-	vector<member>::iterator iter;
+	vector<Member>::iterator iter;
 	cout << "You have the following people in your party:\n";
 	for (iter = members.begin(); iter != members.end(); iter++)
 		cout << "\n\t" << iter->get_name();
@@ -67,7 +66,7 @@ add_members:
 
 /* Offers the party a chance to buy stuffs. 
  */
-void party::shop()
+void Party::shop()
 {
 	short choice;
 	do
@@ -100,34 +99,34 @@ void party::shop()
  *   I'm thinking (oxen * 15)-(weight * 0.3), or something of that nature
  * Right now, just travel us oxen * 15
  */
-int party::get_speed() const
+int Party::get_speed() const
 {
 	return oxen * 15;
 }
 
-int party::get_distance() const
+int Party::get_distance() const
 {
 	return distance_travelled;
 }
 
-void party::add_distance (const int mileage)
+void Party::add_distance (const int mileage)
 {
 	distance_travelled += mileage;
 }
 
-member::member (const sex_ its_sex, const string& its_name)
+Member::Member (const sex_ its_sex, const string& its_name)
 {
         sex = its_sex;
         name = its_name;
 }
 
-string member::get_name () const
+string Member::get_name () const
 {
 	return name;
 }
 
 // TODO: Make people hungry if they can't eat.
-unsigned int party::eat_food ()
+unsigned int Party::eat_food ()
 {
 	int food_eaten;
 	food_eaten = 3 * members.size();
@@ -143,7 +142,7 @@ unsigned int party::eat_food ()
 	return food_eaten;
 }
 
-unsigned int party::get_food () const
+unsigned int Party::get_food () const
 {
 	return food;
 }

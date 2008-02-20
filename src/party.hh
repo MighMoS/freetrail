@@ -9,7 +9,7 @@ using std::vector;
 #include "common.hh"
 #include "world.hh"
 
-class member
+class Member
 {
 	private:
 		sex_ sex;
@@ -22,12 +22,12 @@ class member
 		health_ get_health () const;
 		int get_hunting_skill () const;
 		string get_name () const;
-		member (const sex_ its_sex, const string& its_name);
+		Member (const sex_ its_sex, const string& its_name);
 };
 
-class party
+class Party
 {
-	vector<member> members;
+	vector<Member> members;
 	int food; // in LB
 	int ammo; // in shots
 	int oxen;
@@ -44,6 +44,6 @@ class party
 	void init_party ();
 	void shop ();
 
-	party();
+	Party();
 };
 #endif 
