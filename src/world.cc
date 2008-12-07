@@ -54,6 +54,9 @@ static inline string get_field_value (const string& buffer)
 static void parse_locations(vector<location>& map, const char filename[] = "map.ini")
 {
 	string location_name, buffer;
+    unsigned int distance;
+    bool is_outpost, can_hunt;
+
 	std::ifstream mapfile;
 	mapfile.open (filename);
 	if (!mapfile)
@@ -73,24 +76,25 @@ static void parse_locations(vector<location>& map, const char filename[] = "map.
 		if (buffer[0] == '[' && *last_char == ']')
 		{
 			string temp_name = buffer;
+            // Erase the []'s
 			temp_name.erase(temp_name.begin());
 			temp_name.erase(temp_name.end()-1);
 
-			location temp_location (temp_name);
-			map.push_back(temp_location);
+			//location temp_location (temp_name);
+			//map.push_back(temp_location);
 			continue;
 		}
 
 		if (check_field ("Outpost", buffer))
 		{
 			
-			map.back().is_outpost = (get_field_value (buffer) == "Yes");
+			is_outpost = (get_field_value (buffer) == "Yes");
 			continue;
 		}
 
 		if (check_field ("Hunt", buffer))
 		{
-			map.back().can_hunt = (get_field_value (buffer) == "Yes");
+			can_hunt = (get_field_value (buffer) == "Yes");
 			continue;
 		}
 
@@ -98,7 +102,9 @@ static void parse_locations(vector<location>& map, const char filename[] = "map.
 		{
 			std::stringstream valuestream;
 			valuestream << get_field_value (buffer);
-			valuestream >> map.back().distance;
+			valuestream >> distance;
+            map.push_back(location(location_name, distance,
+                        is_outpost, can_hunt));
 			continue;
 		}
 	}
@@ -111,7 +117,7 @@ static void parse_locations(vector<location>& map, const char filename[] = "map.
 World::World(const int temp, const weather conditions) : 
 	temperature(temp), the_weather(conditions)
 {
-	parse_locations(map);
+	//parse_locations(map);
 }
 
 int World::get_temp () const
@@ -136,30 +142,33 @@ void World::set_conditions (const weather k)
 
 location* World::get_curr_loc()
 {
-	return &map[0];
+	//return &map[0];
 }
 
 location* World::get_next_loc()
 {
-	return &map[1];
+	//return &map[1];
 }
 
 bool World::no_more() const
 {
-	return map.empty();
+	//return map.empty();
 }
 
-location::location(const string& its_name) : name(its_name) {};
+location::location(const string& its_name, const unsigned int distance,
+                   const bool outpost, const bool hunting) :
+    name(its_name), next_distance(distance), is_outpost(outpost),
+    can_hunt(hunting) {};
 
 std::ostream& operator << (std::ostream& os, const location& loc)
 {
 	os << "\n  Name: " << loc.name;
 	os << "\n\tIs an Outpost: " << (loc.is_outpost ? "Yes" : "No");
 	os << "\n\tCan Hunt: " << (loc.can_hunt ? "Yes" : "No");
-	return os << "\n\tDistance: " << loc.distance << endl;
+	return os << "\n\tDistance: " << loc.next_distance << endl;
 }
 
 void World::pop_curr_loc()
 {
-	map.erase(map.begin());
+	//map.erase(map.begin());
 }

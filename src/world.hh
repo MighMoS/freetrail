@@ -11,20 +11,34 @@
 class location
 {
 	public:
-        std::string name;
-	unsigned int distance;
+    std::string name;
+	unsigned int next_distance; // Distance to the next stop
 	bool is_outpost;
 	bool can_hunt;
-	location(const std::string& its_name);
+	location(const std::string& its_name, const unsigned int distance,
+             const bool outpost, const bool hunting);
 #ifdef DEBUG
 	friend ostream& operator <<(ostream& os, const location& loc);
 #endif
 };
 
+class Track
+{
+    std::vector<location> track;
+};
+
+class Map
+{
+    std::vector<Track> map;
+    public:
+    void add_location(const location){};
+};
+
 class World
 {
 	private:
-    std::vector<location> map;
+    Map map;
+    //std::vector<location> map;
 	int temperature; // In degrees F
 	weather the_weather;
 
