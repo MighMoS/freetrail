@@ -1,10 +1,9 @@
 #ifndef WORLD
 #define WORLD
 #include <vector>
-using std::vector;
+
 #ifdef DEBUG
 #include <iostream>
-using std::ostream;
 #endif
 
 #include "common.hh"
@@ -12,11 +11,11 @@ using std::ostream;
 class location
 {
 	public:
-	string name;
+        std::string name;
 	unsigned int distance;
 	bool is_outpost;
 	bool can_hunt;
-	location(const string& its_name);
+	location(const std::string& its_name);
 #ifdef DEBUG
 	friend ostream& operator <<(ostream& os, const location& loc);
 #endif
@@ -25,7 +24,7 @@ class location
 class World
 {
 	private:
-	vector<location> map;
+    std::vector<location> map;
 	int temperature; // In degrees F
 	weather the_weather;
 

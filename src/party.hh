@@ -2,9 +2,7 @@
 #define PARTY
 
 #include <string>
-using std::string;
 #include <vector>
-using std::vector;
 
 #include "common.hh"
 #include "world.hh"
@@ -15,19 +13,19 @@ class Member
 		sex_ sex;
 		health_ health;
 		int hunting_skill;
-		string name;
+        std::string name;
 
 	public:
 		sex_ get_sex () const;
 		health_ get_health () const;
 		int get_hunting_skill () const;
-		string get_name () const;
-		Member (const sex_ its_sex, const string& its_name);
+        std::string get_name () const;
+		Member (const sex_ its_sex, const std::string& its_name);
 };
 
 class Party
 {
-	vector<Member> members;
+    std::vector<Member> members;
 	int food; // in LB
 	int ammo; // in shots
 	int oxen;

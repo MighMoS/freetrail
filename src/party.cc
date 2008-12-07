@@ -23,7 +23,7 @@ void Party::init_party ()
 {
 	short choice = 0;
 	sex_ their_sex;
-	string name;
+    std::string name;
 
 	cout << "Who do you want in your party?\n";
 add_members: do 
@@ -49,7 +49,7 @@ add_members: do
 	while (choice == 1);
 	cout << horizrule;
 
-	vector<Member>::iterator iter;
+    std::vector<Member>::iterator iter;
 	cout << "You have the following people in your party:\n";
 	for (iter = members.begin(); iter != members.end(); iter++)
 		cout << "\n\t" << iter->get_name();
@@ -114,13 +114,13 @@ void Party::add_distance (const int mileage)
 	distance_travelled += mileage;
 }
 
-Member::Member (const sex_ its_sex, const string& its_name)
+Member::Member (const sex_ its_sex, const std::string& its_name)
 {
         sex = its_sex;
         name = its_name;
 }
 
-string Member::get_name () const
+std::string Member::get_name () const
 {
 	return name;
 }
