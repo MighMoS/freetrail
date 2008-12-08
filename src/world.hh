@@ -33,16 +33,15 @@ class Track
 
 class Map
 {
-    std::vector<Track> map;
+    std::vector<Track> all_tracks;
     public:
-    //void add_location(const location){};
+    void add_track(const Track& track);
 };
 
 class World
 {
 	private:
-    Map map;
-    //std::vector<location> map;
+    Map* map;
 	int temperature; // In degrees F
 	weather the_weather;
 
