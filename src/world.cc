@@ -1,20 +1,16 @@
 #include <cstdlib>
 #include <iostream>
-using std::cout;
-using std::endl;
-#include <fstream>
 #include <string>
 using std::string;
 #include <sstream>
-#include <vector>
-using std::vector;
 
 #include <libxml++/libxml++.h>
 
 #include "common.hh"
 #include "world.hh"
 
-static int get_track_number(xmlpp::Node::NodeList::const_iterator track_iter)
+static inline int
+get_track_number(xmlpp::Node::NodeList::const_iterator track_iter)
 {
     std::stringstream ss;
     int track_no;
@@ -32,7 +28,70 @@ static int get_track_number(xmlpp::Node::NodeList::const_iterator track_iter)
     }
 }
 
-static void parse_locations(/*vector<location>& map,*/ const char filename[] = "map.xml")
+static inline
+location* get_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
+{
+    xmlpp::Element* nodeElement = dynamic_cast<xmlpp::Element*>(*stop_iter);
+    const xmlpp::Element::AttributeList& attributes =
+        nodeElement->get_attributes();
+    Glib::ustring stop_name;
+    int stop_length;
+    bool stop_outpost = false, stop_can_hunt = false;
+
+    for(xmlpp::Element::AttributeList::const_iterator attr_iter =
+            attributes.begin(); attr_iter != attributes.end(); attr_iter++)
+    {
+        const xmlpp::Attribute* attribute = *attr_iter;
+        const Glib::ustring current_attribute = attribute->get_value();
+
+        Glib::ustring attr_value (attribute->get_value());
+        // Stop if we don't actually have anything
+        if (attr_value.empty()) continue;
+        if (current_attribute == "outpost")
+        {
+            if (attr_value != "0")
+                stop_outpost = true;
+        }
+        if (current_attribute == "hunting");
+        {
+            if (attr_value != "0")
+                stop_can_hunt = true;
+        }
+    }
+
+    // TODO: Don't process subchildren, or do so more efficiently
+    xmlpp::Node::NodeList list = (*stop_iter)->get_children();
+
+    for (xmlpp::Node::NodeList::const_iterator substop_iter = list.begin();
+            substop_iter != list.end(); substop_iter++)
+    {
+        const xmlpp::TextNode* nodeText =
+            dynamic_cast<const xmlpp::TextNode*>(*substop_iter);
+
+        if (nodeText && nodeText->is_white_space()) continue;
+        const Glib::ustring name = (*substop_iter)->get_name();
+        const xmlpp::Element* nodeElement =
+            dynamic_cast<const xmlpp::Element*>(*substop_iter);
+        const xmlpp::TextNode* fNode = nodeElement->get_child_text();
+
+        if (name == "name")
+        {
+            stop_name = fNode->get_content();
+            continue;
+        }
+        if (name == "length")
+        {
+            std::stringstream ss;
+            ss << fNode->get_content();
+            ss >> stop_length;
+            continue;
+        }
+    }
+
+    return new location(stop_name, stop_length, stop_outpost, stop_can_hunt);
+}
+
+static inline void parse_locations(const char filename[] = "map.xml")
 {
     // In the future this should not be const
 	string location_name, buffer;
@@ -67,6 +126,9 @@ static void parse_locations(/*vector<location>& map,*/ const char filename[] = "
         for(xmlpp::Node::NodeList::const_iterator stop_iter = stop_list.begin();
                 stop_iter != stop_list.end(); stop_iter++)
         {
+            location* loc = get_stop(stop_iter);
+            curr_track.add_location(*loc);
+            delete loc;
         }
     }
     }
@@ -79,6 +141,11 @@ static void parse_locations(/*vector<location>& map,*/ const char filename[] = "
 }
 
 Track::Track(const int number) : track_number(number) {};
+
+void Track::add_location(const location& loc)
+{
+    track.push_back(loc);
+}
 
 World::World(const int temp, const weather conditions) : 
 	temperature(temp), the_weather(conditions)
@@ -131,7 +198,7 @@ std::ostream& operator << (std::ostream& os, const location& loc)
 	os << "\n  Name: " << loc.name;
 	os << "\n\tIs an Outpost: " << (loc.is_outpost ? "Yes" : "No");
 	os << "\n\tCan Hunt: " << (loc.can_hunt ? "Yes" : "No");
-	return os << "\n\tDistance: " << loc.next_distance << endl;
+	return os << "\n\tDistance: " << loc.next_distance << std::endl;
 }
 
 void World::pop_curr_loc()
