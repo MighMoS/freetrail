@@ -1,3 +1,4 @@
+#include <cassert>
 #include <boost/random.hpp>
 #include <iostream>
 using std::cout;
@@ -33,35 +34,42 @@ void Journey::init(Party* _party,  World* _world)
  */
 void Journey::run_instance()
 {
-	unsigned int speed;
+    const unsigned int track_no = the_party->get_track();
+    const unsigned int track_pos = the_party->get_pos();
+    const location* current_landmark =
+        the_world->get_curr_loc(track_no, track_pos);
+
+    const unsigned int speed = the_party->get_speed();
 	unsigned int distance_traveled;
 	unsigned int food_eaten;
 	bool reached_landmark;
 
-	const location* current_landmark = the_world->get_curr_loc();
+    assert(0 != current_landmark);
 
 	// Don't run past an outpost
-	speed = the_party->get_speed();
-	if (Journey::get_remaining_distance() > speed)
+	if (current_landmark->get_next_distance() >
+            speed + the_party->get_distance())
 	{
 		distance_traveled = speed;
+        the_party->add_distance(distance_traveled);
 		reached_landmark = false;
 	}
 	else
 	{
-		distance_traveled = Journey::get_remaining_distance();
+		distance_traveled = current_landmark->get_next_distance();
 		reached_landmark = true;
+        the_party->reached_landmark();
 	}
-	the_party->add_distance(speed);
 	food_eaten = the_party->eat_food();
 
 	cout << "You traveled " << distance_traveled << " miles today and have "
 		<< the_party->get_food() << " lbs of food remaining.\n";
 	user_interface::wait_for_key();
 
+    std::cerr << current_landmark->get_name() << std::endl;
 	if (reached_landmark)
 	{
-		cout << "You've arrived at " << current_landmark->name << endl;
+		cout << "You've arrived at " << current_landmark->get_name() << endl;
 		user_interface::wait_for_key();
 		Journey::stop_and_shop();
 		return;
@@ -80,16 +88,6 @@ void Journey::run_instance()
 	boost::variate_generator<boost::mt19937&, boost::uniform_int<> > temp_mod (rng, temp_mod_);
 #endif
 
-}
-
-/* Gets the distance between the party's at and the next
- * real landmark.
- */
-// TODO: This should be fixed to not really need parameters
-const unsigned int Journey::get_remaining_distance()
-{
-    return 50;
-	//return (the_world->get_next_loc()->next_distance - the_party->get_distance());
 }
 
 void Journey::stop_and_shop()

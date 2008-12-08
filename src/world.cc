@@ -1,3 +1,4 @@
+#include <cassert>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -9,12 +10,12 @@ using std::string;
 #include "common.hh"
 #include "world.hh"
 
-static inline int
+static inline unsigned int
 get_track_number(xmlpp::Node::NodeList::const_iterator track_iter)
 {
     std::stringstream ss;
-    int track_no;
-    xmlpp::Element* nodeElement = dynamic_cast<xmlpp::Element*>(*track_iter);
+    unsigned int track_no;
+    const xmlpp::Element* nodeElement = dynamic_cast<xmlpp::Element*>(*track_iter);
     const xmlpp::Element::AttributeList& attributes =
         nodeElement->get_attributes();
 
@@ -26,6 +27,8 @@ get_track_number(xmlpp::Node::NodeList::const_iterator track_iter)
         ss >> track_no;
         break; // Don't keep looking for another attribute
     }
+
+    return track_no;
 }
 
 static inline
@@ -35,7 +38,7 @@ location* get_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
     const xmlpp::Element::AttributeList& attributes =
         nodeElement->get_attributes();
     Glib::ustring stop_name;
-    int stop_length;
+    unsigned int stop_length;
     bool stop_outpost = false, stop_can_hunt = false;
 
     for(xmlpp::Element::AttributeList::const_iterator attr_iter =
@@ -77,6 +80,7 @@ location* get_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
         if (name == "name")
         {
             stop_name = fNode->get_content();
+            assert ("" != stop_name);
             continue;
         }
         if (name == "length")
@@ -96,8 +100,6 @@ static inline Map* parse_locations(const char filename[] = "map.xml")
     // In the future this should not be const
 	string location_name, buffer;
     Map* map;
-    unsigned int distance;
-    bool is_outpost, can_hunt;
 
     // No align because things things should succeed
     // The syntax is only for failure
@@ -152,9 +154,19 @@ void Track::add_location(const location& loc)
     track.push_back(loc);
 }
 
+const location* Track::get_stop(const unsigned int pos) const
+{
+    return &track[pos];
+}
+
 void Map::add_track(const Track& track)
 {
     all_tracks.push_back(track);
+}
+
+const Track* Map::get_track(const unsigned int pos) const
+{
+    return &all_tracks[pos];
 }
 
 World::World(const int temp, const weather conditions) : 
@@ -183,18 +195,20 @@ void World::set_conditions (const weather k)
 	the_weather = k;
 }
 
-location* World::get_curr_loc()
+const location* World::get_curr_loc(const unsigned int track,
+                                    const unsigned int pos) const
 {
-	//return &map[0];
+	return map->get_track(track)->get_stop(pos);
 }
 
 location* World::get_next_loc()
 {
-	//return &map[1];
+	return NULL;
 }
 
 bool World::no_more() const
 {
+    return false;
 	//return map.empty();
 }
 
@@ -203,6 +217,7 @@ location::location(const string& its_name, const unsigned int distance,
     name(its_name), next_distance(distance), is_outpost(outpost),
     can_hunt(hunting) {};
 
+#ifdef DEBUG
 std::ostream& operator << (std::ostream& os, const location& loc)
 {
 	os << "\n  Name: " << loc.name;
@@ -210,6 +225,7 @@ std::ostream& operator << (std::ostream& os, const location& loc)
 	os << "\n\tCan Hunt: " << (loc.can_hunt ? "Yes" : "No");
 	return os << "\n\tDistance: " << loc.next_distance << std::endl;
 }
+#endif
 
 void World::pop_curr_loc()
 {

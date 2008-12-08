@@ -6,7 +6,6 @@
 class Journey
 {
 	private:
-	static const unsigned int get_remaining_distance();
 	static World* the_world;
 	static Party* the_party;
 

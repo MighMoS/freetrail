@@ -39,9 +39,12 @@ class Party
 	int get_distance () const;
 	unsigned int get_food () const;
 	unsigned int eat_food ();
+    int get_track() const {return track_number;};
+    int get_pos() const {return track_position;};
 	void add_distance (const int mileage);
 	void init_party ();
 	void shop ();
+    void reached_landmark ();
 
 	Party();
 };

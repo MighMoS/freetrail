@@ -146,3 +146,10 @@ unsigned int Party::get_food () const
 {
 	return food;
 }
+
+void Party::reached_landmark ()
+{
+    distance_travelled = 0;
+    // Do real work here...
+    track_position++;
+}
