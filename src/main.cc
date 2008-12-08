@@ -20,7 +20,7 @@ int main (int argc, char **argv)
 	if (the_party == NULL || the_world == NULL)
 	{
 		std::cerr << "Could not allocate resources.\n";
-		exit (1);
+		return 1;
 	}
 
 	user_interface::clear_screen();
