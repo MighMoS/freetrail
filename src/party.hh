@@ -32,6 +32,7 @@ class Party
 	int money;
 	int distance_travelled;
 	int speed;
+    int track_number, track_position;
 
 	public:
 	int get_speed () const;
