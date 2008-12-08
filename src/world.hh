@@ -25,13 +25,17 @@ class location
 class Track
 {
     std::vector<location> track;
+    int track_number; // May or may not need this
+    public:
+    void add_location(const location& loc);
+    Track(const int number);
 };
 
 class Map
 {
     std::vector<Track> map;
     public:
-    void add_location(const location){};
+    //void add_location(const location){};
 };
 
 class World

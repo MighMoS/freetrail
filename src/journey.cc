@@ -88,7 +88,8 @@ void Journey::run_instance()
 // TODO: This should be fixed to not really need parameters
 const unsigned int Journey::get_remaining_distance()
 {
-	return (the_world->get_next_loc()->next_distance - the_party->get_distance());
+    return 50;
+	//return (the_world->get_next_loc()->next_distance - the_party->get_distance());
 }
 
 void Journey::stop_and_shop()

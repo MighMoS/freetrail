@@ -9,115 +9,81 @@ using std::string;
 #include <vector>
 using std::vector;
 
+#include <libxml++/libxml++.h>
+
 #include "common.hh"
 #include "world.hh"
 
-/* Takes a field to search, and a filename.  
- * Makes sure that nothing funny is going on.
- */
-static inline bool check_field(const char field[], const string& buffer)
+static int get_track_number(xmlpp::Node::NodeList::const_iterator track_iter)
 {
-	string compare;
-	if (buffer.find(field) == string::npos)
-		return false;
+    std::stringstream ss;
+    int track_no;
+    xmlpp::Element* nodeElement = dynamic_cast<xmlpp::Element*>(*track_iter);
+    const xmlpp::Element::AttributeList& attributes =
+        nodeElement->get_attributes();
 
-	for (unsigned int i = 0; i < sizeof(field) - 1; i++)
-	{
-		if (buffer[i] != field[i])
-			return false;
-	}
-	return true;
+    for(xmlpp::Element::AttributeList::const_iterator attr_iter =
+            attributes.begin(); attr_iter != attributes.end(); attr_iter++)
+    {
+        const xmlpp::Attribute* attribute = *attr_iter;
+        ss << attribute->get_value();
+        ss >> track_no;
+        break; // Don't keep looking for another attribute
+    }
 }
 
-/* Returns the text after an = sign in a field
- */
-static inline string get_field_value (const string& buffer)
+static void parse_locations(/*vector<location>& map,*/ const char filename[] = "map.xml")
 {
-	string value;
-	string::iterator chop_range;
-
-	value = buffer.substr(buffer.find(" = "));
-	chop_range = value.begin();
-	value.erase(chop_range, chop_range + 3);
-	return value;
-}
-
-/* Utility function for parsing our map file.
- * Reads in lines one at a time and then performs the following actions
- * based on the contents of getline():
- *   If the string is blank, ignore it, get another one
- *   If the string begins with [ or ] it processed as a new entry
- *   If the string contains Buy, Hunt, or Distance, it is added to the 
- *      appropriate field of the last entry
- *   Else the string is ignored, and a warning is printed out.
- */
-static void parse_locations(vector<location>& map, const char filename[] = "map.ini")
-{
+    // In the future this should not be const
 	string location_name, buffer;
     unsigned int distance;
     bool is_outpost, can_hunt;
 
-	std::ifstream mapfile;
-	mapfile.open (filename);
-	if (!mapfile)
-	{
-		std::cerr << "Error opening " << filename <<". Exiting.\n";
-		exit (1);
-	}
+    // No align because things things should succeed
+    // The syntax is only for failure
+    try
+    {
+    xmlpp::DomParser parser;
+    parser.parse_file(filename);
+    parser.set_validate();
+    parser.set_substitute_entities();
 
-	while (getline (mapfile, buffer))
-	{
-		if (buffer.length() == 0) // Blank line
-			continue;
-		string::iterator last_char = buffer.end();
-		last_char--;
+    if (parser)
+    {
+    // Parse the document
+    const xmlpp::Node* rNode = parser.get_document()->get_root_node();
+    if (rNode->get_name() != "freetrail") exit(2);
 
-		// Do we have a name?
-		if (buffer[0] == '[' && *last_char == ']')
-		{
-			string temp_name = buffer;
-            // Erase the []'s
-			temp_name.erase(temp_name.begin());
-			temp_name.erase(temp_name.end()-1);
+    xmlpp::Node::NodeList list = rNode->get_children("track");
 
-			//location temp_location (temp_name);
-			//map.push_back(temp_location);
-			continue;
-		}
-
-		if (check_field ("Outpost", buffer))
-		{
-			
-			is_outpost = (get_field_value (buffer) == "Yes");
-			continue;
-		}
-
-		if (check_field ("Hunt", buffer))
-		{
-			can_hunt = (get_field_value (buffer) == "Yes");
-			continue;
-		}
-
-		if (check_field ("Distance", buffer))
-		{
-			std::stringstream valuestream;
-			valuestream << get_field_value (buffer);
-			valuestream >> distance;
-            map.push_back(location(location_name, distance,
-                        is_outpost, can_hunt));
-			continue;
-		}
-	}
-#ifdef DEBUG
-	for (int i = 0; i < map.size(); i++)
-		cout << map[i];
-#endif
+    // Cannot wait for the auto keyword
+    // Anyway, hop through all the tracks for each of their shits
+    for (xmlpp::Node::NodeList::const_iterator track_iter = list.begin();
+            track_iter != list.end(); track_iter++)
+    {
+        Track curr_track(get_track_number(track_iter));
+        const xmlpp::Node::NodeList stop_list =
+            (*track_iter)->get_children("stop");
+        for(xmlpp::Node::NodeList::const_iterator stop_iter = stop_list.begin();
+                stop_iter != stop_list.end(); stop_iter++)
+        {
+        }
+    }
+    }
+    }
+    catch(const std::exception& ex)
+    {
+        std::cerr << "Exception caught: " << ex.what() << std::endl;
+        exit (1);
+    }
 }
+
+Track::Track(const int number) : track_number(number) {};
 
 World::World(const int temp, const weather conditions) : 
 	temperature(temp), the_weather(conditions)
 {
-	//parse_locations(map);
+	parse_locations();//map);
 }
 
 int World::get_temp () const
