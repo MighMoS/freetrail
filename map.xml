@@ -26,14 +26,14 @@
     <jump dest="4" force="yes"></jump>
 </track>
 <track number="3">
-    <stop hunting="yes">
+    <stop hunting="1">
         <name>Right - there's something here</name>
         <length>80</length>
     </stop>
     <jump dest="4" force="yes"></jump>
 </track>
 <track number="4">
-    <stop outpost="yes">
+    <stop outpost="1">
         <name>End</name>
         <length>0</length>
     </stop>
