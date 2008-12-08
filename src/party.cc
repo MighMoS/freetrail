@@ -71,26 +71,26 @@ void Party::shop()
 	short choice;
 	do
 	{
-	cout << "\nWhat would you like to buy?\n" <<
-		"1) Oxen ($" << PRICE_OF_OXEN << 
-			")\t\t (You have " << oxen << ")\n" <<
-		"2) Food ($" << PRICE_OF_FOOD << " / 50lb)" <<
-			"\t (You have " << food << "lbs)\n" <<
-		"3) Ammo ($" << PRICE_OF_AMMO << " / 10lb)" <<
-			"\t (You have " << ammo << ")\n" <<
-		"0) Done\n";
-	cout << "\nYou have $" << money << endl;
-	cout << select_one;
-	cin >> choice;
-	switch (choice)
-	{
-		case 1:
-		money -= PRICE_OF_OXEN; oxen++; break;
-		case 2:
-		money -= PRICE_OF_FOOD; food += 50; break;
-		case 3:
-		money -= PRICE_OF_AMMO; ammo += 10; break;
-	} // switch
+        cout << "\nWhat would you like to buy?\n" <<
+            "1) Oxen ($" << PRICE_OF_OXEN <<
+                ")\t\t (You have " << oxen << ")\n" <<
+            "2) Food ($" << PRICE_OF_FOOD << " / 50lb)" <<
+                "\t (You have " << food << "lbs)\n" <<
+            "3) Ammo ($" << PRICE_OF_AMMO << " / 10lb)" <<
+                "\t (You have " << ammo << ")\n" <<
+            "0) Done\n";
+        cout << "\nYou have $" << money << endl;
+        cout << select_one;
+        cin >> choice;
+        switch (choice)
+        {
+            case 1:
+            money -= PRICE_OF_OXEN; oxen++; break;
+            case 2:
+            money -= PRICE_OF_FOOD; food += 50; break;
+            case 3:
+            money -= PRICE_OF_AMMO; ammo += 10;
+        }
 	} //do ... while()
 	while (choice);
 }
