@@ -1,3 +1,4 @@
-FreeTrail
-LATEST
 src/*.o
+*~
+*.in
+config.h

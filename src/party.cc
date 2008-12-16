@@ -23,7 +23,7 @@ void Party::init_party ()
 {
 	short choice = 0;
 	sex_ their_sex;
-	string name;
+    std::string name;
 
 	cout << "Who do you want in your party?\n";
 add_members: do 
@@ -49,7 +49,7 @@ add_members: do
 	while (choice == 1);
 	cout << horizrule;
 
-	vector<Member>::iterator iter;
+    std::vector<Member>::iterator iter;
 	cout << "You have the following people in your party:\n";
 	for (iter = members.begin(); iter != members.end(); iter++)
 		cout << "\n\t" << iter->get_name();
@@ -114,13 +114,13 @@ void Party::add_distance (const int mileage)
 	distance_travelled += mileage;
 }
 
-Member::Member (const sex_ its_sex, const string& its_name)
+Member::Member (const sex_ its_sex, const std::string& its_name)
 {
         sex = its_sex;
         name = its_name;
 }
 
-string Member::get_name () const
+std::string Member::get_name () const
 {
 	return name;
 }
@@ -145,4 +145,25 @@ unsigned int Party::eat_food ()
 unsigned int Party::get_food () const
 {
 	return food;
+}
+
+// Probably shouldn't directly take a map
+// TODO: Write out a better way.
+void Party::reached_landmark (const Map* map, const unsigned int track_no)
+{
+    distance_travelled = 0;
+
+    // Sizes won't be zero based, subtract 1
+    if (map->get_track_size(track_no) - 1 <= track_position)
+    {
+        track_position = 0;
+        if (map->get_number_tracks() - 1 <= track_number)
+            track_number++;
+        else
+            ; // Signify winning, but this should happen elsewhere. Hmmm...
+    }
+    else
+    {
+        track_position++;
+    }
 }

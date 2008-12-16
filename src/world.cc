@@ -1,117 +1,194 @@
+#include <cassert>
 #include <cstdlib>
 #include <iostream>
-using std::cout;
-using std::endl;
-#include <fstream>
 #include <string>
 using std::string;
 #include <sstream>
-#include <vector>
-using std::vector;
+
+#include <libxml++/libxml++.h>
 
 #include "common.hh"
 #include "world.hh"
 
-/* Takes a field to search, and a filename.  
- * Makes sure that nothing funny is going on.
- */
-static inline bool check_field(const char field[], const string& buffer)
+static inline unsigned int
+get_track_number(xmlpp::Node::NodeList::const_iterator track_iter)
 {
-	string compare;
-	if (buffer.find(field) == string::npos)
-		return false;
+    std::stringstream ss;
+    unsigned int track_no;
+    const xmlpp::Element* nodeElement = dynamic_cast<xmlpp::Element*>(*track_iter);
+    const xmlpp::Element::AttributeList& attributes =
+        nodeElement->get_attributes();
 
-	for (unsigned int i = 0; i < sizeof(field) - 1; i++)
-	{
-		if (buffer[i] != field[i])
-			return false;
-	}
-	return true;
+    for(xmlpp::Element::AttributeList::const_iterator attr_iter =
+            attributes.begin(); attr_iter != attributes.end(); attr_iter++)
+    {
+        const xmlpp::Attribute* attribute = *attr_iter;
+        ss << attribute->get_value();
+        ss >> track_no;
+        break; // Don't keep looking for another attribute
+    }
+
+    return track_no;
 }
 
-/* Returns the text after an = sign in a field
- */
-static inline string get_field_value (const string& buffer)
+static inline
+location* get_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
 {
-	string value;
-	string::iterator chop_range;
+    xmlpp::Element* nodeElement = dynamic_cast<xmlpp::Element*>(*stop_iter);
+    const xmlpp::Element::AttributeList& attributes =
+        nodeElement->get_attributes();
+    Glib::ustring stop_name;
+    unsigned int stop_length;
+    bool stop_outpost = false, stop_can_hunt = false;
 
-	value = buffer.substr(buffer.find(" = "));
-	chop_range = value.begin();
-	value.erase(chop_range, chop_range + 3);
-	return value;
+    for(xmlpp::Element::AttributeList::const_iterator attr_iter =
+            attributes.begin(); attr_iter != attributes.end(); attr_iter++)
+    {
+        const xmlpp::Attribute* attribute = *attr_iter;
+        const Glib::ustring current_attribute = attribute->get_value();
+
+        Glib::ustring attr_value (attribute->get_value());
+        // Stop if we don't actually have anything
+        if (attr_value.empty()) continue;
+        if (current_attribute == "outpost")
+        {
+            if (attr_value != "0")
+                stop_outpost = true;
+        }
+        if (current_attribute == "hunting");
+        {
+            if (attr_value != "0")
+                stop_can_hunt = true;
+        }
+    }
+
+    // TODO: Don't process subchildren, or do so more efficiently
+    xmlpp::Node::NodeList list = (*stop_iter)->get_children();
+
+    for (xmlpp::Node::NodeList::const_iterator substop_iter = list.begin();
+            substop_iter != list.end(); substop_iter++)
+    {
+        const xmlpp::TextNode* nodeText =
+            dynamic_cast<const xmlpp::TextNode*>(*substop_iter);
+
+        if (nodeText && nodeText->is_white_space()) continue;
+        const Glib::ustring name = (*substop_iter)->get_name();
+        const xmlpp::Element* nodeElement =
+            dynamic_cast<const xmlpp::Element*>(*substop_iter);
+        const xmlpp::TextNode* fNode = nodeElement->get_child_text();
+
+        if (name == "name")
+        {
+            stop_name = fNode->get_content();
+            assert ("" != stop_name);
+            continue;
+        }
+        if (name == "length")
+        {
+            std::stringstream ss;
+            ss << fNode->get_content();
+            ss >> stop_length;
+            continue;
+        }
+    }
+
+    return new location(stop_name, stop_length, stop_outpost, stop_can_hunt);
 }
 
-/* Utility function for parsing our map file.
- * Reads in lines one at a time and then performs the following actions
- * based on the contents of getline():
- *   If the string is blank, ignore it, get another one
- *   If the string begins with [ or ] it processed as a new entry
- *   If the string contains Buy, Hunt, or Distance, it is added to the 
- *      appropriate field of the last entry
- *   Else the string is ignored, and a warning is printed out.
- */
-static void parse_locations(vector<location>& map, const char filename[] = "map.ini")
+static inline Map* parse_locations(const char filename[] = "map.xml")
 {
+    // In the future this should not be const
 	string location_name, buffer;
-	std::ifstream mapfile;
-	mapfile.open (filename);
-	if (!mapfile)
-	{
-		std::cerr << "Error opening " << filename <<". Exiting.\n";
-		exit (1);
-	}
+    Map* map;
 
-	while (getline (mapfile, buffer))
-	{
-		if (buffer.length() == 0) // Blank line
-			continue;
-		string::iterator last_char = buffer.end();
-		last_char--;
+    // No align because things things should succeed
+    // The syntax is only for failure
+    try
+    {
+    xmlpp::DomParser parser;
+    parser.parse_file(filename);
+    parser.set_validate();
+    parser.set_substitute_entities();
 
-		// Do we have a name?
-		if (buffer[0] == '[' && *last_char == ']')
-		{
-			string temp_name = buffer;
-			temp_name.erase(temp_name.begin());
-			temp_name.erase(temp_name.end()-1);
+    if (parser)
+    {
+    map = new Map();
+    // Parse the document
+    const xmlpp::Node* rNode = parser.get_document()->get_root_node();
+    if (rNode->get_name() != "freetrail") exit(2);
 
-			location temp_location (temp_name);
-			map.push_back(temp_location);
-			continue;
-		}
+    xmlpp::Node::NodeList list = rNode->get_children("track");
 
-		if (check_field ("Outpost", buffer))
-		{
-			
-			map.back().is_outpost = (get_field_value (buffer) == "Yes");
-			continue;
-		}
+    // Cannot wait for the auto keyword
+    // Anyway, hop through all the tracks for each of their shits
+    for (xmlpp::Node::NodeList::const_iterator track_iter = list.begin();
+            track_iter != list.end(); track_iter++)
+    {
+        Track curr_track(get_track_number(track_iter));
+        const xmlpp::Node::NodeList stop_list =
+            (*track_iter)->get_children("stop");
+        for(xmlpp::Node::NodeList::const_iterator stop_iter = stop_list.begin();
+                stop_iter != stop_list.end(); stop_iter++)
+        {
+            location* loc = get_stop(stop_iter);
+            curr_track.add_location(*loc);
+            delete loc;
+        }
+        map->add_track(curr_track);
+    } // for (auto track_iter = list.begin)
+    } // if(parser)
+    } // try
+    catch(const std::exception& ex)
+    {
+        std::cerr << "Exception caught: " << ex.what() << std::endl;
+        exit (1);
+    }
 
-		if (check_field ("Hunt", buffer))
-		{
-			map.back().can_hunt = (get_field_value (buffer) == "Yes");
-			continue;
-		}
+    return map;
+}
 
-		if (check_field ("Distance", buffer))
-		{
-			std::stringstream valuestream;
-			valuestream << get_field_value (buffer);
-			valuestream >> map.back().distance;
-			continue;
-		}
-	}
-#ifdef DEBUG
-	for (int i = 0; i < map.size(); i++)
-		cout << map[i];
-#endif
+Track::Track(const int number) : track_number(number) {};
+
+void Track::add_location(const location& loc)
+{
+    track.push_back(loc);
+}
+
+const location* Track::get_stop(const unsigned int pos) const
+{
+    assert (pos <= track.size());
+    return &track[pos];
+}
+
+unsigned int Track::size() const
+{
+    return track.size();
+}
+
+void Map::add_track(const Track& track)
+{
+    all_tracks.push_back(track);
+}
+
+unsigned int Map::get_number_tracks () const
+{
+    return all_tracks.size();
+}
+
+unsigned int Map::get_track_size (unsigned int track_no) const
+{
+    return all_tracks[track_no].size();
+}
+
+const Track* Map::get_track(const unsigned int pos) const
+{
+    return &all_tracks[pos];
 }
 
 World::World(const int temp, const weather conditions) : 
 	temperature(temp), the_weather(conditions)
 {
-	parse_locations(map);
+	map = parse_locations();
 }
 
 int World::get_temp () const
@@ -134,32 +211,34 @@ void World::set_conditions (const weather k)
 	the_weather = k;
 }
 
-location* World::get_curr_loc()
+const location* World::get_curr_loc(const unsigned int track,
+                                    const unsigned int pos) const
 {
-	return &map[0];
-}
-
-location* World::get_next_loc()
-{
-	return &map[1];
+	return map->get_track(track)->get_stop(pos);
 }
 
 bool World::no_more() const
 {
-	return map.empty();
+    return false;
+	//return map.empty();
 }
 
-location::location(const string& its_name) : name(its_name) {};
+const Map* World::get_map () const
+{
+    return map;
+}
 
+location::location(const string& its_name, const unsigned int distance,
+                   const bool outpost, const bool hunting) :
+    name(its_name), next_distance(distance), is_outpost(outpost),
+    can_hunt(hunting) {};
+
+#ifdef DEBUG
 std::ostream& operator << (std::ostream& os, const location& loc)
 {
 	os << "\n  Name: " << loc.name;
 	os << "\n\tIs an Outpost: " << (loc.is_outpost ? "Yes" : "No");
 	os << "\n\tCan Hunt: " << (loc.can_hunt ? "Yes" : "No");
-	return os << "\n\tDistance: " << loc.distance << endl;
+	return os << "\n\tDistance: " << loc.next_distance << std::endl;
 }
-
-void World::pop_curr_loc()
-{
-	map.erase(map.begin());
-}
+#endif

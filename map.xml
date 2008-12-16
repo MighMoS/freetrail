@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freetrail version="0.1">
+<track number="1">
+    <stop outpost="1">
+        <name>Fort Intro</name>
+        <length>100</length>
+    </stop>
+    <stop hunting="1">
+        <name>Wild Plains</name>
+        <length>150</length>
+    </stop>
+    <stop outpost="1">
+        <name>Encampment Halo</name>
+        <length>50</length>
+        <switch text="Its a question! Do you:">
+            <choice dest="2">Go left</choice>
+            <choice dest="3">Go right</choice>
+        </switch>
+    </stop>
+</track>
+<track number="2">
+    <stop>
+        <name>Left - there's nothing here</name>
+        <length>40</length>
+    </stop>
+    <jump dest="4" force="yes"></jump>
+</track>
+<track number="3">
+    <stop hunting="1">
+        <name>Right - there's something here</name>
+        <length>80</length>
+    </stop>
+    <jump dest="4" force="yes"></jump>
+</track>
+<track number="4">
+    <stop outpost="1">
+        <name>End</name>
+        <length>0</length>
+    </stop>
+</track>
+</freetrail>
