@@ -1,3 +1,7 @@
-* Decide and implement a standard user interface for CLI
-* Fix infinite loop in journeying
+High Priority:
+    * Fix infinite loop in journeying
+    * Implement a map iterator so that we can...
+        * Trash journey.cc and most of the world structures
 
+Low Priority:
+    * Decide and implement a standard user interface for CLI
