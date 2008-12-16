@@ -98,7 +98,7 @@ location* get_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
 static inline Map* parse_locations(const char filename[] = "map.xml")
 {
     // In the future this should not be const
-	string location_name, buffer;
+    string location_name, buffer;
     Map* map;
 
     // No align because things things should succeed
@@ -186,41 +186,41 @@ const Track* Map::get_track(const unsigned int pos) const
 }
 
 World::World(const int temp, const weather conditions) : 
-	temperature(temp), the_weather(conditions)
+    temperature(temp), the_weather(conditions)
 {
-	map = parse_locations();
+    map = parse_locations();
 }
 
 int World::get_temp () const
 {
-	return temperature;
+    return temperature;
 }
 
 weather World::get_conditions () const
 {
-	return the_weather;
+    return the_weather;
 }
 
 void World::set_temp (const int k)
 {
-	temperature = k;
+    temperature = k;
 }
 
 void World::set_conditions (const weather k)
 {
-	the_weather = k;
+    the_weather = k;
 }
 
 const location* World::get_curr_loc(const unsigned int track,
                                     const unsigned int pos) const
 {
-	return map->get_track(track)->get_stop(pos);
+    return map->get_track(track)->get_stop(pos);
 }
 
 bool World::no_more() const
 {
     return false;
-	//return map.empty();
+    //return map.empty();
 }
 
 const Map* World::get_map () const
@@ -236,9 +236,9 @@ location::location(const string& its_name, const unsigned int distance,
 #ifdef DEBUG
 std::ostream& operator << (std::ostream& os, const location& loc)
 {
-	os << "\n  Name: " << loc.name;
-	os << "\n\tIs an Outpost: " << (loc.is_outpost ? "Yes" : "No");
-	os << "\n\tCan Hunt: " << (loc.can_hunt ? "Yes" : "No");
-	return os << "\n\tDistance: " << loc.next_distance << std::endl;
+    os << "\n  Name: " << loc.name;
+    os << "\n\tIs an Outpost: " << (loc.is_outpost ? "Yes" : "No");
+    os << "\n\tCan Hunt: " << (loc.can_hunt ? "Yes" : "No");
+    return os << "\n\tDistance: " << loc.next_distance << std::endl;
 }
 #endif

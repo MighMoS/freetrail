@@ -11,7 +11,7 @@ const int PRICE_OF_FOOD = 25;
 const int PRICE_OF_AMMO = 10;
 
 Party::Party () : food(100), ammo (50), oxen (0), money (1000), 
-	distance_travelled (0)
+    distance_travelled (0)
 {}
 
 /* Initializes the party with members.
@@ -21,56 +21,56 @@ Party::Party () : food(100), ammo (50), oxen (0), money (1000),
  */
 void Party::init_party ()
 {
-	short choice = 0;
-	sex_ their_sex;
+    short choice = 0;
+    sex_ their_sex;
     std::string name;
 
-	cout << "Who do you want in your party?\n";
+    cout << "Who do you want in your party?\n";
 add_members: do 
-	{
-	cout << "\nIs your party member\n1) Male\n2) Female\n";
-	cout << select_one;
-	cin >> choice;
-	if (choice  == 1)
-		their_sex = MALE;
-	else
-		their_sex = FEMALE;
+    {
+    cout << "\nIs your party member\n1) Male\n2) Female\n";
+    cout << select_one;
+    cin >> choice;
+    if (choice  == 1)
+        their_sex = MALE;
+    else
+        their_sex = FEMALE;
 
-	cin.ignore(); // Needed to avoid getline screwing up
+    cin.ignore(); // Needed to avoid getline screwing up
 
-	cout << "What is " << (their_sex == MALE ? "his " : "her ") << "name? ";
-	getline (cin, name);
+    cout << "What is " << (their_sex == MALE ? "his " : "her ") << "name? ";
+    getline (cin, name);
 
-	members.push_back (Member(their_sex, name));
-	cout << "\nDo you wish to have another member?\n1) Yes\n2) No\n";
-	cout << select_one;
-	cin >> choice;
-	}
-	while (choice == 1);
-	cout << horizrule;
+    members.push_back (Member(their_sex, name));
+    cout << "\nDo you wish to have another member?\n1) Yes\n2) No\n";
+    cout << select_one;
+    cin >> choice;
+    }
+    while (choice == 1);
+    cout << horizrule;
 
     std::vector<Member>::iterator iter;
-	cout << "You have the following people in your party:\n";
-	for (iter = members.begin(); iter != members.end(); iter++)
-		cout << "\n\t" << iter->get_name();
-	cout << "\n\nAre you sure this is it?\n1) Yes\n2) No\n";
-	cout << select_one;
-	cin >> choice;
-	if (choice == 2)
-		goto add_members; // Goto avoids horrible nested logic. 
-	cout << horizrule;
+    cout << "You have the following people in your party:\n";
+    for (iter = members.begin(); iter != members.end(); iter++)
+        cout << "\n\t" << iter->get_name();
+    cout << "\n\nAre you sure this is it?\n1) Yes\n2) No\n";
+    cout << select_one;
+    cin >> choice;
+    if (choice == 2)
+        goto add_members; // Goto avoids horrible nested logic. 
+    cout << horizrule;
 
-	// We call shop first at init party
-	shop();
+    // We call shop first at init party
+    shop();
 }
 
 /* Offers the party a chance to buy stuffs. 
  */
 void Party::shop()
 {
-	short choice;
-	do
-	{
+    short choice;
+    do
+    {
         cout << "\nWhat would you like to buy?\n" <<
             "1) Oxen ($" << PRICE_OF_OXEN <<
                 ")\t\t (You have " << oxen << ")\n" <<
@@ -91,8 +91,8 @@ void Party::shop()
             case 3:
             money -= PRICE_OF_AMMO; ammo += 10;
         }
-	} //do ... while()
-	while (choice);
+    } //do ... while()
+    while (choice);
 }
 
 /* In the future this will calculate speed base on some formula
@@ -101,17 +101,17 @@ void Party::shop()
  */
 int Party::get_speed() const
 {
-	return oxen * 15;
+    return oxen * 15;
 }
 
 int Party::get_distance() const
 {
-	return distance_travelled;
+    return distance_travelled;
 }
 
 void Party::add_distance (const int mileage)
 {
-	distance_travelled += mileage;
+    distance_travelled += mileage;
 }
 
 Member::Member (const sex_ its_sex, const std::string& its_name)
@@ -122,29 +122,29 @@ Member::Member (const sex_ its_sex, const std::string& its_name)
 
 std::string Member::get_name () const
 {
-	return name;
+    return name;
 }
 
 // TODO: Make people hungry if they can't eat.
 unsigned int Party::eat_food ()
 {
-	int food_eaten;
-	food_eaten = 3 * members.size();
-	// Don't descend into negatives, etc.
-	if (food - food_eaten < 0)
-	{
-		food = 0;
-		// XXX If we need to eat 20 lbs and only have 2, this shoudl be penalized.
-		food_eaten = food;
-	}
-	food -= food_eaten;
+    int food_eaten;
+    food_eaten = 3 * members.size();
+    // Don't descend into negatives, etc.
+    if (food - food_eaten < 0)
+    {
+        food = 0;
+        // XXX If we need to eat 20 lbs and only have 2, this shoudl be penalized.
+        food_eaten = food;
+    }
+    food -= food_eaten;
 
-	return food_eaten;
+    return food_eaten;
 }
 
 unsigned int Party::get_food () const
 {
-	return food;
+    return food;
 }
 
 // Probably shouldn't directly take a map
