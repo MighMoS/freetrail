@@ -3,5 +3,9 @@ High Priority:
     * Implement a map iterator so that we can...
         * Trash journey.cc and most of the world structures
 
+Medium Priority:
+    * Untangle UI from implementation (very important later)
+
 Low Priority:
     * Decide and implement a standard user interface for CLI
+    * Write GTK2 interface

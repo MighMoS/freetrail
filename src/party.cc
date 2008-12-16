@@ -3,8 +3,9 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-#include "party.hh"
 #include "common.hh"
+#include "party.hh"
+#include "ui.hh"
 
 const int PRICE_OF_OXEN = 175;
 const int PRICE_OF_FOOD = 25;
@@ -71,6 +72,7 @@ void Party::shop()
     short choice;
     do
     {
+        user_interface::clear_screen();
         cout << "\nWhat would you like to buy?\n" <<
             "1) Oxen ($" << PRICE_OF_OXEN <<
                 ")\t\t (You have " << oxen << ")\n" <<
@@ -134,7 +136,7 @@ unsigned int Party::eat_food ()
     if (food - food_eaten < 0)
     {
         food = 0;
-        // XXX If we need to eat 20 lbs and only have 2, this shoudl be penalized.
+        // XXX If we need to eat 20 lbs and only have 2, this should be penalized.
         food_eaten = food;
     }
     food -= food_eaten;
@@ -148,7 +150,7 @@ unsigned int Party::get_food () const
 }
 
 // Probably shouldn't directly take a map
-// TODO: Write out a better way.
+// TODO: Use a map/track iterator, which needs to be written.
 void Party::reached_landmark (const Map* map, const unsigned int track_no)
 {
     distance_travelled = 0;

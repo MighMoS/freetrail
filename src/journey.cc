@@ -45,7 +45,7 @@ void Journey::run_instance()
     unsigned int food_eaten;
     bool reached_landmark;
 
-    assert(0 != current_landmark);
+    assert(NULL != current_landmark);
 
     // Don't run past an outpost
     if (current_landmark->get_next_distance() >
@@ -70,6 +70,7 @@ void Journey::run_instance()
 
     if (reached_landmark)
     {
+        cout << horizrule;
         cout << "You've arrived at " << current_landmark->get_name() << endl;
         user_interface::wait_for_key();
         Journey::stop_and_shop();
