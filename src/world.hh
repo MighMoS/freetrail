@@ -32,9 +32,10 @@ class Track
     std::vector<location> track;
     int track_number; // May or may not need this
     public:
-    void add_location(const location& loc);
-    const location* get_stop(const unsigned int pos) const;
     Track(const int number);
+    const location* get_stop(const unsigned int pos) const;
+    unsigned int size() const;
+    void add_location(const location& loc);
 };
 
 class Map
@@ -43,6 +44,8 @@ class Map
     public:
     void add_track(const Track& track);
     const Track* get_track(const unsigned int pos) const;
+    unsigned int get_number_tracks() const;
+    unsigned int get_track_size(unsigned int track_no) const;
 };
 
 class World
@@ -58,6 +61,9 @@ class World
 	weather get_conditions() const;
 	void set_temp(const int);
 	void set_conditions(const weather);
+
+    // The following is a hack, because we can't remove World yet
+    const Map* get_map() const;
 
 	location* get_next_loc();
 	const location* get_curr_loc(const unsigned int track,

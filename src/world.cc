@@ -156,12 +156,28 @@ void Track::add_location(const location& loc)
 
 const location* Track::get_stop(const unsigned int pos) const
 {
+    assert (pos <= track.size());
     return &track[pos];
+}
+
+unsigned int Track::size() const
+{
+    return track.size();
 }
 
 void Map::add_track(const Track& track)
 {
     all_tracks.push_back(track);
+}
+
+unsigned int Map::get_number_tracks () const
+{
+    return all_tracks.size();
+}
+
+unsigned int Map::get_track_size (unsigned int track_no) const
+{
+    return all_tracks[track_no].size();
 }
 
 const Track* Map::get_track(const unsigned int pos) const
@@ -201,15 +217,15 @@ const location* World::get_curr_loc(const unsigned int track,
 	return map->get_track(track)->get_stop(pos);
 }
 
-location* World::get_next_loc()
-{
-	return NULL;
-}
-
 bool World::no_more() const
 {
     return false;
 	//return map.empty();
+}
+
+const Map* World::get_map () const
+{
+    return map;
 }
 
 location::location(const string& its_name, const unsigned int distance,
@@ -226,8 +242,3 @@ std::ostream& operator << (std::ostream& os, const location& loc)
 	return os << "\n\tDistance: " << loc.next_distance << std::endl;
 }
 #endif
-
-void World::pop_curr_loc()
-{
-	//map.erase(map.begin());
-}

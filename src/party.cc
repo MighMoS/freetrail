@@ -147,9 +147,23 @@ unsigned int Party::get_food () const
 	return food;
 }
 
-void Party::reached_landmark ()
+// Probably shouldn't directly take a map
+// TODO: Write out a better way.
+void Party::reached_landmark (const Map* map, const unsigned int track_no)
 {
     distance_travelled = 0;
-    // Do real work here...
-    track_position++;
+
+    // Sizes won't be zero based, subtract 1
+    if (map->get_track_size(track_no) - 1 <= track_position)
+    {
+        track_position = 0;
+        if (map->get_number_tracks() - 1 <= track_number)
+            track_number++;
+        else
+            ; // Signify winning, but this should happen elsewhere. Hmmm...
+    }
+    else
+    {
+        track_position++;
+    }
 }

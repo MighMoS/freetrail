@@ -32,7 +32,7 @@ class Party
 	int money;
 	int distance_travelled;
 	int speed;
-    int track_number, track_position;
+    unsigned int track_number, track_position;
 
 	public:
 	int get_speed () const;
@@ -44,7 +44,7 @@ class Party
 	void add_distance (const int mileage);
 	void init_party ();
 	void shop ();
-    void reached_landmark ();
+    void reached_landmark (const Map* map, const unsigned int track_no);
 
 	Party();
 };

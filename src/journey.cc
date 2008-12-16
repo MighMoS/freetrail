@@ -18,6 +18,7 @@ using std::endl;
 // but we're not there, yet.
 World* Journey::the_world = NULL;
 Party* Journey::the_party = NULL;
+
 void Journey::init(Party* _party,  World* _world)
 {
 	the_party = _party;
@@ -56,9 +57,10 @@ void Journey::run_instance()
 	}
 	else
 	{
+        const Map* map = the_world->get_map();
 		distance_traveled = current_landmark->get_next_distance();
 		reached_landmark = true;
-        the_party->reached_landmark();
+        the_party->reached_landmark(map, track_no);
 	}
 	food_eaten = the_party->eat_food();
 
@@ -66,7 +68,6 @@ void Journey::run_instance()
 		<< the_party->get_food() << " lbs of food remaining.\n";
 	user_interface::wait_for_key();
 
-    std::cerr << current_landmark->get_name() << std::endl;
 	if (reached_landmark)
 	{
 		cout << "You've arrived at " << current_landmark->get_name() << endl;
@@ -92,6 +93,5 @@ void Journey::run_instance()
 
 void Journey::stop_and_shop()
 {
-	the_world->pop_curr_loc();
 	the_party->shop();
 }
