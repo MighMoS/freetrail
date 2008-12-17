@@ -1,0 +1,2 @@
+* Run ./configure && make && make install
+* Run ./configure --help for more options
