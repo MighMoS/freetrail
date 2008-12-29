@@ -162,7 +162,9 @@ void Party::reached_landmark (const Map* map, const unsigned int track_no)
         if (map->get_number_tracks() - 1 <= track_number)
             track_number++;
         else
+        {
             ; // Signify winning, but this should happen elsewhere. Hmmm...
+        }
     }
     else
     {

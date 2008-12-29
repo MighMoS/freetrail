@@ -55,7 +55,7 @@ location* get_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
             if (attr_value != "0")
                 stop_outpost = true;
         }
-        if (current_attribute == "hunting");
+        if (current_attribute == "hunting")
         {
             if (attr_value != "0")
                 stop_can_hunt = true;
@@ -99,7 +99,7 @@ static inline Map* parse_locations(const char filename[] = "map.xml")
 {
     // In the future this should not be const
     string location_name, buffer;
-    Map* map;
+    Map* map = new Map();
 
     // No align because things things should succeed
     // The syntax is only for failure
@@ -112,7 +112,6 @@ static inline Map* parse_locations(const char filename[] = "map.xml")
 
     if (parser)
     {
-    map = new Map();
     // Parse the document
     const xmlpp::Node* rNode = parser.get_document()->get_root_node();
     if (rNode->get_name() != "freetrail") exit(2);

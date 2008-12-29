@@ -10,7 +10,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-int main (int argc, char **argv)
+int main (/* int argc, char *argv[]*/)
 {
     Party* the_party;
     World* the_world;

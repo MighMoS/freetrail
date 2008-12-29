@@ -1,5 +1,5 @@
 INCLUDES = $(LIBXML_CFLAGS)
-CFLAGS = -Wall -Werror
+AM_CXXFLAGS = -Wall -Wextra -Werror
 
 bin_PROGRAMS=freetrail
 freetrail_SOURCES=journey.cc \
