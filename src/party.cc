@@ -7,10 +7,6 @@ using std::endl;
 #include "party.hh"
 #include "ui.hh"
 
-const int PRICE_OF_OXEN = 175;
-const int PRICE_OF_FOOD = 25;
-const int PRICE_OF_AMMO = 10;
-
 Party::Party () : food(100), ammo (50), oxen (0), money (1000), 
     distance_travelled (0)
 {}
@@ -62,39 +58,7 @@ add_members: do
     cout << horizrule;
 
     // We call shop first at init party
-    shop();
-}
-
-/* Offers the party a chance to buy stuffs. 
- */
-void Party::shop()
-{
-    short choice;
-    do
-    {
-        user_interface::clear_screen();
-        cout << "\nWhat would you like to buy?\n" <<
-            "1) Oxen ($" << PRICE_OF_OXEN <<
-                ")\t\t (You have " << oxen << ")\n" <<
-            "2) Food ($" << PRICE_OF_FOOD << " / 50lb)" <<
-                "\t (You have " << food << "lbs)\n" <<
-            "3) Ammo ($" << PRICE_OF_AMMO << " / 10lb)" <<
-                "\t (You have " << ammo << ")\n" <<
-            "0) Done\n";
-        cout << "\nYou have $" << money << endl;
-        cout << select_one;
-        cin >> choice;
-        switch (choice)
-        {
-            case 1:
-            money -= PRICE_OF_OXEN; oxen++; break;
-            case 2:
-            money -= PRICE_OF_FOOD; food += 50; break;
-            case 3:
-            money -= PRICE_OF_AMMO; ammo += 10;
-        }
-    } //do ... while()
-    while (choice);
+    user_interface::shop(*this);
 }
 
 /* In the future this will calculate speed base on some formula

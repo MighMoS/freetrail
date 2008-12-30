@@ -73,7 +73,7 @@ void Journey::run_instance()
         cout << horizrule;
         cout << "You've arrived at " << current_landmark->get_name() << endl;
         user_interface::wait_for_key();
-        Journey::stop_and_shop();
+        user_interface::shop(*the_party);
         return;
     }
 
@@ -92,7 +92,3 @@ void Journey::run_instance()
 
 }
 
-void Journey::stop_and_shop()
-{
-    the_party->shop();
-}

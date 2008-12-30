@@ -49,7 +49,6 @@ class Party
     int get_pos() const {return track_position;};
     void add_distance (const int mileage);
     void init_party ();
-    void shop ();
     void reached_landmark (const Map* map, const unsigned int track_no);
 
     Party();
