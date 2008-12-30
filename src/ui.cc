@@ -22,3 +22,11 @@ void user_interface::clear_screen()
     std::cout << horizrule;
 }
 
+void user_interface::welcome_new_user()
+{
+    clear_screen();
+    std::cout << "Welcome to FreeTrail. Adventure and fortune awaits you if you "
+        "can survive.\n"
+        "You set out to gather your party and resources...\n";
+    wait_for_key();
+}

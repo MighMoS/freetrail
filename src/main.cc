@@ -23,10 +23,7 @@ int main (/* int argc, char *argv[]*/)
         return 1;
     }
 
-    user_interface::clear_screen();
-    cout << "Welcome to FreeTrail. Adventure and fortune awaits you if you can survive.\n"
-        << "You set out to gather your party and resources...\n";
-    user_interface::wait_for_key();
+    user_interface::welcome_new_user();
 
     the_party->init_party();
     Journey::init(the_party, the_world);
