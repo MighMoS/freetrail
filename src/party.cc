@@ -127,6 +127,24 @@ std::string Member::get_name () const
     return name;
 }
 
+unsigned int Party::buy_ammo (const unsigned int amount)
+{
+    money -= amount;
+    return ammo += 10;
+}
+
+unsigned int Party::buy_food (const unsigned int amount)
+{
+    money -= amount;
+    return food += 50;
+}
+
+unsigned int Party::buy_oxen (const unsigned int amount)
+{
+    money -= amount;
+    return ++oxen;
+}
+
 // TODO: Make people hungry if they can't eat.
 unsigned int Party::eat_food ()
 {
@@ -144,9 +162,24 @@ unsigned int Party::eat_food ()
     return food_eaten;
 }
 
+unsigned int Party::get_ammo () const
+{
+    return ammo;
+}
+
 unsigned int Party::get_food () const
 {
     return food;
+}
+
+unsigned int Party::get_money () const
+{
+    return money;
+}
+
+unsigned int Party::get_oxen () const
+{
+    return oxen;
 }
 
 // Probably shouldn't directly take a map

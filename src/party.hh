@@ -37,8 +37,14 @@ class Party
     public:
     int get_speed () const;
     int get_distance () const;
+    unsigned int get_ammo () const;
     unsigned int get_food () const;
+    unsigned int get_money () const;
+    unsigned int get_oxen () const;
     unsigned int eat_food ();
+    unsigned int buy_ammo(const unsigned int amount);
+    unsigned int buy_food(const unsigned int amount);
+    unsigned int buy_oxen(const unsigned int amount);
     int get_track() const {return track_number;};
     int get_pos() const {return track_position;};
     void add_distance (const int mileage);
