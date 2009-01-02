@@ -190,26 +190,6 @@ World::World(const int temp, const weather conditions) :
     map = parse_locations();
 }
 
-int World::get_temp () const
-{
-    return temperature;
-}
-
-weather World::get_conditions () const
-{
-    return the_weather;
-}
-
-void World::set_temp (const int k)
-{
-    temperature = k;
-}
-
-void World::set_conditions (const weather k)
-{
-    the_weather = k;
-}
-
 const location* World::get_curr_loc(const unsigned int track,
                                     const unsigned int pos) const
 {

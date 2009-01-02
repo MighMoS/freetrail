@@ -57,10 +57,6 @@ class World
 
     public:
     World(const int temp, const weather conditions=SUNNY);
-    int get_temp() const;
-    weather get_conditions() const;
-    void set_temp(const int);
-    void set_conditions(const weather);
 
     // The following is a hack, because we can't remove World yet
     const Map* get_map() const;
