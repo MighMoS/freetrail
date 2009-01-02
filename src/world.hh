@@ -62,8 +62,6 @@ class World
     location* get_next_loc();
     const location* get_curr_loc(const unsigned int track,
                                  const unsigned int pos) const;
-
-    bool no_more() const;
 };
 
 #endif

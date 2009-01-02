@@ -198,12 +198,6 @@ const location* World::get_curr_loc(const unsigned int track,
     return map->get_track(track)->get_stop(pos);
 }
 
-bool World::no_more() const
-{
-    return false;
-    //return map.empty();
-}
-
 const Map* World::get_map () const
 {
     return map;
