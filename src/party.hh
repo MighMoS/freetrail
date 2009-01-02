@@ -35,6 +35,8 @@ class Party
     unsigned int track_number, track_position;
 
     public:
+    const std::vector<Member>* get_members() const;
+
     int get_speed () const;
     int get_distance () const;
     unsigned int get_ammo () const;
@@ -49,7 +51,7 @@ class Party
     int get_pos() const {return track_position;};
     void add_distance (const int mileage);
     void init_party ();
-    void reached_landmark (const Map* map, const unsigned int track_no);
+    bool reached_landmark (const Map* map, const unsigned int track_no);
 
     Party();
 };

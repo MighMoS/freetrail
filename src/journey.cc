@@ -32,8 +32,10 @@ void Journey::init(Party* _party,  World* _world)
  *   Add distance traveled for that [period of time]
  *   Stop at outposts, if necessary (and end)
  *   Otherwise, run random events (sickness, etc.), and present options
+ * RETURNS:
+ *   FALSE if we're done.
  */
-void Journey::run_instance()
+bool Journey::run_instance()
 {
     const unsigned int track_no = the_party->get_track();
     const unsigned int track_pos = the_party->get_pos();
@@ -60,7 +62,9 @@ void Journey::run_instance()
         const Map* map = the_world->get_map();
         distance_traveled = current_landmark->get_next_distance();
         reached_landmark = true;
-        the_party->reached_landmark(map, track_no);
+        // Return if we win the game.
+        if (the_party->reached_landmark(map, track_no))
+            return false;
     }
     food_eaten = the_party->eat_food();
 
@@ -74,9 +78,9 @@ void Journey::run_instance()
         cout << "You've arrived at " << current_landmark->get_name() << endl;
         user_interface::wait_for_key();
         user_interface::shop(*the_party);
-        return;
     }
 
+    return true;
 
 #if 0
     // This RNG is based on time.  That's bad, I know.
@@ -89,6 +93,5 @@ void Journey::run_instance()
     boost::variate_generator<boost::mt19937&, boost::uniform_int<> > weather (rng, weather_);
     boost::variate_generator<boost::mt19937&, boost::uniform_int<> > temp_mod (rng, temp_mod_);
 #endif
-
 }
 

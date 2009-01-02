@@ -192,6 +192,9 @@ World::World()
 const location* World::get_curr_loc(const unsigned int track,
                                     const unsigned int pos) const
 {
+#ifdef DEBUG
+    std::cout << "Get current location: " << track << ", " << pos << std::endl;
+#endif
     return map->get_track(track)->get_stop(pos);
 }
 

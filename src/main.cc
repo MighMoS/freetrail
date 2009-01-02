@@ -28,11 +28,12 @@ int main (/* int argc, char *argv[]*/)
     the_party->init_party();
     Journey::init(the_party, the_world);
 
-    //XXX This is wrong
-    while (!(the_world->no_more()))
+    //XXX This seems wrong
+    while (Journey::run_instance())
     {
-        Journey::run_instance();
+        //?
     }
+    user_interface::win(*the_party);
 
     delete the_world;
     delete the_party;

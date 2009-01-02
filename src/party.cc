@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 using std::cout;
 using std::cin;
@@ -59,6 +60,11 @@ add_members: do
 
     // We call shop first at init party
     user_interface::shop(*this);
+}
+
+const std::vector<Member>* Party::get_members() const
+{
+    return &members;
 }
 
 /* In the future this will calculate speed base on some formula
@@ -148,7 +154,10 @@ unsigned int Party::get_oxen () const
 
 // Probably shouldn't directly take a map
 // TODO: Use a map/track iterator, which needs to be written.
-void Party::reached_landmark (const Map* map, const unsigned int track_no)
+// Returns false as long as there is still more map
+//
+// Returns TRUE if we're at the end -- we won!
+bool Party::reached_landmark (const Map* map, const unsigned int track_no)
 {
     distance_travelled = 0;
 
@@ -156,15 +165,17 @@ void Party::reached_landmark (const Map* map, const unsigned int track_no)
     if (map->get_track_size(track_no) - 1 <= track_position)
     {
         track_position = 0;
-        if (map->get_number_tracks() - 1 <= track_number)
-            track_number++;
-        else
-        {
-            ; // Signify winning, but this should happen elsewhere. Hmmm...
-        }
+        assert (track_number <= map->get_number_tracks() - 1);
+        track_number++;
     }
     else
     {
         track_position++;
     }
+
+    // If there's no where to go, we've won.
+    if (map->get_track(track_no)-> get_stop(track_position)-> get_next_distance() == 0)
+        return true;
+
+    return false;
 }
