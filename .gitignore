@@ -11,8 +11,5 @@ Makefile
 /config.status
 /configure
 /configure.scan
-/depcomp
-/install-sh
-/missing
 /stamp-h1
 /src/freetrail
