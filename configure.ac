@@ -15,6 +15,28 @@ AC_CONFIG_FILES([Makefile
 AC_PROG_CC
 AC_PROG_CXX
 
+AC_LANG_CPLUSPLUS
+
+AC_MSG_CHECKING(whether to build with debug information)
+
+# create configure parameter and init variable $debuger
+debuger=no
+AC_ARG_ENABLE(debug,
+    AC_HELP_STRING(
+        [--enable-debug],
+        [enable debug data generation (def=no)]
+    ),
+    debuger="$enableval"
+)
+
+# resulting value to screen (to complete checking message)
+AC_MSG_RESULT($debuger)
+
+# set DEBUG flag and introduce additional compiler flags
+if test x"$debuger" = x"yes"; then
+    CXXFLAGS="$CXXFLAGS -g3"
+fi  
+
 # Checks for libraries.
 PKG_CHECK_MODULES([LIBXML], [libxml++-2.6 >= 2.10.0])
 AC_SUBST(LIBXML_CFLAGS)
