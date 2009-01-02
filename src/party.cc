@@ -9,7 +9,7 @@ using std::endl;
 #include "ui.hh"
 
 Party::Party () : food(100), ammo (50), oxen (0), money (1000), 
-    distance_travelled (0), track_number(0), track_position(0)
+    distance_travelled (0), track_number(0), track_position(1)
 {}
 
 /* Initializes the party with members.
