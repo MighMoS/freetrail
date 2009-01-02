@@ -60,7 +60,8 @@ bool Journey::run_instance()
     else
     {
         const Map* map = the_world->get_map();
-        distance_traveled = current_landmark->get_next_distance();
+        distance_traveled =
+            current_landmark->get_next_distance() - the_party->get_distance();
         reached_landmark = true;
         // Return if we win the game.
         if (the_party->reached_landmark(map, track_no))
