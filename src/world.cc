@@ -184,8 +184,7 @@ const Track* Map::get_track(const unsigned int pos) const
     return &all_tracks[pos];
 }
 
-World::World(const int temp, const weather conditions) : 
-    temperature(temp), the_weather(conditions)
+World::World()
 {
     map = parse_locations();
 }

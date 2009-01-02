@@ -52,11 +52,9 @@ class World
 {
     private:
     Map* map;
-    int temperature; // In degrees F
-    weather the_weather;
 
     public:
-    World(const int temp, const weather conditions=SUNNY);
+    World();
 
     // The following is a hack, because we can't remove World yet
     const Map* get_map() const;
@@ -65,7 +63,6 @@ class World
     const location* get_curr_loc(const unsigned int track,
                                  const unsigned int pos) const;
 
-    void pop_curr_loc();
     bool no_more() const;
 };
 

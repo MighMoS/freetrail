@@ -14,7 +14,7 @@ int main (/* int argc, char *argv[]*/)
 {
     Party* the_party;
     World* the_world;
-    the_world  = new World (75); //XXX: Replace with randomness
+    the_world  = new World ();
     the_party = new Party;
 
     if (the_party == NULL || the_world == NULL)
