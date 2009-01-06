@@ -32,7 +32,7 @@ get_track_number(xmlpp::Node::NodeList::const_iterator track_iter)
 }
 
 static inline
-location* get_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
+location* fill_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
 {
     xmlpp::Element* nodeElement = dynamic_cast<xmlpp::Element*>(*stop_iter);
     const xmlpp::Element::AttributeList& attributes =
@@ -92,7 +92,14 @@ location* get_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
         }
     }
 
-    return new location(stop_name, stop_length, stop_outpost, stop_can_hunt);
+    location* loc = new location(stop_name, stop_length,
+            stop_outpost, stop_can_hunt);
+    if (loc == NULL)
+    {
+        std::cerr << "Out of memory!\n";
+        exit (1);
+    }
+    return loc;
 }
 
 static inline Map* parse_locations(const char filename[] = "map.xml")
@@ -100,6 +107,11 @@ static inline Map* parse_locations(const char filename[] = "map.xml")
     // In the future this should not be const
     string location_name, buffer;
     Map* map = new Map();
+    if (map == NULL)
+    {
+        std::cerr << "Out of memory!\n";
+        exit (1);
+    }
 
     // No align because things things should succeed
     // The syntax is only for failure
@@ -114,7 +126,11 @@ static inline Map* parse_locations(const char filename[] = "map.xml")
     {
     // Parse the document
     const xmlpp::Node* rNode = parser.get_document()->get_root_node();
-    if (rNode->get_name() != "freetrail") exit(2);
+    if (rNode->get_name() != "freetrail")
+    {
+        std::cerr << "Expected root node to be \"freetrail\"!\n";
+        exit(2);
+    }
 
     xmlpp::Node::NodeList list = rNode->get_children("track");
 
@@ -129,7 +145,7 @@ static inline Map* parse_locations(const char filename[] = "map.xml")
         for(xmlpp::Node::NodeList::const_iterator stop_iter = stop_list.begin();
                 stop_iter != stop_list.end(); stop_iter++)
         {
-            location* loc = get_stop(stop_iter);
+            location* loc = fill_stop(stop_iter);
             curr_track.add_location(*loc);
             delete loc;
         }

@@ -23,14 +23,14 @@
         <name>Left - there's nothing here</name>
         <length>40</length>
     </stop>
-    <jump dest="4" force="yes"></jump>
+    <jump dest="4"></jump>
 </track>
 <track number="3">
     <stop hunting="1">
         <name>Right - there's something here</name>
         <length>80</length>
     </stop>
-    <jump dest="4" force="yes"></jump>
+    <jump dest="4"></jump>
 </track>
 <track number="4">
     <stop outpost="1">
