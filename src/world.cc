@@ -38,6 +38,7 @@ location* fill_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
     const xmlpp::Element::AttributeList& attributes =
         nodeElement->get_attributes();
     Glib::ustring stop_name;
+    std::vector<Fork>* fork = NULL;
     unsigned int stop_length;
     bool stop_outpost = false, stop_can_hunt = false;
 
@@ -90,10 +91,16 @@ location* fill_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
             ss >> stop_length;
             continue;
         }
+        if (name == "switch")
+        {
+            const xmlpp::Node::NodeList choices_list =
+                (*substop_iter)->get_children("choice");
+            //fork = fill_switch (choice_list);
+        }
     }
 
     location* loc = new location(stop_name, stop_length,
-            stop_outpost, stop_can_hunt);
+            stop_outpost, stop_can_hunt, fork);
     if (loc == NULL)
     {
         std::cerr << "Out of memory!\n";
@@ -220,9 +227,11 @@ const Map* World::get_map () const
 }
 
 location::location(const string& its_name, const unsigned int distance,
-                   const bool outpost, const bool hunting) :
-    name(its_name), next_distance(distance), is_outpost(outpost),
-    can_hunt(hunting) {};
+                   const bool outpost, const bool hunting,
+                   const std::vector<Fork>* jumps) :
+    name(its_name), next_distance(distance),
+    is_outpost(outpost), can_hunt(hunting),
+    fork_(jumps) {};
 
 #ifdef DEBUG
 std::ostream& operator << (std::ostream& os, const location& loc)

@@ -1,10 +1,8 @@
 High Priority:
-    * Fix infinite loop in journeying
-    * Implement a map iterator so that we can...
-        * Trash journey.cc and most of the world structures
 
 Medium Priority:
     * Untangle UI from implementation (very important later)
+    * Generi-size the XML parsing interface to not be so copy and paste
 
 Low Priority:
     * Decide and implement a standard user interface for CLI
