@@ -45,26 +45,26 @@ location* fill_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
             attributes.begin(); attr_iter != attributes.end(); attr_iter++)
     {
         const xmlpp::Attribute* attribute = *attr_iter;
-        const Glib::ustring current_attribute = attribute->get_value();
+        const Glib::ustring attribute_name = attribute->get_name();
+        const Glib::ustring attribute_value = attribute->get_value();
 
-        Glib::ustring attr_value (attribute->get_value());
         // Stop if we don't actually have anything
-        if (attr_value.empty()) continue;
-        if (current_attribute == "outpost")
+        if (attribute_name.empty()) continue;
+        if (attribute_name == "outpost")
         {
-            if (attr_value != "0")
+            if (attribute_value != "0")
                 stop_outpost = true;
         }
-        if (current_attribute == "hunting")
+        if (attribute_name == "hunting")
         {
-            if (attr_value != "0")
+            if (attribute_value != "0")
                 stop_can_hunt = true;
         }
     }
 
-    // TODO: Don't process subchildren, or do so more efficiently
     xmlpp::Node::NodeList list = (*stop_iter)->get_children();
 
+    // Process child nodes
     for (xmlpp::Node::NodeList::const_iterator substop_iter = list.begin();
             substop_iter != list.end(); substop_iter++)
     {
