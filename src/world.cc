@@ -207,9 +207,9 @@ const Track* Map::get_track(const unsigned int pos) const
     return &all_tracks[pos];
 }
 
-World::World()
+World::~World()
 {
-    map = parse_locations();
+    delete map;
 }
 
 const location* World::get_curr_loc(const unsigned int track,

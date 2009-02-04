@@ -84,6 +84,7 @@ class World
 
     public:
     World();
+    ~World();
 
     // The following is a hack, because we can't remove World yet
     const Map* get_map() const;
