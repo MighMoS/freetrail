@@ -10,6 +10,8 @@ using std::string;
 #include "common.hh"
 #include "world.hh"
 
+///@relates Track
+///Returns the track identification number pointed to by track_iter
 static inline unsigned int
 get_track_number(xmlpp::Node::NodeList::const_iterator track_iter)
 {
@@ -31,14 +33,38 @@ get_track_number(xmlpp::Node::NodeList::const_iterator track_iter)
     return track_no;
 }
 
+#if 0
+// XXX Fix copy and paste
+static std::vector<unsigned int>*
+fill_switch (const xmlpp::Node::NodeList list)
+{
+    for (xmlpp::Node::NodeList::const_iterator switch_iter = list.begin();
+            switch_iter != list.end(); switch_iter++)
+    {
+        const xmlpp::Element* nodeElement =
+            dynamic_cast<const xmlpp::Element*>(*substop_iter);
+        const Glib::ustring name = (*switch_iter)->get_name();
+        const xmlpp::TextNode* fNode = nodeElement->get_child_text();
+
+        if (name == "choice")
+        {
+            stop_name = fNode->get_content();
+            assert ("" != stop_name);
+            continue;
+        }
+    }
+}
+#endif
+
+///@relates: location
+///Creates a new location based off the XML pointed to by stop_iter
 static inline
-location* fill_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
+Path* fill_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
 {
     xmlpp::Element* nodeElement = dynamic_cast<xmlpp::Element*>(*stop_iter);
     const xmlpp::Element::AttributeList& attributes =
         nodeElement->get_attributes();
     Glib::ustring stop_name;
-    std::vector<Fork>* fork = NULL;
     unsigned int stop_length;
     bool stop_outpost = false, stop_can_hunt = false;
 
@@ -99,8 +125,8 @@ location* fill_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
         }
     }
 
-    location* loc = new location(stop_name, stop_length,
-            stop_outpost, stop_can_hunt, fork);
+    Path* loc = new Path(stop_name, stop_length,
+            stop_outpost, stop_can_hunt);
     if (loc == NULL)
     {
         std::cerr << "Out of memory!\n";
@@ -152,8 +178,11 @@ static inline Map* parse_locations(const char filename[] = "map.xml")
         for(xmlpp::Node::NodeList::const_iterator stop_iter = stop_list.begin();
                 stop_iter != stop_list.end(); stop_iter++)
         {
-            location* loc = fill_stop(stop_iter);
-            curr_track.add_location(*loc);
+            std::cerr << "Filling location...\n\t";
+            Path* loc = fill_stop(stop_iter);
+            assert (loc != NULL);
+            curr_track.add_location(loc);
+            std::cerr << "Filled location " << loc->get_name() << std::endl;
             delete loc;
         }
         map->add_track(curr_track);
@@ -171,15 +200,42 @@ static inline Map* parse_locations(const char filename[] = "map.xml")
 
 Track::Track(const int number) : track_number(number) {};
 
-void Track::add_location(const location& loc)
+/**
+ * Add a location to this track.
+ * @param[in] loc   Initialized pointer to location which will be added to this track.
+ *
+ * Side effects include the previous added track will be updated when a new one is inserted.
+ * @bug: this is not thread safe
+ * @bug: this sucks.
+ */
+void Track::add_location(location* loc)
 {
+    static Path* last_path = NULL;
+    Path* curr_path;
+
+    assert(loc != NULL);
+
+    // Update old path
+    if (last_path != NULL)
+        last_path->set_next_location(loc);
+
+    // Set old path to current path
+    curr_path = dynamic_cast<Path*>(loc);
+    if (curr_path)
+        last_path = curr_path;
+    else
+        last_path = NULL;
     track.push_back(loc);
 }
 
+/**
+ * Returns the nth location (0 based).
+ * @notes caller does not have to delete the returned location*
+ */
 const location* Track::get_stop(const unsigned int pos) const
 {
     assert (pos <= track.size());
-    return &track[pos];
+    return track[pos];
 }
 
 unsigned int Track::size() const
@@ -192,19 +248,19 @@ void Map::add_track(const Track& track)
     all_tracks.push_back(track);
 }
 
-unsigned int Map::get_number_tracks () const
+const Track* Map::get_track(const unsigned int pos) const
+{
+    return &all_tracks[pos];
+}
+
+unsigned int Map::size () const
 {
     return all_tracks.size();
 }
 
-unsigned int Map::get_track_size (unsigned int track_no) const
+World::World()
 {
-    return all_tracks[track_no].size();
-}
-
-const Track* Map::get_track(const unsigned int pos) const
-{
-    return &all_tracks[pos];
+    map = parse_locations();
 }
 
 World::~World()
@@ -226,12 +282,28 @@ const Map* World::get_map () const
     return map;
 }
 
-location::location(const string& its_name, const unsigned int distance,
-                   const bool outpost, const bool hunting,
-                   const std::vector<Fork>* jumps) :
-    name(its_name), next_distance(distance),
-    is_outpost(outpost), can_hunt(hunting),
-    fork_(jumps) {};
+/// Set the next location
+void Path::set_next_location(location* next_location)
+{
+    _next_location = next_location;
+#ifndef NDEBUG
+    std::cout << _next_location << std::endl;
+#endif
+}
+
+/// Returns the next location* in line.
+/**
+ * @bug Assumes that a Path will never be the last location in a Track
+ */
+std::vector<location*>
+Path::getNext (const unsigned int track_no, const unsigned int position) const
+{
+    std::vector<location*> next_location;
+
+    next_location.push_back(_next_location);
+
+    return next_location;
+}
 
 #ifdef DEBUG
 std::ostream& operator << (std::ostream& os, const location& loc)

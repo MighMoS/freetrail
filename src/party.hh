@@ -23,6 +23,7 @@ class Member
         Member (const sex_ its_sex, const std::string& its_name);
 };
 
+/// The stars of the show.
 class Party
 {
     std::vector<Member> members;

@@ -1,4 +1,5 @@
 High Priority:
+    * Use std::map for tracks storing locations and tracks
 
 Medium Priority:
     * Untangle UI from implementation (very important later)

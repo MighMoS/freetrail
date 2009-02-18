@@ -12,25 +12,30 @@
     <stop outpost="1">
         <name>Encampment Halo</name>
         <length>50</length>
-        <switch text="Its a question! Do you:">
-            <choice dest="2">Go left</choice>
-            <choice dest="3">Go right</choice>
-        </switch>
     </stop>
+    <switch>
+        <name>Its a fork in the road!</name>
+        <jump dest="2">Go left</jump>
+        <jump dest="3">Go right</jump>
+    </switch>
 </track>
 <track number="2">
     <stop>
         <name>Left - there's nothing here</name>
         <length>40</length>
     </stop>
-    <jump dest="4"></jump>
+    <switch>
+        <jump dest="4"></jump>
+    </switch>
 </track>
 <track number="3">
     <stop hunting="1">
         <name>Right - there's something here</name>
         <length>80</length>
     </stop>
-    <jump dest="4"></jump>
+    <switch>
+        <jump dest="4"></jump>
+    </switch>
 </track>
 <track number="4">
     <stop outpost="1">

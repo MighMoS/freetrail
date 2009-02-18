@@ -161,6 +161,7 @@ bool Party::reached_landmark (const Map* map, const unsigned int track_no)
 {
     distance_travelled = 0;
 
+#if 0
     // Sizes won't be zero based, subtract 1
     if (map->get_track_size(track_no) - 1 <= track_position)
     {
@@ -176,6 +177,7 @@ bool Party::reached_landmark (const Map* map, const unsigned int track_no)
     // If there's no where to go, we've won.
     if (map->get_track(track_no)-> get_stop(track_position)-> get_next_distance() == 0)
         return true;
+#endif
 
     return false;
 }

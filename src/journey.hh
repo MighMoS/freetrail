@@ -3,6 +3,7 @@
 #include "party.hh"
 #include "world.hh"
 
+/// Interface for moving the party
 class Journey
 {
     private:
@@ -11,7 +12,8 @@ class Journey
 
     public:
     static void init(Party* _party, World* _world);
-    static bool run_instance();
+    static bool run_path();
+    static void GoForward();
 };
 
 #endif

@@ -29,7 +29,7 @@ int main (/* int argc, char *argv[]*/)
     Journey::init(the_party, the_world);
 
     //XXX This seems wrong
-    while (Journey::run_instance())
+    while (Journey::run_path())
     {
         //?
     }
