@@ -5,6 +5,7 @@ bin_PROGRAMS=freetrail
 freetrail_SOURCES=journey.cc \
 		  main.cc \
 		  party.cc \
+		  runners.cc \
 		  ui.cc \
 		  world.cc
 

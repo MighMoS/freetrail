@@ -248,6 +248,11 @@ void Map::add_track(const Track& track)
     all_tracks.push_back(track);
 }
 
+const Track* Map::getStartTrack () const
+{
+    return (const Track*) 0xdeadbeef;
+}
+
 const Track* Map::get_track(const unsigned int pos) const
 {
     return &all_tracks[pos];

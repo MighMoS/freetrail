@@ -38,6 +38,7 @@ class location
     location(const Glib::ustring& name) : name_(name) {};
     /// Returns a friendly name for this place.
     Glib::ustring get_name () const {return name_;};
+    //virtual Freetrail::Runner::Status run (Party* party) = 0;
     virtual std::vector<location*>
         getNext(const unsigned int track_no,
                 const unsigned int position) const = 0;
@@ -46,6 +47,9 @@ class location
     friend ostream& operator <<(ostream& os, const location& loc);
 #endif
 };
+
+// For compat:
+typedef location Location;
 
 /// Reserved for future use.
 //
@@ -122,6 +126,8 @@ class Map
     std::vector<Track> all_tracks;
     public:
     void add_track(const Track& track);
+    /// Gets the first track of the map. This must exist and can not fail.
+    const Track* getStartTrack() const;
     const Track* get_track(const unsigned int pos) const;
     /// Returns the number of tracks held.
     unsigned int size() const;
