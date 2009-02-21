@@ -1,5 +1,4 @@
 #include <cassert>
-#include <cstdlib>
 #include <iostream>
 #include <string>
 using std::string;
@@ -7,7 +6,6 @@ using std::string;
 
 #include <libxml++/libxml++.h>
 
-#include "common.hh"
 #include "world.hh"
 
 ///@relates Track
@@ -287,35 +285,3 @@ const Map* World::get_map () const
     return map;
 }
 
-/// Set the next location
-void Path::set_next_location(location* next_location)
-{
-    _next_location = next_location;
-#ifndef NDEBUG
-    std::cout << _next_location << std::endl;
-#endif
-}
-
-/// Returns the next location* in line.
-/**
- * @bug Assumes that a Path will never be the last location in a Track
- */
-std::vector<location*>
-Path::getNext (const unsigned int track_no, const unsigned int position) const
-{
-    std::vector<location*> next_location;
-
-    next_location.push_back(_next_location);
-
-    return next_location;
-}
-
-#ifdef DEBUG
-std::ostream& operator << (std::ostream& os, const location& loc)
-{
-    os << "\n  Name: " << loc.name;
-    os << "\n\tIs an Outpost: " << (loc.is_outpost ? "Yes" : "No");
-    os << "\n\tCan Hunt: " << (loc.can_hunt ? "Yes" : "No");
-    return os << "\n\tDistance: " << loc.next_distance << std::endl;
-}
-#endif

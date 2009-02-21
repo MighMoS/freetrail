@@ -8,8 +8,7 @@ using std::endl;
 #include "party.hh"
 #include "ui.hh"
 
-Party::Party () : food(100), ammo (50), oxen (0), money (1000), 
-    distance_travelled (0), track_number(0), track_position(1)
+Party::Party () : food(100), ammo (50), oxen (0), money (1000)
 {}
 
 /* Initializes the party with members.
@@ -74,16 +73,6 @@ const std::vector<Member>* Party::get_members() const
 int Party::get_speed() const
 {
     return oxen * 15;
-}
-
-int Party::get_distance() const
-{
-    return distance_travelled;
-}
-
-void Party::add_distance (const int mileage)
-{
-    distance_travelled += mileage;
 }
 
 Member::Member (const sex_ its_sex, const std::string& its_name)
@@ -152,32 +141,3 @@ unsigned int Party::get_oxen () const
     return oxen;
 }
 
-// Probably shouldn't directly take a map
-// TODO: Use a map/track iterator, which needs to be written.
-// Returns false as long as there is still more map
-//
-// Returns TRUE if we're at the end -- we won!
-bool Party::reached_landmark (const Map* map, const unsigned int track_no)
-{
-    distance_travelled = 0;
-
-#if 0
-    // Sizes won't be zero based, subtract 1
-    if (map->get_track_size(track_no) - 1 <= track_position)
-    {
-        track_position = 0;
-        assert (track_number <= map->get_number_tracks() - 1);
-        track_number++;
-    }
-    else
-    {
-        track_position++;
-    }
-
-    // If there's no where to go, we've won.
-    if (map->get_track(track_no)-> get_stop(track_position)-> get_next_distance() == 0)
-        return true;
-#endif
-
-    return false;
-}

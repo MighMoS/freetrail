@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "common.hh"
-#include "world.hh"
 
 class Member
 {
@@ -31,9 +30,7 @@ class Party
     int ammo; // in shots
     int oxen;
     int money;
-    int distance_travelled;
     int speed;
-    unsigned int track_number, track_position;
 
     public:
     const std::vector<Member>* get_members() const;
@@ -48,11 +45,7 @@ class Party
     unsigned int buy_ammo(const unsigned int amount);
     unsigned int buy_food(const unsigned int amount);
     unsigned int buy_oxen(const unsigned int amount);
-    int get_track() const {return track_number;};
-    int get_pos() const {return track_position;};
-    void add_distance (const int mileage);
     void init_party ();
-    bool reached_landmark (const Map* map, const unsigned int track_no);
 
     Party();
 };

@@ -3,6 +3,7 @@ AM_CXXFLAGS = -Wall -Wextra -Werror -Wno-unused-parameter
 
 bin_PROGRAMS=freetrail
 freetrail_SOURCES=journey.cc \
+		location.cc \
 		  main.cc \
 		  party.cc \
 		  runners.cc \

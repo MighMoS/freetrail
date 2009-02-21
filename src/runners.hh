@@ -24,8 +24,8 @@ namespace Freetrail{
 
         const Track* getNextTrack () const {return _next_track;};
         bool KeepRunning () const {return _state == KEEP_RUNNING;};
-        bool HasWon () const {return _state == WIN;};
-        bool HasLost () const {return _state == LOSE;};
+        bool hasWon () const {return _state == WIN;};
+        bool hasLost () const {return _state == LOSE;};
     };
 
 /// Abstract class for moving the party through places.

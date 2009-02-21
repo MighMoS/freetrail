@@ -3,19 +3,18 @@
 #include "journey.hh"
 #include "main.hh"
 #include "party.hh"
+#include "runners.hh"
 #include "ui.hh"
 #include "world.hh"
 
-using std::cin;
-using std::cout;
-using std::endl;
-
-int main (/* int argc, char *argv[]*/)
+int main (int argc, char *argv[])
 {
     Party* the_party;
     World* the_world;
     the_world  = new World ();
     the_party = new Party;
+    Freetrail::Runner::IMapRunner mRun (the_party, the_world->get_map());
+    Freetrail::Runner::Status stat;
 
     if (the_party == NULL || the_world == NULL)
     {
@@ -28,12 +27,9 @@ int main (/* int argc, char *argv[]*/)
     the_party->init_party();
     Journey::init(the_party, the_world);
 
-    //XXX This seems wrong
-    while (Journey::run_path())
-    {
-        //?
-    }
-    user_interface::win(*the_party);
+    stat = mRun.run ();
+    if (stat.hasWon ())
+        user_interface::win(*the_party);
 
     delete the_world;
     delete the_party;
