@@ -3,7 +3,8 @@ High Priority:
 
 Medium Priority:
     * Untangle UI from implementation (very important later)
-    * Generi-size the XML parsing interface to not be so copy and paste
+    * (WIP) Generi-size the XML parsing interface to not be so copy and paste
+    * Replace many asserts with exceptions, and exception handling mechanisms.
 
 Low Priority:
     * Decide and implement a standard user interface for CLI

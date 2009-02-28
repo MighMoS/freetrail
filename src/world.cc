@@ -187,10 +187,12 @@ Map::Map (const char filename[])
     
     root_element = dynamic_cast<const xmlpp::Element*>(rNode);
     starting_track = root_element->get_attribute (Glib::ustring("start"));
-    starting_track_name = starting_track->get_name ();
+    starting_track_name = starting_track->get_value ();
+    assert ("" != starting_track_name);
 
     track_list = rNode->get_children("track");
 
+    bool first_filled = false;
     // Cannot wait for the auto keyword
     // Anyway, hop through all the tracks for each of their shits
     for (xmlpp::Node::NodeList::const_iterator track_iter = track_list.begin();
@@ -199,8 +201,15 @@ Map::Map (const char filename[])
         Track* curr_track;
         curr_track = fill_track (track_iter);
         assert (curr_track != NULL);
+        if (first_filled == false && *curr_track == starting_track_name)
+        {
+            first_filled = true;
+            _firstTrack = curr_track;
+        }
         this->add_track(*curr_track);
     }
+
+    assert (first_filled != false);
 }
 
 Track::Track(const Glib::ustring& name) : _name(name) {};
