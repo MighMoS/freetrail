@@ -57,5 +57,6 @@ Outpost::Outpost (const Glib::ustring& name) :
 
 Freetrail::Runner::Status Outpost::run (Party* party)
 {
+    user_interface::shop(*party);
     return Freetrail::Runner::Status();
 }
