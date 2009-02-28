@@ -7,13 +7,10 @@
 class Journey
 {
     private:
-    static World* the_world;
     static Party* the_party;
 
     public:
-    static void init(Party* _party, World* _world);
-    static bool run_path();
-    static void GoForward();
+    static void init(Party* _party);
 };
 
 #endif

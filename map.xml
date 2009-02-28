@@ -1,46 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<freetrail version="0.1">
-<track number="1">
-    <stop outpost="1">
+<freetrail version="0.2" start="First">
+<track endtype="user">
+    <name>First</name>
+    <outpost>
         <name>Fort Intro</name>
-        <length>100</length>
-    </stop>
-    <stop hunting="1">
+    </outpost>
+    <path>
         <name>Wild Plains</name>
         <length>150</length>
-    </stop>
-    <stop outpost="1">
+    </path>
+    <path>
+        <name>Swamps</name>
+        <length>68</length>
+    </path>
+    <outpost>
         <name>Encampment Halo</name>
-        <length>50</length>
-    </stop>
-    <switch>
+    </outpost>
+    <userjump>
         <name>Its a fork in the road!</name>
-        <jump dest="2">Go left</jump>
-        <jump dest="3">Go right</jump>
-    </switch>
+        <jump dest="Second part1">Go left</jump>
+        <jump dest="Second part2">Go right</jump>
+    </userjump>
 </track>
-<track number="2">
-    <stop>
+<track end="fixed">
+    <name>Second part1</name>
+    <path>
         <name>Left - there's nothing here</name>
         <length>40</length>
-    </stop>
-    <switch>
-        <jump dest="4"></jump>
-    </switch>
+    </path>
+    <fixedjump>
+        <jump dest="Last Track"></jump>
+    </fixedjump>
 </track>
-<track number="3">
-    <stop hunting="1">
+<track end="fixed">
+    <name>Second part2</name>
+    <path>
         <name>Right - there's something here</name>
         <length>80</length>
-    </stop>
-    <switch>
-        <jump dest="4"></jump>
-    </switch>
+    </path>
+    <fixedjump>
+        <jump dest="Last Track"></jump>
+    </fixedjump>
 </track>
-<track number="4">
-    <stop outpost="1">
-        <name>End</name>
-        <length>0</length>
-    </stop>
+<track end="win">
+    <name>Last Track</name>
+    <path>
+        <name>Almost there</name>
+        <length>20</length>
+    </path>
 </track>
 </freetrail>

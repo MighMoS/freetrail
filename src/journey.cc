@@ -11,7 +11,6 @@ using std::endl;
 #include "ui.hh"
 #include "world.hh"
 
-World* Journey::the_world = NULL;
 Party* Journey::the_party = NULL;
 
 /// Initializes our journey class so that we don't have to keep passing
@@ -20,9 +19,8 @@ Party* Journey::the_party = NULL;
  * @todo Ideally this function would do any other initialization that's needed,
  *  but we're not there, yet.
  */
-void Journey::init(Party* _party,  World* _world)
+void Journey::init(Party* _party)
 {
     the_party = _party;
-    the_world = _world;
 }
 

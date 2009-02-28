@@ -27,10 +27,8 @@ class location
     location(const Glib::ustring& name) : _name(name) {};
     /// Returns a friendly name for this place.
     Glib::ustring get_name () const {return _name;};
+    virtual bool operator == (const Glib::ustring& rhs) const;
     virtual Freetrail::Runner::Status run (Party* party) = 0;
-    virtual std::vector<location*>
-        getNext(const unsigned int track_no,
-                const unsigned int position) const = 0;
 
 #ifdef DEBUG
     friend ostream& operator <<(ostream& os, const location& loc);
@@ -45,25 +43,23 @@ typedef location Location;
 /// Will contain a list of items for sale (and price), for one.
 class Outpost : public location
 {
+    public:
     Outpost (const Glib::ustring& name);
+    Freetrail::Runner::Status run (Party* party);
 };
 
 /// A road to travel, the most common type of location.
 class Path : public location
 {
-    unsigned int next_distance; // Distance to the next stop
-    location* _next_location; ///<-- What's next? TODO: be smarter.
+    unsigned int _next_distance; // Distance to the next stop
 
     public:
-    Path (const Glib::ustring& name, const unsigned int distance,
-              const bool outpost, const bool hunting):
-        location(name), next_distance(distance) {};
+    Path (const Glib::ustring& name, const unsigned int distance) :
+        location(name), _next_distance(distance) {};
     /// How far away is the next location, from start to finish.
-    unsigned int get_next_distance () const {return next_distance;};
+    unsigned int get_next_distance () const {return _next_distance;};
     /// Should only be called by map parser.
     void set_next_location(location* next_location);
-    virtual std::vector<location*>
-        getNext(const unsigned int track_no, const unsigned int position) const;
     Freetrail::Runner::Status run (Party* party);
 };
 

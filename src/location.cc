@@ -5,27 +5,9 @@
 #include "runners.hh"
 #include "ui.hh"
 
-///Set the next location
-void Path::set_next_location(Location* next_location)
+bool Location::operator == (const Glib::ustring& rhs) const
 {
-    _next_location = next_location;
-#ifndef NDEBUG
-    std::cout << _next_location << std::endl;
-#endif
-}
-
-///Returns the next location* in line.
-/**
- * @bug Assumes that a Path will never be the last location in a Track
- */
-std::vector<Location*>
-Path::getNext (const unsigned int track_no, const unsigned int position) const
-{
-    std::vector<location*> next_location;
-
-    next_location.push_back(_next_location);
-
-    return next_location;
+    return _name == rhs;
 }
 
 Freetrail::Runner::Status Path::run(Party* party)
@@ -72,3 +54,8 @@ std::ostream& operator << (std::ostream& os, const Location& loc)
 Outpost::Outpost (const Glib::ustring& name) :
     Location (name)
 {}
+
+Freetrail::Runner::Status Outpost::run (Party* party)
+{
+    return Freetrail::Runner::Status();
+}

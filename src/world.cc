@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <string>
@@ -8,153 +9,174 @@ using std::string;
 
 #include "world.hh"
 
-///@relates Track
-///Returns the track identification number pointed to by track_iter
-static inline unsigned int
-get_track_number(xmlpp::Node::NodeList::const_iterator track_iter)
+/**
+ * Extracts the name tag from an element.
+ * @returns the name of what's being parsed.
+ * @note the iterator passed in will no longer have the <name> tag.
+ */
+static inline Glib::ustring
+extract_name (const xmlpp::Node::NodeList::const_iterator& iter)
 {
-    std::stringstream ss;
-    unsigned int track_no;
-    const xmlpp::Element* nodeElement = dynamic_cast<xmlpp::Element*>(*track_iter);
-    const xmlpp::Element::AttributeList& attributes =
-        nodeElement->get_attributes();
+    const xmlpp::Node::NodeList name_tag = (*iter)->get_children("name");
+    if (name_tag.size () == 0)
+        return Glib::ustring("");
+    const xmlpp::Element* nodeElement =
+        dynamic_cast<const xmlpp::Element*> (*(name_tag.begin()));
+    const xmlpp::TextNode* node_text = nodeElement->get_child_text ();
 
-    for(xmlpp::Element::AttributeList::const_iterator attr_iter =
-            attributes.begin(); attr_iter != attributes.end(); attr_iter++)
-    {
-        const xmlpp::Attribute* attribute = *attr_iter;
-        ss << attribute->get_value();
-        ss >> track_no;
-        break; // Don't keep looking for another attribute
-    }
+    xmlpp::Node::NodeList node_list = (*iter)->get_children ();
+    Glib::ustring name;
 
-    return track_no;
+    name = node_text->get_content ();
+
+    // replace these with an exceptions
+    //assert (name_tag.size () == 1);
+    assert (name != "");
+
+    // Remove the name tag from our list
+    std::remove(node_list.begin(), node_list.end(), *(name_tag.begin()));
+
+    return name;
 }
 
-#if 0
-// XXX Fix copy and paste
-static std::vector<unsigned int>*
-fill_switch (const xmlpp::Node::NodeList list)
+static inline Outpost*
+fill_outpost (const xmlpp::Node::NodeList::const_iterator& iter)
 {
-    for (xmlpp::Node::NodeList::const_iterator switch_iter = list.begin();
-            switch_iter != list.end(); switch_iter++)
-    {
-        const xmlpp::Element* nodeElement =
-            dynamic_cast<const xmlpp::Element*>(*substop_iter);
-        const Glib::ustring name = (*switch_iter)->get_name();
-        const xmlpp::TextNode* fNode = nodeElement->get_child_text();
+    Glib::ustring outpost_name;
 
-        if (name == "choice")
-        {
-            stop_name = fNode->get_content();
-            assert ("" != stop_name);
-            continue;
-        }
-    }
-}
-#endif
+    outpost_name = extract_name (iter);
+    Outpost* loc = new Outpost (outpost_name);
 
-///@relates: location
+    return loc;
+};
+
+///@relates: path
 ///Creates a new location based off the XML pointed to by stop_iter
+/**
+ * <path><name>thisPathName</name><length>100</path>
+ * would create a path with a length of 100 called "thisPathName"
+ */
 static inline
-Path* fill_stop(xmlpp::Node::NodeList::const_iterator stop_iter)
+Path* fill_path (const xmlpp::Node::NodeList::const_iterator& stop_iter)
 {
-    xmlpp::Element* nodeElement = dynamic_cast<xmlpp::Element*>(*stop_iter);
-    const xmlpp::Element::AttributeList& attributes =
-        nodeElement->get_attributes();
-    Glib::ustring stop_name;
-    unsigned int stop_length;
-    bool stop_outpost = false, stop_can_hunt = false;
+    xmlpp::Node::NodeList path_children;
+    Glib::ustring path_name;
+    unsigned int path_length;
 
-    for(xmlpp::Element::AttributeList::const_iterator attr_iter =
-            attributes.begin(); attr_iter != attributes.end(); attr_iter++)
-    {
-        const xmlpp::Attribute* attribute = *attr_iter;
-        const Glib::ustring attribute_name = attribute->get_name();
-        const Glib::ustring attribute_value = attribute->get_value();
+    path_name = extract_name (stop_iter);
+    path_children = (*stop_iter)->get_children ();
 
-        // Stop if we don't actually have anything
-        if (attribute_name.empty()) continue;
-        if (attribute_name == "outpost")
-        {
-            if (attribute_value != "0")
-                stop_outpost = true;
-        }
-        if (attribute_name == "hunting")
-        {
-            if (attribute_value != "0")
-                stop_can_hunt = true;
-        }
-    }
-
-    xmlpp::Node::NodeList list = (*stop_iter)->get_children();
-
-    // Process child nodes
-    for (xmlpp::Node::NodeList::const_iterator substop_iter = list.begin();
-            substop_iter != list.end(); substop_iter++)
+    // Process child nodes and text
+    for (xmlpp::Node::NodeList::const_iterator
+            substop_iter = path_children.begin ();
+            substop_iter != path_children.end (); substop_iter++)
     {
         const xmlpp::TextNode* nodeText =
             dynamic_cast<const xmlpp::TextNode*>(*substop_iter);
 
         if (nodeText && nodeText->is_white_space()) continue;
-        const Glib::ustring name = (*substop_iter)->get_name();
+
+        const Glib::ustring element_name = (*substop_iter)->get_name ();
         const xmlpp::Element* nodeElement =
             dynamic_cast<const xmlpp::Element*>(*substop_iter);
-        const xmlpp::TextNode* fNode = nodeElement->get_child_text();
+        const xmlpp::TextNode* fNode = nodeElement->get_child_text ();
 
-        if (name == "name")
-        {
-            stop_name = fNode->get_content();
-            assert ("" != stop_name);
-            continue;
-        }
-        if (name == "length")
+        if (element_name == "length")
         {
             std::stringstream ss;
             ss << fNode->get_content();
-            ss >> stop_length;
+            ss >> path_length;
+            assert (0 < path_length);
             continue;
-        }
-        if (name == "switch")
-        {
-            const xmlpp::Node::NodeList choices_list =
-                (*substop_iter)->get_children("choice");
-            //fork = fill_switch (choice_list);
         }
     }
 
-    Path* loc = new Path(stop_name, stop_length,
-            stop_outpost, stop_can_hunt);
-    if (loc == NULL)
-    {
-        std::cerr << "Out of memory!\n";
-        exit (1);
-    }
+    Path* loc = new Path (path_name, path_length);
     return loc;
 }
 
-static inline Map* parse_locations(const char filename[] = "map.xml")
+static inline Location*
+fill_location (const xmlpp::Node::NodeList::const_iterator& iter)
 {
-    // In the future this should not be const
-    string location_name, buffer;
-    Map* map = new Map();
-    if (map == NULL)
+    Glib::ustring type;
+
+    type = (*iter)->get_name ();
+
+#ifndef NDEBUG
+    std::cerr << "Currently processing an element of type " <<
+        type << std::endl;
+#endif
+    if (type == "path")
+        return fill_path (iter);
+    if (type == "outpost")
+        return fill_outpost (iter);
+    if (type == "userjump"){}
+    if (type == "fixedjump"){}
+
+    return NULL;
+}
+
+/// Returns a complete, ready to use track
+/**
+ * @param[in] track_iter iterator of who's children we will construct
+ * the track from.
+ * @todo: use exceptions to raise errors about what we expected in the
+ * document
+ */
+static inline
+Track* fill_track (const xmlpp::Node::NodeList::const_iterator& track_iter)
+{
+    xmlpp::Node::NodeList track_list = (*track_iter)->get_children ();
+    Track* new_track;
+    Glib::ustring name;
+
+    name = extract_name (track_iter);
+    new_track = new Track (name);
+#ifndef NDEBUG
+    std::cerr << "Created track " << name << std::endl;
+#endif
+
+    // Get all  our children
+    for(xmlpp::Node::NodeList::const_iterator
+            track_iter = track_list.begin();
+            track_iter != track_list.end(); track_iter++)
     {
-        std::cerr << "Out of memory!\n";
+        if ((*track_iter)->get_name () == "text") continue;
+        location* loc = fill_location (track_iter);
+        if (loc != NULL)
+        {
+            new_track->add_location (loc);
+#ifndef NDEBUG
+            std::cerr << "Filled location " << loc->get_name() << std::endl;
+#endif
+            delete loc;
+        }
+    }
+
+    return new_track;
+}
+
+Map::Map (const char filename[])
+{
+    xmlpp::DomParser parser;
+    const xmlpp::Element* root_element;
+    xmlpp::Node::NodeList track_list;
+    const xmlpp::Attribute* starting_track;
+    Glib::ustring starting_track_name;
+
+    try
+    {
+        parser.parse_file(filename);
+        parser.set_validate();
+        parser.set_substitute_entities();
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << "Exception caught validating the map: "
+            << ex.what() << std::endl;
         exit (1);
     }
 
-    // No align because things things should succeed
-    // The syntax is only for failure
-    try
-    {
-    xmlpp::DomParser parser;
-    parser.parse_file(filename);
-    parser.set_validate();
-    parser.set_substitute_entities();
-
-    if (parser)
-    {
     // Parse the document
     const xmlpp::Node* rNode = parser.get_document()->get_root_node();
     if (rNode->get_name() != "freetrail")
@@ -162,68 +184,41 @@ static inline Map* parse_locations(const char filename[] = "map.xml")
         std::cerr << "Expected root node to be \"freetrail\"!\n";
         exit(2);
     }
+    
+    root_element = dynamic_cast<const xmlpp::Element*>(rNode);
+    starting_track = root_element->get_attribute (Glib::ustring("start"));
+    starting_track_name = starting_track->get_name ();
 
-    xmlpp::Node::NodeList list = rNode->get_children("track");
+    track_list = rNode->get_children("track");
 
     // Cannot wait for the auto keyword
     // Anyway, hop through all the tracks for each of their shits
-    for (xmlpp::Node::NodeList::const_iterator track_iter = list.begin();
-            track_iter != list.end(); track_iter++)
+    for (xmlpp::Node::NodeList::const_iterator track_iter = track_list.begin();
+            track_iter != track_list.end(); track_iter++)
     {
-        Track curr_track(get_track_number(track_iter));
-        const xmlpp::Node::NodeList stop_list =
-            (*track_iter)->get_children("stop");
-        for(xmlpp::Node::NodeList::const_iterator stop_iter = stop_list.begin();
-                stop_iter != stop_list.end(); stop_iter++)
-        {
-            std::cerr << "Filling location...\n\t";
-            Path* loc = fill_stop(stop_iter);
-            assert (loc != NULL);
-            curr_track.add_location(loc);
-            std::cerr << "Filled location " << loc->get_name() << std::endl;
-            delete loc;
-        }
-        map->add_track(curr_track);
-    } // for (auto track_iter = list.begin)
-    } // if(parser)
-    } // try
-    catch(const std::exception& ex)
-    {
-        std::cerr << "Exception caught: " << ex.what() << std::endl;
-        exit (1);
+        Track* curr_track;
+        curr_track = fill_track (track_iter);
+        assert (curr_track != NULL);
+        this->add_track(*curr_track);
     }
-
-    return map;
 }
 
-Track::Track(const int number) : track_number(number) {};
+Track::Track(const Glib::ustring& name) : _name(name) {};
 
 /**
  * Add a location to this track.
  * @param[in] loc   Initialized pointer to location which will be added to this track.
- *
- * Side effects include the previous added track will be updated when a new one is inserted.
- * @bug: this is not thread safe
- * @bug: this sucks.
  */
 void Track::add_location(location* loc)
 {
-    static Path* last_path = NULL;
-    Path* curr_path;
-
     assert(loc != NULL);
 
-    // Update old path
-    if (last_path != NULL)
-        last_path->set_next_location(loc);
-
-    // Set old path to current path
-    curr_path = dynamic_cast<Path*>(loc);
-    if (curr_path)
-        last_path = curr_path;
-    else
-        last_path = NULL;
     track.push_back(loc);
+}
+
+bool Track::operator == (const Glib::ustring& rhs) const
+{
+    return _name == rhs;
 }
 
 /**
@@ -248,7 +243,7 @@ void Map::add_track(const Track& track)
 
 const Track* Map::getStartTrack () const
 {
-    return (const Track*) 0xdeadbeef;
+    return _firstTrack;
 }
 
 const Track* Map::get_track(const unsigned int pos) const
@@ -259,29 +254,5 @@ const Track* Map::get_track(const unsigned int pos) const
 unsigned int Map::size () const
 {
     return all_tracks.size();
-}
-
-World::World()
-{
-    map = parse_locations();
-}
-
-World::~World()
-{
-    delete map;
-}
-
-const location* World::get_curr_loc(const unsigned int track,
-                                    const unsigned int pos) const
-{
-#ifdef DEBUG
-    std::cout << "Get current location: " << track << ", " << pos << std::endl;
-#endif
-    return map->get_track(track)->get_stop(pos);
-}
-
-const Map* World::get_map () const
-{
-    return map;
 }
 
