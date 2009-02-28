@@ -11,5 +11,6 @@ Makefile
 /config.status
 /configure
 /configure.scan
+/doc
 /stamp-h1
 /src/freetrail
