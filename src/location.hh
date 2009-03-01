@@ -66,33 +66,34 @@ class Path : public location
 /// Container object holding a location, and a "how to get there".
 class ForkOption
 {
-    const Glib::ustring description_;
-    const unsigned int destination_;
+    const Glib::ustring _description; ///<A friendly description of what's here.
+    const Glib::ustring _destination; ///< Name of the destination track.
 
     public:
-    ForkOption (const Glib::ustring& desc, const unsigned int dest) :
-        description_(desc), destination_(dest)
+    ForkOption (const Glib::ustring& desc, const Glib::ustring& dest) :
+        _description(desc), _destination(dest)
     {};
     /// Returns what's special about this path
-    const Glib::ustring& get_description () const {return description_;};
+    const Glib::ustring& get_description () const {return _description;};
     /// Returns an int pointing to the track to jump to
-    unsigned int get_destination () const {return destination_;};
+    const Glib::ustring& get_destination () const {return _destination;};
 };
 
 /// A classic fork in the road.
 class Fork : public location
 {
-    const std::vector<ForkOption> jump_locations_;
+    const std::vector<ForkOption*> _jump_locations; ///<Possible places we could go.
 
-    const std::vector<ForkOption>& get_jumps () {return jump_locations_;};
     public:
     Fork (const Glib::ustring& name,
-          const std::vector<ForkOption>& jump_locations) :
-        location(name), jump_locations_(jump_locations)
+          const std::vector<ForkOption*>& jump_locations) :
+        location(name), _jump_locations(jump_locations)
     {};
-    /// Returns all the places someone can go from here.
-    virtual std::vector<location*>
-        getNext(const unsigned int track_no, const unsigned int position) const;
+    ~Fork();
+
+    Freetrail::Runner::Status run (Party* party);
+    const std::vector<ForkOption*>& get_jumps () const
+        {return _jump_locations;};
 };
 
 #endif // LOCATION_H

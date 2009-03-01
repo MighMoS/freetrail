@@ -10,6 +10,15 @@ bool Location::operator == (const Glib::ustring& rhs) const
     return _name == rhs;
 }
 
+Freetrail::Runner::Status Fork::run (Party* party)
+{
+    Freetrail::Runner::Status stat;
+
+    // Present options to the user.
+
+    return stat;
+}
+
 Freetrail::Runner::Status Path::run(Party* party)
 {
     Freetrail::Runner::Status stat;

@@ -95,6 +95,53 @@ Path* fill_path (const xmlpp::Node::NodeList::const_iterator& stop_iter)
     return loc;
 }
 
+///@relates: ForkOption
+static inline ForkOption*
+fill_jump (const xmlpp::Node::NodeList::const_iterator& iter)
+{
+    Glib::ustring destination;
+    Glib::ustring description;
+    const xmlpp::Element* jump = dynamic_cast<const xmlpp::Element*> (*iter);
+    const xmlpp::TextNode* description_text = jump->get_child_text ();
+    xmlpp::Attribute* jump_dest = jump->get_attribute(Glib::ustring("dest"));
+
+    destination = jump_dest->get_value ();
+    description = description_text->get_content ();
+
+    return new ForkOption (description, destination);
+}
+
+///@relates: Fork
+static inline Fork*
+fill_userjump (const xmlpp::Node::NodeList::const_iterator& iter)
+{
+    xmlpp::Node::NodeList fork_children;
+    Glib::ustring fork_name;
+    std::vector<ForkOption*> option_list;
+
+    fork_name = extract_name (iter);
+    fork_children = (*iter)->get_children (Glib::ustring("jump"));
+
+    // Process child nodes and text
+    for (xmlpp::Node::NodeList::const_iterator
+            substop_iter = fork_children.begin ();
+            substop_iter != fork_children.end (); substop_iter++)
+    {
+        ForkOption* opt;
+        const xmlpp::TextNode* nodeText =
+            dynamic_cast<const xmlpp::TextNode*>(*substop_iter);
+        if (nodeText && nodeText->is_white_space()) continue;
+        opt = fill_jump (substop_iter);
+        option_list.push_back(opt);
+    }
+
+    Fork* fork = new Fork (fork_name, option_list);
+
+    return fork;
+}
+
+///@Fills out a generic location by passing types to handlers.
+///@relates: Location
 static inline Location*
 fill_location (const xmlpp::Node::NodeList::const_iterator& iter)
 {
@@ -110,7 +157,8 @@ fill_location (const xmlpp::Node::NodeList::const_iterator& iter)
         return fill_path (iter);
     if (type == "outpost")
         return fill_outpost (iter);
-    if (type == "userjump"){}
+    if (type == "userjump")
+        return fill_userjump (iter);
     if (type == "fixedjump"){}
 
     return NULL;
@@ -149,7 +197,6 @@ Track* fill_track (const xmlpp::Node::NodeList::const_iterator& track_iter)
 #ifndef NDEBUG
             std::cerr << "Filled location " << loc->get_name() << std::endl;
 #endif
-            delete loc;
         }
     }
 
