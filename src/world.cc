@@ -142,7 +142,7 @@ Track* fill_track (const xmlpp::Node::NodeList::const_iterator& track_iter)
             track_iter != track_list.end(); track_iter++)
     {
         if ((*track_iter)->get_name () == "text") continue;
-        location* loc = fill_location (track_iter);
+        Location* loc = fill_location (track_iter);
         if (loc != NULL)
         {
             new_track->add_location (loc);
@@ -207,6 +207,7 @@ Map::Map (const char filename[])
             _firstTrack = curr_track;
         }
         this->add_track(*curr_track);
+        delete curr_track;
     }
 
     assert (first_filled != false);
@@ -214,15 +215,19 @@ Map::Map (const char filename[])
 
 Track::Track(const Glib::ustring& name) : _name(name) {};
 
+Track::~Track ()
+{
+}
+
 /**
  * Add a location to this track.
  * @param[in] loc   Initialized pointer to location which will be added to this track.
  */
-void Track::add_location(location* loc)
+void Track::add_location(Location* loc)
 {
     assert(loc != NULL);
 
-    track.push_back(loc);
+    _track.push_back(loc);
 }
 
 bool Track::operator == (const Glib::ustring& rhs) const
@@ -232,17 +237,17 @@ bool Track::operator == (const Glib::ustring& rhs) const
 
 /**
  * Returns the nth location (0 based).
- * @notes caller does not have to delete the returned location*
+ * @notes caller does not have to delete the returned Location*
  */
 const location* Track::get_stop(const unsigned int pos) const
 {
-    assert (pos <= track.size());
-    return track[pos];
+    assert (pos <= _track.size());
+    return _track[pos];
 }
 
 unsigned int Track::size() const
 {
-    return track.size();
+    return _track.size();
 }
 
 void Map::add_track(const Track& track)
