@@ -18,8 +18,6 @@ static inline Glib::ustring
 extract_name (const xmlpp::Node::NodeList::const_iterator& iter)
 {
     const xmlpp::Node::NodeList name_tag = (*iter)->get_children("name");
-    if (name_tag.size () == 0)
-        return Glib::ustring("");
     const xmlpp::Element* nodeElement =
         dynamic_cast<const xmlpp::Element*> (*(name_tag.begin()));
     const xmlpp::TextNode* node_text = nodeElement->get_child_text ();
@@ -39,6 +37,8 @@ extract_name (const xmlpp::Node::NodeList::const_iterator& iter)
     return name;
 }
 
+/// Returns a ready to use Outpost Location.
+///@relates: outpost
 static inline Outpost*
 fill_outpost (const xmlpp::Node::NodeList::const_iterator& iter)
 {
@@ -50,8 +50,8 @@ fill_outpost (const xmlpp::Node::NodeList::const_iterator& iter)
     return loc;
 };
 
-///@relates: path
 ///Creates a new location based off the XML pointed to by stop_iter
+///@relates: path
 /**
  * <path><name>thisPathName</name><length>100</path>
  * would create a path with a length of 100 called "thisPathName"
@@ -286,7 +286,7 @@ bool Track::operator == (const Glib::ustring& rhs) const
  * Returns the nth location (0 based).
  * @notes caller does not have to delete the returned Location*
  */
-const location* Track::get_stop(const unsigned int pos) const
+const Location* Track::get_stop(const unsigned int pos) const
 {
     assert (pos <= _track.size());
     return _track[pos];

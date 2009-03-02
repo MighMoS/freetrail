@@ -14,17 +14,22 @@ namespace Freetrail{
     /// Container holding what happened, and where to go.
     class Status
     {
-        const Track* _next_track;
-        state _state;
+        const Track* _next_track; ///<Where to go to next. If this is NULL, allow controller to decide.
+        state _state; ///<Win, Lose, or neither yet?
 
         public:
         Status ();
+        /// Used to jump to another track.
         void setNextTrack (const Track* track);
+        /// Used to indicate success or failure.
         void setStatus (const state state);
 
         const Track* getNextTrack () const {return _next_track;};
+        /// Do we keep going?
         bool KeepRunning () const {return _state == KEEP_RUNNING;};
+        /// Have we won?
         bool hasWon () const {return _state == WIN;};
+        /// Have we lost?
         bool hasLost () const {return _state == LOSE;};
     };
 
@@ -33,13 +38,13 @@ namespace Freetrail{
 class Runner
 {
     protected:
-        const Party* _party;
+        const Party* _party; ///<The party we're running.
     public:
         Runner (const Party* _party);
         virtual Status run() = 0;
 };
 
-/// Runs a party through the whole map.
+/// Runs a Party through the whole Map.
 class IMapRunner : public Runner
 {
     const Map* _map;
@@ -47,10 +52,11 @@ class IMapRunner : public Runner
 
     public:
     IMapRunner (const Party* party, const Map* map);
+    /// Plays the game. Won't stop until there is no where else to go.
     Status run();
 };
 
-/// Runs a party through a single track.
+/// Runs a Party through a single Track.
 class ITrackRunner : public Runner
 {
     const Track* _track;
@@ -58,17 +64,18 @@ class ITrackRunner : public Runner
 
     public:
     ITrackRunner (const Party* party, const Track* track);
+    /// Moves through an area.
     Status run();
 };
 
-/// Runs a party through a single location.
-/// This is where most of the work is done.
+/// Runs a Party through a single Location.
 class ILocationRunner : public Runner
 {
     const Location* _location;
 
     public:
     ILocationRunner (const Party* party, const Location* location);
+    /// Moves through a single Location, as defined by its subtype.
     Status run();
 };
 

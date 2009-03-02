@@ -11,23 +11,20 @@ class Status;
 }}
 
 /// Abstract class for "somewhere".
-class location
+class Location
 {
     protected:
     Glib::ustring _name;
-    /// Is this a settled place?
-    /// @deprecated: In the future a new class (Outpost) should be used.
-    bool is_outpost;
-
     /// Can we hunt?
     ///@deprecated: I'm not sure what to do with this, but it seems wrong.
     bool can_hunt;
 
     public:
-    location(const Glib::ustring& name) : _name(name) {};
+    Location(const Glib::ustring& name) : _name(name) {};
     /// Returns a friendly name for this place.
     Glib::ustring get_name () const {return _name;};
     virtual bool operator == (const Glib::ustring& rhs) const;
+    /// Does something with the party while they're here.
     virtual Freetrail::Runner::Status run (Party* party) = 0;
 
 #ifdef DEBUG
@@ -35,31 +32,28 @@ class location
 #endif
 };
 
-// For compat:
-typedef location Location;
-
-/// Reserved for future use.
-//
-/// Will contain a list of items for sale (and price), for one.
-class Outpost : public location
+/// A respectable, safe place to stop and shop.
+class Outpost : public Location
 {
     public:
     Outpost (const Glib::ustring& name);
+    /// Allows the party to rest and purchase supplies.
     Freetrail::Runner::Status run (Party* party);
 };
 
 /// A road to travel, the most common type of location.
-class Path : public location
+class Path : public Location
 {
-    unsigned int _next_distance; // Distance to the next stop
+    unsigned int _next_distance; ///<Distance to the next Location
 
     public:
     Path (const Glib::ustring& name, const unsigned int distance) :
-        location(name), _next_distance(distance) {};
+        Location(name), _next_distance(distance) {};
     /// How far away is the next location, from start to finish.
     unsigned int get_next_distance () const {return _next_distance;};
     /// Should only be called by map parser.
-    void set_next_location(location* next_location);
+    void set_next_location(Location* next_location);
+    /// Moves a party step by step through a path, possibly over several turns.
     Freetrail::Runner::Status run (Party* party);
 };
 
@@ -80,18 +74,20 @@ class ForkOption
 };
 
 /// A classic fork in the road.
-class Fork : public location
+class Fork : public Location
 {
     const std::vector<ForkOption*> _jump_locations; ///<Possible places we could go.
 
     public:
     Fork (const Glib::ustring& name,
           const std::vector<ForkOption*>& jump_locations) :
-        location(name), _jump_locations(jump_locations)
+        Location(name), _jump_locations(jump_locations)
     {};
     ~Fork();
 
+    /// Allows the user to make a decision of where to go.
     Freetrail::Runner::Status run (Party* party);
+    /// Returns possible locations to go to.
     const std::vector<ForkOption*>& get_jumps () const
         {return _jump_locations;};
 };

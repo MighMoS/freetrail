@@ -62,6 +62,8 @@ ITrackRunner::ITrackRunner (const Party* party,
     assert (_track != NULL);
 }
 
+///Runs a party through a track.
+///@relates: Track
 Status ITrackRunner::run()
 {
     Status stat;
