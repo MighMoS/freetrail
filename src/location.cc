@@ -5,11 +5,17 @@
 #include "runners.hh"
 #include "ui.hh"
 
+/**
+ *@param[in] rhs a Glib::ustring to compare this Location to.
+ */
 bool Location::operator == (const Glib::ustring& rhs) const
 {
     return _name == rhs;
 }
 
+/**
+ *@param[in] party Party to subject to this Location.
+ */
 Freetrail::Runner::Status Fork::run (Party* party)
 {
     Freetrail::Runner::Status stat;
@@ -19,6 +25,9 @@ Freetrail::Runner::Status Fork::run (Party* party)
     return stat;
 }
 
+/**
+ *@param[in] party Party to subject to this Location.
+ */
 Freetrail::Runner::Status Path::run(Party* party)
 {
     Freetrail::Runner::Status stat;
@@ -60,10 +69,16 @@ std::ostream& operator << (std::ostream& os, const Location& loc)
 }
 #endif
 
+/**
+ *@param[in] name what this outpost is called.
+ */
 Outpost::Outpost (const Glib::ustring& name) :
     Location (name)
 {}
 
+/**
+ *@param[in] party Party to subject to this Location.
+ */
 Freetrail::Runner::Status Outpost::run (Party* party)
 {
     user_interface::shop(*party);
