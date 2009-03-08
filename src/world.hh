@@ -1,5 +1,7 @@
 #ifndef WORLD
 #define WORLD
+#include <tr1/memory>
+
 #include <vector>
 
 #ifdef DEBUG
@@ -13,15 +15,17 @@
 /// Container holding a list of locations. Best thought of as an "area".
 class Track
 {
-    std::vector<Location*> _track; ///< Holds a list of our locations
+    std::vector<std::tr1::shared_ptr<Location> > _track; ///< Holds a list of our Locations
     Glib::ustring _name; ///< Friendly name describing this area
     public:
+    /// Default constructor, creates a Track with no Locations and the provided name.
     Track (const Glib::ustring& name);
-    ~Track ();
     const Location* get_stop(const unsigned int pos) const;
     /// Compares a track's name against a string.
     bool operator == (const Glib::ustring& rhs) const;
+    /// Returns how many Locations are stored in this Track.
     unsigned int size() const;
+    /// Adds the specified Location the end of this track.
     void add_location(Location* loc);
 };
 

@@ -262,19 +262,18 @@ Map::Map (const char filename[])
 
 Track::Track(const Glib::ustring& name) : _name(name) {};
 
-Track::~Track ()
-{
-}
-
 /**
- * Add a location to this track.
+ * Add a Location to this Track.
  * @param[in] loc   Initialized pointer to location which will be added to this track.
+ * @notes The caller should NOT delete the pointer passed in.
  */
 void Track::add_location(Location* loc)
 {
     assert(loc != NULL);
 
-    _track.push_back(loc);
+    // From this point forward, loc is automatically managed.
+    std::tr1::shared_ptr<Location> shared_loc (loc);
+    _track.push_back(shared_loc);
 }
 
 bool Track::operator == (const Glib::ustring& rhs) const
@@ -289,7 +288,7 @@ bool Track::operator == (const Glib::ustring& rhs) const
 const Location* Track::get_stop(const unsigned int pos) const
 {
     assert (pos <= _track.size());
-    return _track[pos];
+    return _track[pos].get();
 }
 
 unsigned int Track::size() const
