@@ -16,7 +16,7 @@ bool Location::operator == (const Glib::ustring& rhs) const
 /**
  *@param[in] party Party to subject to this Location.
  */
-Freetrail::Runner::Status Fork::run (Party* party)
+Freetrail::Runner::Status Fork::run (Party* party) const
 {
     Freetrail::Runner::Status stat;
 
@@ -28,7 +28,7 @@ Freetrail::Runner::Status Fork::run (Party* party)
 /**
  *@param[in] party Party to subject to this Location.
  */
-Freetrail::Runner::Status Path::run(Party* party)
+Freetrail::Runner::Status Path::run(Party* party) const
 {
     Freetrail::Runner::Status stat;
     const unsigned int speed = party->get_speed();
@@ -79,7 +79,7 @@ Outpost::Outpost (const Glib::ustring& name) :
 /**
  *@param[in] party Party to subject to this Location.
  */
-Freetrail::Runner::Status Outpost::run (Party* party)
+Freetrail::Runner::Status Outpost::run (Party* party) const
 {
     user_interface::shop(*party);
     return Freetrail::Runner::Status();

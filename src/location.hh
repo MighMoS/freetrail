@@ -25,7 +25,7 @@ class Location
     Glib::ustring get_name () const {return _name;};
     virtual bool operator == (const Glib::ustring& rhs) const;
     /// Does something with the party while they're here.
-    virtual Freetrail::Runner::Status run (Party* party) = 0;
+    virtual Freetrail::Runner::Status run (Party* party) const = 0;
 
 #ifdef DEBUG
     friend ostream& operator <<(ostream& os, const location& loc);
@@ -38,7 +38,7 @@ class Outpost : public Location
     public:
     Outpost (const Glib::ustring& name);
     /// Allows the party to rest and purchase supplies.
-    Freetrail::Runner::Status run (Party* party);
+    Freetrail::Runner::Status run (Party* party) const;
 };
 
 /// A road to travel, the most common type of location.
@@ -54,7 +54,7 @@ class Path : public Location
     /// Should only be called by map parser.
     void set_next_location(Location* next_location);
     /// Moves a party step by step through a path, possibly over several turns.
-    Freetrail::Runner::Status run (Party* party);
+    Freetrail::Runner::Status run (Party* party) const;
 };
 
 /// Container object holding a location, and a "how to get there".
@@ -86,7 +86,7 @@ class Fork : public Location
     ~Fork();
 
     /// Allows the user to make a decision of where to go.
-    Freetrail::Runner::Status run (Party* party);
+    Freetrail::Runner::Status run (Party* party) const;
     /// Returns possible locations to go to.
     const std::vector<ForkOption*>& get_jumps () const
         {return _jump_locations;};

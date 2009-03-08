@@ -38,9 +38,9 @@ namespace Freetrail{
 class Runner
 {
     protected:
-        const Party* _party; ///<The party we're running.
+        Party* _party; ///<The party we're running.
     public:
-        Runner (const Party* _party);
+        Runner (Party* _party);
         virtual Status run() = 0;
 };
 
@@ -51,7 +51,7 @@ class IMapRunner : public Runner
     const Track* _curr_track;
 
     public:
-    IMapRunner (const Party* party, const Map* map);
+    IMapRunner (Party* party, const Map* map);
     /// Plays the game. Won't stop until there is no where else to go.
     Status run();
 };
@@ -63,7 +63,7 @@ class ITrackRunner : public Runner
     const Location* _curr_location;
 
     public:
-    ITrackRunner (const Party* party, const Track* track);
+    ITrackRunner (Party* party, const Track* track);
     /// Moves through an area.
     Status run();
 };
@@ -74,7 +74,7 @@ class ILocationRunner : public Runner
     const Location* _location;
 
     public:
-    ILocationRunner (const Party* party, const Location* location);
+    ILocationRunner (Party* party, const Location* location);
     /// Moves through a single Location, as defined by its subtype.
     Status run();
 };
