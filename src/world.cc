@@ -1,8 +1,6 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
-#include <string>
-using std::string;
 #include <sstream>
 
 #include <libxml++/libxml++.h>
@@ -206,10 +204,9 @@ Track* fill_track (const xmlpp::Node::NodeList::const_iterator& track_iter)
 Map::Map (const char filename[])
 {
     xmlpp::DomParser parser;
-    const xmlpp::Element* root_element;
     xmlpp::Node::NodeList track_list;
+    const xmlpp::Element* root_element;
     const xmlpp::Attribute* starting_track;
-    Glib::ustring starting_track_name;
 
     try
     {
@@ -234,12 +231,11 @@ Map::Map (const char filename[])
     
     root_element = dynamic_cast<const xmlpp::Element*>(rNode);
     starting_track = root_element->get_attribute (Glib::ustring("start"));
-    starting_track_name = starting_track->get_value ();
-    assert ("" != starting_track_name);
+    _first_track = starting_track->get_value ();
+    assert ("" != _first_track);
 
     track_list = rNode->get_children("track");
 
-    bool first_filled = false;
     // Cannot wait for the auto keyword
     // Anyway, hop through all the tracks for each of their shits
     for (xmlpp::Node::NodeList::const_iterator track_iter = track_list.begin();
@@ -248,16 +244,9 @@ Map::Map (const char filename[])
         Track* curr_track;
         curr_track = fill_track (track_iter);
         assert (curr_track != NULL);
-        if (first_filled == false && *curr_track == starting_track_name)
-        {
-            first_filled = true;
-            _firstTrack = curr_track;
-        }
         this->add_track(*curr_track);
-        delete curr_track;
+        delete (curr_track);
     }
-
-    assert (first_filled != false);
 }
 
 Track::Track(const Glib::ustring& name) : _name(name) {};
@@ -298,21 +287,26 @@ unsigned int Track::size() const
 
 void Map::add_track(const Track& track)
 {
-    all_tracks.push_back(track);
+    _all_tracks.insert (track);
 }
 
 const Track* Map::getStartTrack () const
 {
-    return _firstTrack;
+    return get_track (_first_track);
 }
 
-const Track* Map::get_track(const unsigned int pos) const
+/**
+ * @params[in] track_name the name of the Track to retrieve.
+ * @notes The caller should not delete the returned Track.
+ */
+const Track* Map::get_track (const Glib::ustring& track_name) const
 {
-    return &all_tracks[pos];
+    // Convert the iterator to a regular pointer, and return.
+    return &*_all_tracks.find (track_name);
 }
 
 unsigned int Map::size () const
 {
-    return all_tracks.size();
+    return _all_tracks.size();
 }
 
