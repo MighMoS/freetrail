@@ -55,8 +55,7 @@ Status IMapRunner::run()
 ///@param party: the party we're moving.
 ///@param track: the track we're moving the party through.
 ITrackRunner::ITrackRunner (Party* party, const Track* track) :
-    Runner(party), _track(track),
-    _curr_location(track->get_stop(0))
+    Runner(party), _track(track)
 {
     assert (_track != NULL);
 }
@@ -66,10 +65,11 @@ ITrackRunner::ITrackRunner (Party* party, const Track* track) :
 Status ITrackRunner::run()
 {
     Status stat;
+    for (unsigned int i = 0; i < _track->size (); i++)
     while (stat.KeepRunning() == true)
     {
-        ILocationRunner lRun (_party, _curr_location);
-        lRun.run ();
+        ILocationRunner lRun (_party, _track->get_stop (i));
+        stat = lRun.run ();
         if (stat.getNextTrack () != NULL)
         {
             return stat;

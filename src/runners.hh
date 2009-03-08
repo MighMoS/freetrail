@@ -60,7 +60,6 @@ class IMapRunner : public Runner
 class ITrackRunner : public Runner
 {
     const Track* _track;
-    const Location* _curr_location;
 
     public:
     ITrackRunner (Party* party, const Track* track);
