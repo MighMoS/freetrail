@@ -5,10 +5,6 @@
 #include <set>
 #include <vector>
 
-#ifdef DEBUG
-#include <iostream>
-#endif
-
 #include <glibmm.h>
 
 #include "location.hh"
