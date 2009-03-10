@@ -1,5 +1,6 @@
 #include <cassert>
 
+#include "common.hh"
 #include "runners.hh"
 #include "world.hh"
 
@@ -65,10 +66,8 @@ ITrackRunner::ITrackRunner (Party* party, const Track* track) :
 Status ITrackRunner::run()
 {
     Status stat;
-    for (unsigned int i = 0; i < _track->size (); i++)
+    for (unsigned int i = 0; i < _track->size () && stat.KeepRunning(); i++)
     {
-        while (stat.KeepRunning() == true)
-        {
             ILocationRunner lRun (_party, _track->get_stop (i));
             stat = lRun.run ();
             // If we're supposed to jump somewhere, then do so.
@@ -76,7 +75,6 @@ Status ITrackRunner::run()
             {
                 return stat;
             }
-        }
     }
 
     return stat;

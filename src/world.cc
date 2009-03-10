@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 
+#include <glibmm.h>
 #include <libxml++/libxml++.h>
 
 #include "world.hh"
