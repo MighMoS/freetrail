@@ -1,6 +1,10 @@
 #ifndef LOCATION_H
 #define LOCATION_H
 
+#ifndef NDEBUG
+#include <iostream>
+#endif
+
 #include <glibmm.h>
 
 #include "party.hh"
@@ -14,10 +18,9 @@ class Status;
 class Location
 {
     protected:
-    Glib::ustring _name;
-    /// Can we hunt?
+    Glib::ustring _name; ///<What we shall call this place.
     ///@deprecated: I'm not sure what to do with this, but it seems wrong.
-    bool can_hunt;
+    bool can_hunt; ///<Can we hunt here?
 
     public:
     Location(const Glib::ustring& name) : _name(name) {};
@@ -27,8 +30,8 @@ class Location
     /// Does something with the party while they're here.
     virtual Freetrail::Runner::Status run (Party* party) const = 0;
 
-#ifdef DEBUG
-    friend ostream& operator <<(ostream& os, const location& loc);
+#ifndef NDEBUG
+    friend std::ostream& operator <<(std::ostream& os, const Location& loc);
 #endif
 };
 
