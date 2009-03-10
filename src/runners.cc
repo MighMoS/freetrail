@@ -66,13 +66,16 @@ Status ITrackRunner::run()
 {
     Status stat;
     for (unsigned int i = 0; i < _track->size (); i++)
-    while (stat.KeepRunning() == true)
     {
-        ILocationRunner lRun (_party, _track->get_stop (i));
-        stat = lRun.run ();
-        if (stat.getNextTrack () != NULL)
+        while (stat.KeepRunning() == true)
         {
-            return stat;
+            ILocationRunner lRun (_party, _track->get_stop (i));
+            stat = lRun.run ();
+            // If we're supposed to jump somewhere, then do so.
+            if (stat.getNextTrack () != NULL)
+            {
+                return stat;
+            }
         }
     }
 

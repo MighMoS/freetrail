@@ -38,20 +38,20 @@ Freetrail::Runner::Status Path::run(Party* party) const
 
     while (reached_landmark == false)
     {
-    if (get_next_distance() > speed + distance_traveled)
-    {
-        distance_traveled += speed;
-    }
-    else
-    {
-        distance_traveled = get_next_distance() - distance_traveled;
-        reached_landmark = true;
-    }
-    food_eaten = party->eat_food();
+        if (get_next_distance() > speed + distance_traveled)
+        {
+            distance_traveled += speed;
+        }
+        else
+        {
+            distance_traveled = get_next_distance() - distance_traveled;
+            reached_landmark = true;
+        }
+        food_eaten = party->eat_food();
 
-    std::cout << "You traveled " << distance_traveled << " miles today and have "
-        << party->get_food() << " lbs of food remaining.\n";
-    user_interface::wait_for_key();
+        std::cout << "You traveled " << distance_traveled << " miles today and have "
+            << party->get_food() << " lbs of food remaining.\n";
+        user_interface::wait_for_key();
     }
 
     std::cout << horizrule;
