@@ -36,8 +36,11 @@ extract_name (const xmlpp::Node::NodeList::const_iterator& iter)
     return name;
 }
 
-/// Returns a ready to use Outpost Location.
-///@relates: outpost
+/**
+ * Constructs an Outpost from iter
+ * @returns a ready to use Outpost.
+ * @relates Outpost
+ */
 static inline Outpost*
 fill_outpost (const xmlpp::Node::NodeList::const_iterator& iter)
 {
@@ -139,7 +142,7 @@ fill_userjump (const xmlpp::Node::NodeList::const_iterator& iter)
     return fork;
 }
 
-///@Fills out a generic location by passing types to handlers.
+///Fills out a generic location by passing types to handlers.
 ///@relates: Location
 static inline Location*
 fill_location (const xmlpp::Node::NodeList::const_iterator& iter)
@@ -255,7 +258,7 @@ Track::Track(const Glib::ustring& name) : _name(name) {};
 /**
  * Add a Location to this Track.
  * @param[in] loc   Initialized pointer to location which will be added to this track.
- * @notes The caller should NOT delete the pointer passed in.
+ * @note The caller should NOT delete the pointer passed in.
  */
 void Track::add_location(Location* loc)
 {
@@ -273,7 +276,7 @@ bool Track::operator == (const Glib::ustring& rhs) const
 
 /**
  * Returns the nth location (0 based).
- * @notes caller does not have to delete the returned Location*
+ * @note caller does not have to delete the returned Location*
  */
 const Location* Track::get_stop(const unsigned int pos) const
 {
@@ -297,8 +300,8 @@ const Track* Map::getStartTrack () const
 }
 
 /**
- * @params[in] track_name the name of the Track to retrieve.
- * @notes The caller should not delete the returned Track.
+ * @param[in] track_name the name of the Track to retrieve.
+ * @note The caller should not delete the returned Track.
  */
 const Track* Map::get_track (const Glib::ustring& track_name) const
 {
