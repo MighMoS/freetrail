@@ -34,7 +34,7 @@ AC_MSG_RESULT($debuger)
 
 # set DEBUG flag and introduce additional compiler flags
 if test x"$debuger" = x"yes"; then
-    CXXFLAGS="$CXXFLAGS -g3"
+    CXXFLAGS="$CXXFLAGS -g3 -O0"
 fi  
 
 # Checks for libraries.

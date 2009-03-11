@@ -1,4 +1,10 @@
-Freetrail 0.0.1:
+Freetrail 0.0.2:
+----------
+* Moving in a non-linear fashion is supported.
+* Massive rework of all manhandling code.
+* Massive documentation effort.
 
+Freetrail 0.0.1:
+----------
 Initial release. Support for creating a party and moving.
 That's about it.
