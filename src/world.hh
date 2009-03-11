@@ -9,7 +9,8 @@
 
 #include "location.hh"
 
-typedef std::vector<std::tr1::shared_ptr<Location> > LocationContainer;
+typedef std::tr1::shared_ptr<Location> LocationPtr;
+typedef std::vector<LocationPtr> LocationContainer;
 /// Container holding a list of locations. Best thought of as an "area".
 class Track
 {
