@@ -65,6 +65,16 @@ class Path : public Location
     Freetrail::Runner::Status run (Party* party) const;
 };
 
+/// Completing this Path will win the game for the user.
+class WinningPath : public Path
+{
+    public:
+    WinningPath (const Glib::ustring& name, const unsigned int distance) :
+        Path (name, distance) {};
+    /// Functions just like Path::run, but win if we get through it.
+    Freetrail::Runner::Status run (Party* party) const;
+};
+
 /// Container object holding a location, and a "how to get there".
 class ForkOption
 {

@@ -45,7 +45,7 @@ class Map
     /// Returns a pointer to the specified Track.
     const Track* find (const Glib::ustring& track_name) const;
     /// Gets the first Track of the map. This must exist and can not fail.
-    const Track* getStartTrack() const;
+    const Glib::ustring& getStartTrack() const;
     /// Returns the number of tracks held.
     unsigned int size() const;
 };

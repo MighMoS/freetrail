@@ -61,10 +61,12 @@ fill_outpost (const xmlpp::Node::NodeList::const_iterator& iter)
  * would create a path with a length of 100 called "thisPathName"
  */
 static inline
-Path* fill_path (const xmlpp::Node::NodeList::const_iterator& stop_iter)
+Path* fill_path (const xmlpp::Node::NodeList::const_iterator& stop_iter,
+        const Glib::ustring& type)
 {
     xmlpp::Node::NodeList path_children;
     Glib::ustring path_name;
+    Path* loc;
     unsigned int path_length;
 
     path_name = extract_name (stop_iter);
@@ -95,7 +97,12 @@ Path* fill_path (const xmlpp::Node::NodeList::const_iterator& stop_iter)
         }
     }
 
-    Path* loc = new Path (path_name, path_length);
+    if (type == "path")
+        loc = new Path (path_name, path_length);
+    else if (type == "winningpath")
+        loc = new WinningPath (path_name, path_length);
+    else
+        assert (0 && "Path was neither a regular path or a winning on");
     return loc;
 }
 
@@ -169,8 +176,8 @@ fill_location (const xmlpp::Node::NodeList::const_iterator& iter)
     std::cerr << "Currently processing an element of type " <<
         type << std::endl;
 #endif
-    if (type == "path")
-        return fill_path (iter);
+    if (type == "path" || type == "winningpath")
+        return fill_path (iter, type);
     if (type == "outpost")
         return fill_outpost (iter);
     if (type == "userjump" || type == "fixedjump")
@@ -320,13 +327,13 @@ void Map::add_track(const Track& track)
     _all_tracks.insert (track);
 }
 
-const Track* Map::getStartTrack () const
+const Glib::ustring& Map::getStartTrack () const
 {
-    return find (_first_track);
+    return _first_track;
 }
 
 /**
- * @param[in] track_name the name of the Track to retrieve.
+ * @param track_name the name of the Track to retrieve.
  * @note The caller should NOT @c delete the returned Track.
  */
 const Track* Map::find (const Glib::ustring& track_name) const

@@ -46,9 +46,9 @@
 </track>
 <track end="win">
     <name>Last Track</name>
-    <path>
-        <name>Almost there</name>
+    <winningpath>
+        <name>You're almost there</name>
         <length>20</length>
-    </path>
+    </winningpath>
 </track>
 </freetrail>

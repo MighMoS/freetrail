@@ -98,6 +98,21 @@ Freetrail::Runner::Status Path::run(Party* party) const
     return stat;
 }
 
+/**
+ *@see Path::run ()
+ */
+Freetrail::Runner::Status WinningPath::run (Party* party) const
+{
+    Freetrail::Runner::Status stat;
+
+    stat = Path::run (party);
+    // Actually, don't keep running, we're done!
+    if (stat.KeepRunning ())
+        stat.setStatus (Freetrail::Runner::WIN);
+
+    return stat;
+}
+
 #ifndef NDEBUG
 std::ostream& operator << (std::ostream& os, const Location& loc)
 {

@@ -45,14 +45,14 @@ IMapRunner::IMapRunner (Party* party, const Map* map) :
 Status IMapRunner::run()
 {
     Status stat;
-    const Track* _curr_track = _map->getStartTrack ();
-    assert (_curr_track != NULL);
+    const Track* _curr_track;
+    stat.setNextTrack (_map->getStartTrack ());
 
     while (stat.KeepRunning()) // Default value
     {
+        _curr_track = _map->find (stat.getNextTrack ());
         ITrackRunner tRun (_party, _curr_track);
         stat = tRun.run ();
-        _curr_track = _map->find (stat.getNextTrack ());
     }
 
     return stat;
