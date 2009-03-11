@@ -47,7 +47,7 @@ Status IMapRunner::run()
     while (stat.KeepRunning()) // Default value
     {
         ITrackRunner tRun (_party, _curr_track);
-        tRun.run ();
+        stat = tRun.run ();
         _curr_track = _map->find (stat.getNextTrack ());
     }
 
