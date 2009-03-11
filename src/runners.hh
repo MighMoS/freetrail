@@ -9,7 +9,7 @@ namespace Freetrail{
 {
     /// What is the current state of the game?
     /// Have we won, lost, or do we keep playing?
-    enum state {KEEP_RUNNING, JUMP, WIN, LOSE};
+    enum state {KEEP_RUNNING, WIN, LOSE};
 
     /// Container holding what happened, and where to go.
     class Status

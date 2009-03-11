@@ -36,7 +36,7 @@ const ForkOption* user_interface::prompt_at_fork (const Fork& loc)
         std::cout << counter << ") " << (*i)->get_description() << "\n";
     }
     std::cin >> counter;
-    return fork_vec[counter-1]; // people count from 1, we don't.
+    return fork_vec[counter-1].get (); // people count from 1, we don't.
 }
 
 /**

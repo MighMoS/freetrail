@@ -10,12 +10,21 @@
 #include "ui.hh"
 
 /**
- *@param[in] rhs a Glib::ustring to compare this Location to.
+ *@param rhs a Glib::ustring to compare this Location to.
  */
 bool Location::operator == (const Glib::ustring& rhs) const
 {
     return _name == rhs;
 }
+
+/**
+ *@param name circumstances requiring a fork
+ *@param jump_locations a list of choices for the user
+ */
+Fork::Fork (const Glib::ustring& name,
+        const ForkOptionContainer& jump_locations):
+    Location(name), _jump_locations(jump_locations)
+{};
 
 /**
  *@param[in,out] party Party to ask where to go.

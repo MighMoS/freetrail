@@ -13,9 +13,12 @@ Status::Status () :
 {}
 
 ///In case we're not moving sequentially, this will jump us somewhere.
+/**
+ *@param track name of the Track to jump to.
+ */
 void Status::setNextTrack (const Glib::ustring& track)
 {
-    _state = JUMP;
+    _state = KEEP_RUNNING;
     _next_track = track;
 }
 
@@ -31,8 +34,8 @@ Runner::Runner (Party* party) : _party(party)
     assert (party != NULL);
 }
 
-///@param party: the party we're moving.
-///@param map: the map we're moving the party through.
+///@param party the party we're moving.
+///@param map the map we're moving the party through.
 IMapRunner::IMapRunner (Party* party, const Map* map) :
     Runner::Runner(party), _map(map)
 {

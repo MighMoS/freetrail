@@ -100,7 +100,7 @@ Path* fill_path (const xmlpp::Node::NodeList::const_iterator& stop_iter)
 }
 
 ///@relates: ForkOption
-static inline ForkOption*
+static inline ForkOptionPtr
 fill_jump (const xmlpp::Node::NodeList::const_iterator& iter)
 {
     Glib::ustring destination;
@@ -112,7 +112,7 @@ fill_jump (const xmlpp::Node::NodeList::const_iterator& iter)
     destination = jump_dest->get_value ();
     description = description_text->get_content ();
 
-    return new ForkOption (description, destination);
+    return ForkOptionPtr (new ForkOption(description, destination));
 }
 
 ///@relates: Fork
@@ -121,7 +121,7 @@ fill_userjump (const xmlpp::Node::NodeList::const_iterator& iter)
 {
     xmlpp::Node::NodeList fork_children;
     Glib::ustring fork_name;
-    std::vector<ForkOption*> option_list;
+    ForkOptionContainer option_list;
 
     fork_name = extract_name (iter);
     fork_children = (*iter)->get_children (Glib::ustring("jump"));
@@ -131,11 +131,11 @@ fill_userjump (const xmlpp::Node::NodeList::const_iterator& iter)
             substop_iter = fork_children.begin ();
             substop_iter != fork_children.end (); substop_iter++)
     {
-        ForkOption* opt;
         const xmlpp::TextNode* nodeText =
             dynamic_cast<const xmlpp::TextNode*>(*substop_iter);
         if (nodeText && nodeText->is_white_space()) continue;
-        opt = fill_jump (substop_iter);
+
+        ForkOptionPtr opt (fill_jump (substop_iter));
         option_list.push_back(opt);
     }
 

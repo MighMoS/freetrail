@@ -4,6 +4,7 @@
 #ifndef NDEBUG
 #include <iostream>
 #endif
+#include <tr1/memory>
 
 #include <glibmm.h>
 
@@ -80,7 +81,8 @@ class ForkOption
     const Glib::ustring& get_destination () const {return _destination;};
 };
 
-typedef std::vector<ForkOption*> ForkOptionContainer;
+typedef std::tr1::shared_ptr<ForkOption> ForkOptionPtr;
+typedef std::vector<ForkOptionPtr> ForkOptionContainer;
 /// A classic fork in the road.
 class Fork : public Location
 {
@@ -88,10 +90,7 @@ class Fork : public Location
 
     public:
     Fork (const Glib::ustring& name,
-          const ForkOptionContainer& jump_locations) :
-        Location(name), _jump_locations(jump_locations)
-    {};
-    ~Fork();
+          const ForkOptionContainer& jump_locations);
 
     /// Allows the user to make a decision of where to go.
     Freetrail::Runner::Status run (Party* party) const;
