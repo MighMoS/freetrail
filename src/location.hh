@@ -10,9 +10,13 @@
 #include "party.hh"
 
 // Found in runners.hh
-namespace Freetrail{namespace Runner{
-class Status;
-}}
+namespace Freetrail
+{
+    namespace Runner
+    {
+        class Status;
+    }
+}
 
 /// Abstract class for "somewhere".
 class Location
@@ -76,14 +80,15 @@ class ForkOption
     const Glib::ustring& get_destination () const {return _destination;};
 };
 
+typedef std::vector<ForkOption*> ForkOptionContainer;
 /// A classic fork in the road.
 class Fork : public Location
 {
-    const std::vector<ForkOption*> _jump_locations; ///<Possible places we could go.
+    const ForkOptionContainer _jump_locations; ///<Possible places we could go.
 
     public:
     Fork (const Glib::ustring& name,
-          const std::vector<ForkOption*>& jump_locations) :
+          const ForkOptionContainer& jump_locations) :
         Location(name), _jump_locations(jump_locations)
     {};
     ~Fork();
@@ -91,7 +96,7 @@ class Fork : public Location
     /// Allows the user to make a decision of where to go.
     Freetrail::Runner::Status run (Party* party) const;
     /// Returns possible locations to go to.
-    const std::vector<ForkOption*>& get_jumps () const
+    const ForkOptionContainer& get_jumps () const
         {return _jump_locations;};
 };
 

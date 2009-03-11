@@ -14,7 +14,7 @@ namespace Freetrail{
     /// Container holding what happened, and where to go.
     class Status
     {
-        Glib::ustring _next_track; ///<Where to go to next. If this is NULL, allow controller to decide.
+        Glib::ustring _next_track; ///<Name of the next Track.
         state _state; ///<Win, Lose, or neither yet?
 
         public:

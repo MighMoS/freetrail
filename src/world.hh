@@ -9,10 +9,11 @@
 
 #include "location.hh"
 
+typedef std::vector<std::tr1::shared_ptr<Location> > LocationContainer;
 /// Container holding a list of locations. Best thought of as an "area".
 class Track
 {
-    std::vector<std::tr1::shared_ptr<Location> > _track; ///< Holds a list of our Locations
+    LocationContainer _track; ///< Holds a list of our Locations
     Glib::ustring _name; ///< Friendly name describing this area
     public:
     /// Default constructor, creates a Track with no Locations and the provided name.
@@ -30,10 +31,11 @@ class Track
     unsigned int size() const;
 };
 
+typedef std::set<Track> TrackContainer;
 /// Container holding tracks, which in turn hold locations.
 class Map
 {
-    std::set<Track> _all_tracks; ///< Container holding everything.
+    TrackContainer _all_tracks; ///< Container holding everything.
     Glib::ustring _first_track; ///< Name of our starting location.
     public:
     Map (const char filename[] = "map.xml");

@@ -10,6 +10,8 @@
 
 /**
  * Extracts the name tag from an element.
+ * @param[in,out] iter an Iterator to extract name from. Upon completion,
+     it will lack the name tag.
  * @returns the name of what's being parsed.
  * @note the iterator passed in will no longer have the <name> tag.
  */
@@ -142,7 +144,7 @@ fill_userjump (const xmlpp::Node::NodeList::const_iterator& iter)
     return fork;
 }
 
-///Fills out a generic location by passing types to handlers.
+///Fills out a generic Location by passing types to handlers.
 ///@relates: Location
 static inline Location*
 fill_location (const xmlpp::Node::NodeList::const_iterator& iter)
@@ -168,9 +170,9 @@ fill_location (const xmlpp::Node::NodeList::const_iterator& iter)
 
 /// Returns a complete, ready to use track
 /**
- * @param[in] track_iter iterator of who's children we will construct
+ * @param track_iter iterator of who's children we will construct
  * the track from.
- * @todo: use exceptions to raise errors about what we expected in the
+ * @todo use exceptions to raise errors about what we expected in the
  * document
  */
 static inline
@@ -248,9 +250,22 @@ Map::Map (const char filename[])
         Track* curr_track;
         curr_track = fill_track (track_iter);
         assert (curr_track != NULL);
-        this->add_track(*curr_track);
+        add_track(*curr_track);
         delete (curr_track);
     }
+
+    // Really there does need to be some kind of sanity check here.
+#ifndef NDEBUG
+    Freetrail::Debug ("Found tracks:");
+    for (TrackContainer::iterator i = _all_tracks.begin (); i != _all_tracks.end (); i++)
+    {
+        Freetrail::Debug ("Sanity check:");
+        Freetrail::Debug ("\tAdded " + i->get_name ());
+        Freetrail::Debug ("\tCan reference " +
+                (_all_tracks.find (i->get_name ()))->get_name());
+        assert (_all_tracks.find (i->get_name ()) != _all_tracks.end ());
+    }
+#endif
 }
 
 Track::Track(const Glib::ustring& name) : _name(name) {};
@@ -258,7 +273,7 @@ Track::Track(const Glib::ustring& name) : _name(name) {};
 /**
  * Add a Location to this Track.
  * @param[in] loc   Initialized pointer to location which will be added to this track.
- * @note The caller should NOT delete the pointer passed in.
+ * @note The caller should NOT @c delete the pointer passed in.
  */
 void Track::add_location(Location* loc)
 {
@@ -276,7 +291,7 @@ bool Track::operator == (const Glib::ustring& rhs) const
 
 /**
  * Returns the nth location (0 based).
- * @note caller does not have to delete the returned Location*
+ * @note caller does not have to @c delete the returned Location*
  */
 const Location* Track::get_stop(const unsigned int pos) const
 {
@@ -301,7 +316,7 @@ const Track* Map::getStartTrack () const
 
 /**
  * @param[in] track_name the name of the Track to retrieve.
- * @note The caller should not delete the returned Track.
+ * @note The caller should NOT @c delete the returned Track.
  */
 const Track* Map::find (const Glib::ustring& track_name) const
 {

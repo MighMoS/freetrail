@@ -18,17 +18,18 @@ void user_interface::wait_for_key()
 }
 
 /**
- * @bug: doesn't do input validation.
+ * @param loc The Fork which we will draw our choices from.
+ * @bug Doesn't do input validation.
  */
 const ForkOption* user_interface::prompt_at_fork (const Fork& loc)
 {
-    std::vector<ForkOption*> fork_vec = loc.get_jumps ();
+    ForkOptionContainer fork_vec = loc.get_jumps ();
     unsigned int counter = 0; ///<Which number are we displaying? What does the user want?
 
     std::cout << "You've arrived at " << loc.get_name () << "\n";
     std::cout << "It would appear that there are " << fork_vec.size() << " options.\n";
     std::cout << "Where should we go?\n";
-    for (std::vector<ForkOption*>::iterator i = fork_vec.begin();
+    for (ForkOptionContainer::iterator i = fork_vec.begin();
             i != fork_vec.end(); i++)
     {
         counter++;
@@ -39,7 +40,7 @@ const ForkOption* user_interface::prompt_at_fork (const Fork& loc)
 }
 
 /**
- * @bug: this is braindead and dumb (IE: it does't actually clear).
+ * @bug This is braindead and dumb (IE: it does't actually clear).
  */
 void user_interface::clear_screen()
 {
@@ -49,7 +50,7 @@ void user_interface::clear_screen()
 }
 
 /**
- * @param[in/out] Party the party to purchase supplies.
+ * @param[in,out] party the party to purchase supplies.
  */
 void user_interface::shop(Party& party)
 {
