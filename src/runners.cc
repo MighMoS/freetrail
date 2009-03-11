@@ -34,16 +34,17 @@ Runner::Runner (Party* party) : _party(party)
 ///@param party: the party we're moving.
 ///@param map: the map we're moving the party through.
 IMapRunner::IMapRunner (Party* party, const Map* map) :
-    Runner::Runner(party), _map(map),
-    _curr_track(map->getStartTrack())
+    Runner::Runner(party), _map(map)
 {
     assert (map != NULL);
-    assert (_curr_track != NULL);
 }
 
 Status IMapRunner::run()
 {
     Status stat;
+    const Track* _curr_track = _map->getStartTrack ();
+    assert (_curr_track != NULL);
+
     while (stat.KeepRunning()) // Default value
     {
         ITrackRunner tRun (_party, _curr_track);

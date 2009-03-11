@@ -48,7 +48,6 @@ class Runner
 class IMapRunner : public Runner
 {
     const Map* _map;
-    const Track* _curr_track;
 
     public:
     IMapRunner (Party* party, const Map* map);
