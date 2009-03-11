@@ -20,9 +20,9 @@ void Status::setNextTrack (const Glib::ustring& track)
 }
 
 ///When we've won or lost, this needs to be called.
-void Status::setStatus (const state state)
+void Status::setStatus (const state new_state)
 {
-    _state = state;
+    _state = new_state;
 }
 
 ///Abstract constructor.
@@ -69,8 +69,8 @@ Status ITrackRunner::run()
     Status stat;
     for (unsigned int i = 0; i < _track->size () && stat.KeepRunning(); i++)
     {
-            ILocationRunner lRun (_party, _track->get_stop (i));
-            stat = lRun.run ();
+        ILocationRunner lRun (_party, _track->get_stop (i));
+        stat = lRun.run ();
     }
 
     return stat;
