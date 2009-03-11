@@ -1,5 +1,9 @@
+#include <cassert>
 #include <iostream>
 
+#include <glibmm.h>
+
+#include "common.hh"
 #include "location.hh"
 #include "party.hh"
 #include "runners.hh"
@@ -14,19 +18,23 @@ bool Location::operator == (const Glib::ustring& rhs) const
 }
 
 /**
- *@param[in] party Party to subject to this Location.
+ *@param[in,out] party Party to ask where to go.
  */
 Freetrail::Runner::Status Fork::run (Party* party) const
 {
     Freetrail::Runner::Status stat;
+    Glib::ustring destination;
+    const ForkOption* chosen;
 
-    // Present options to the user.
+    chosen = user_interface::prompt_at_fork (*this);
+    destination = chosen->get_destination ();
+    stat.setNextTrack (destination);
 
     return stat;
 }
 
 /**
- *@param[in] party Party to subject to this Location.
+ *@param[in,out] party Party to subject to this Location.
  */
 Freetrail::Runner::Status Path::run(Party* party) const
 {
@@ -70,14 +78,14 @@ std::ostream& operator << (std::ostream& os, const Location& loc)
 #endif
 
 /**
- *@param[in] name what this outpost is called.
+ *@param[in,out] name what this outpost is called.
  */
 Outpost::Outpost (const Glib::ustring& name) :
     Location (name)
 {}
 
 /**
- *@param[in] party Party to subject to this Location.
+ *@param[in,out] party Party to subject to this Location.
  */
 Freetrail::Runner::Status Outpost::run (Party* party) const
 {

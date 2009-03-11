@@ -39,10 +39,10 @@ class Map
     Map (const char filename[] = "map.xml");
     /// Adds the specified Track to the map.
     void add_track(const Track& track);
+    /// Returns a pointer to the specified Track.
+    const Track* find (const Glib::ustring& track_name) const;
     /// Gets the first Track of the map. This must exist and can not fail.
     const Track* getStartTrack() const;
-    /// Returns a pointer to the specified Track.
-    const Track* get_track(const Glib::ustring& track_name) const;
     /// Returns the number of tracks held.
     unsigned int size() const;
 };

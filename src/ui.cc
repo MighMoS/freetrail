@@ -1,10 +1,13 @@
 #include <iostream>
+#include <vector>
 
 #include "common.hh"
+#include "location.hh"
 #include "ui.hh"
 
-/* Waits the user to press a key. This is used to give the illusion of 
- * ``slowly progressing''.
+/**
+ * Waits the user to press a key.
+ * This is used to give the illusion of ``slowly progressing''.
  */
 void user_interface::wait_for_key()
 {
@@ -14,7 +17,30 @@ void user_interface::wait_for_key()
     std::cout << horizrule;
 }
 
-//TODO: replace this with a /real/ clear screen function
+/**
+ * @bug: doesn't do input validation.
+ */
+const ForkOption* user_interface::prompt_at_fork (const Fork& loc)
+{
+    std::vector<ForkOption*> fork_vec = loc.get_jumps ();
+    unsigned int counter = 0; ///<Which number are we displaying? What does the user want?
+
+    std::cout << "You've arrived at " << loc.get_name () << "\n";
+    std::cout << "It would appear that there are " << fork_vec.size() << " options.\n";
+    std::cout << "Where should we go?\n";
+    for (std::vector<ForkOption*>::iterator i = fork_vec.begin();
+            i != fork_vec.end(); i++)
+    {
+        counter++;
+        std::cout << counter << ") " << (*i)->get_description() << "\n";
+    }
+    std::cin >> counter;
+    return fork_vec[counter-1]; // people count from 1, we don't.
+}
+
+/**
+ * @bug: this is braindead and dumb (IE: it does't actually clear).
+ */
 void user_interface::clear_screen()
 {
     for (int i = 0; i < 24; i++)
@@ -22,7 +48,8 @@ void user_interface::clear_screen()
     std::cout << horizrule;
 }
 
-/* Offers the party a chance to buy stuffs.
+/**
+ * @param[in/out] Party the party to purchase supplies.
  */
 void user_interface::shop(Party& party)
 {

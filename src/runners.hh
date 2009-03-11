@@ -9,22 +9,22 @@ namespace Freetrail{
 {
     /// What is the current state of the game?
     /// Have we won, lost, or do we keep playing?
-    enum state {KEEP_RUNNING, WIN, LOSE};
+    enum state {KEEP_RUNNING, JUMP, WIN, LOSE};
 
     /// Container holding what happened, and where to go.
     class Status
     {
-        const Track* _next_track; ///<Where to go to next. If this is NULL, allow controller to decide.
+        Glib::ustring _next_track; ///<Where to go to next. If this is NULL, allow controller to decide.
         state _state; ///<Win, Lose, or neither yet?
 
         public:
         Status ();
         /// Used to jump to another track.
-        void setNextTrack (const Track* track);
+        void setNextTrack (const Glib::ustring& track);
         /// Used to indicate success or failure.
         void setStatus (const state state);
 
-        const Track* getNextTrack () const {return _next_track;};
+        const Glib::ustring& getNextTrack () const {return _next_track;};
         /// Do we keep going?
         bool KeepRunning () const {return _state == KEEP_RUNNING;};
         /// Have we won?

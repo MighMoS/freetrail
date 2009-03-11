@@ -296,16 +296,18 @@ void Map::add_track(const Track& track)
 
 const Track* Map::getStartTrack () const
 {
-    return get_track (_first_track);
+    return find (_first_track);
 }
 
 /**
  * @param[in] track_name the name of the Track to retrieve.
  * @note The caller should not delete the returned Track.
  */
-const Track* Map::get_track (const Glib::ustring& track_name) const
+const Track* Map::find (const Glib::ustring& track_name) const
 {
-    // Convert the iterator to a regular pointer, and return.
+    // Convert the iterator to a regular pointer
+    const Track* found = &*(_all_tracks.find (track_name));
+    assert (found != &*(_all_tracks.end ()));
     return &*_all_tracks.find (track_name);
 }
 

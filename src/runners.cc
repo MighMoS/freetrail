@@ -9,12 +9,13 @@ namespace Freetrail{
 {
 
 Status::Status () :
-    _next_track(NULL), _state (KEEP_RUNNING)
+    _state (KEEP_RUNNING)
 {}
 
 ///In case we're not moving sequentially, this will jump us somewhere.
-void Status::setNextTrack (const Track* track)
+void Status::setNextTrack (const Glib::ustring& track)
 {
+    _state = JUMP;
     _next_track = track;
 }
 
@@ -47,7 +48,7 @@ Status IMapRunner::run()
     {
         ITrackRunner tRun (_party, _curr_track);
         tRun.run ();
-        _curr_track = stat.getNextTrack ();
+        _curr_track = _map->find (stat.getNextTrack ());
     }
 
     return stat;
@@ -70,11 +71,6 @@ Status ITrackRunner::run()
     {
             ILocationRunner lRun (_party, _track->get_stop (i));
             stat = lRun.run ();
-            // If we're supposed to jump somewhere, then do so.
-            if (stat.getNextTrack () != NULL)
-            {
-                return stat;
-            }
     }
 
     return stat;
