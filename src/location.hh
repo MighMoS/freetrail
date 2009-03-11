@@ -99,4 +99,14 @@ class Fork : public Location
         {return _jump_locations;};
 };
 
+/// A FixedJump occurs at the end of a Track to automatically jump us somewhere
+class FixedJump : public Fork
+{
+    public:
+    FixedJump (const Glib::ustring& name,
+          const ForkOptionContainer& jump_locations);
+    /// Jump somewhere, no questions asked.
+    Freetrail::Runner::Status run (Party* party) const;
+};
+
 #endif // LOCATION_H

@@ -43,6 +43,26 @@ Freetrail::Runner::Status Fork::run (Party* party) const
 }
 
 /**
+ *@param name circumstances requiring this jump
+ *@param jump_locations where we're going.
+ */
+FixedJump::FixedJump (const Glib::ustring& name,
+        const ForkOptionContainer& jump_locations):
+    Fork(name, jump_locations)
+{};
+
+/**
+ *@param party unused
+ */
+Freetrail::Runner::Status FixedJump::run (Party* party) const
+{
+    Freetrail::Runner::Status stat;
+    stat.setNextTrack ((*get_jumps().begin ())->get_destination ());
+
+    return stat;
+}
+
+/**
  *@param[in,out] party Party to subject to this Location.
  */
 Freetrail::Runner::Status Path::run(Party* party) const

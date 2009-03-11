@@ -55,7 +55,7 @@ fill_outpost (const xmlpp::Node::NodeList::const_iterator& iter)
 };
 
 ///Creates a new location based off the XML pointed to by stop_iter
-///@relates: path
+///@relates Path
 /**
  * <path><name>thisPathName</name><length>100</path>
  * would create a path with a length of 100 called "thisPathName"
@@ -116,13 +116,19 @@ fill_jump (const xmlpp::Node::NodeList::const_iterator& iter)
     return ptr;
 }
 
-///@relates: Fork
+///@relates Fork
+/**
+ *@param iter
+ *@param type indicates if we are a regular Fork or a FixedJump.
+ */
 static inline Fork*
-fill_userjump (const xmlpp::Node::NodeList::const_iterator& iter)
+fill_fork (const xmlpp::Node::NodeList::const_iterator& iter,
+        const Glib::ustring& type)
 {
     xmlpp::Node::NodeList fork_children;
     Glib::ustring fork_name;
     ForkOptionContainer option_list;
+    Fork* fork;
 
     fork_name = extract_name (iter);
     fork_children = (*iter)->get_children (Glib::ustring("jump"));
@@ -140,7 +146,12 @@ fill_userjump (const xmlpp::Node::NodeList::const_iterator& iter)
         option_list.push_back(opt);
     }
 
-    Fork* fork = new Fork (fork_name, option_list);
+    if (type == "userjump")
+        fork = new Fork (fork_name, option_list);
+    else if (type == "fixedjump")
+        fork = new FixedJump (fork_name, option_list);
+    else
+        assert (0 && "Jump was not a user jump or fixed jump");
 
     return fork;
 }
@@ -162,9 +173,8 @@ fill_location (const xmlpp::Node::NodeList::const_iterator& iter)
         return fill_path (iter);
     if (type == "outpost")
         return fill_outpost (iter);
-    if (type == "userjump")
-        return fill_userjump (iter);
-    if (type == "fixedjump"){}
+    if (type == "userjump" || type == "fixedjump")
+        return fill_fork (iter, type);
 
     return NULL;
 }

@@ -29,7 +29,8 @@
         <length>40</length>
     </path>
     <fixedjump>
-        <jump dest="Last Track"></jump>
+        <name>We're almost there</name>
+        <jump dest="Last Track">You could have gotten here some other way...</jump>
     </fixedjump>
 </track>
 <track end="fixed">
@@ -39,7 +40,8 @@
         <length>80</length>
     </path>
     <fixedjump>
-        <jump dest="Last Track"></jump>
+        <name>We're almost there</name>
+        <jump dest="Last Track">You could have gotten here some other way...</jump>
     </fixedjump>
 </track>
 <track end="win">
