@@ -112,7 +112,8 @@ fill_jump (const xmlpp::Node::NodeList::const_iterator& iter)
     destination = jump_dest->get_value ();
     description = description_text->get_content ();
 
-    return ForkOptionPtr (new ForkOption(description, destination));
+    ForkOptionPtr ptr (new ForkOption(description, destination));
+    return ptr;
 }
 
 ///@relates: Fork
