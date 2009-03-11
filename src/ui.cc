@@ -17,6 +17,12 @@ void user_interface::wait_for_key()
     std::cout << horizrule;
 }
 
+void user_interface::lose ()
+{
+    std::cout << "You've lose. Better luck next time.\n";
+    wait_for_key ();
+}
+
 /**
  * @param loc The Fork which we will draw our choices from.
  * @bug Doesn't do input validation.

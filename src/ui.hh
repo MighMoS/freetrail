@@ -10,6 +10,8 @@ class user_interface
 {
 	public:
 	static void clear_screen();
+    /// Message to be displayed when the user loses.
+    static void lose ();
     /// Allows the user to choose which ForkOption to take.
     static const ForkOption* prompt_at_fork (const Fork& loc);
     /// Allows the Party to purchase additional supplies.
