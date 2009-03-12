@@ -1,47 +1,52 @@
 #ifndef PARTY
 #define PARTY
 
-#include <string>
 #include <vector>
 
+#include <glibmm.h>
+
 #include "common.hh"
+
+enum sex {MALE, FEMALE};
+enum health {DEAD, DYING, POOR, FAIR, GOOD, EXCELLENT};
 
 class Member
 {
     private:
-        sex_ sex;
-        health_ health;
-        int hunting_skill;
-        std::string name;
+        sex _sex;
+        health _health;
+        int _hunting_skill;
+        Glib::ustring _name;
 
     public:
-        sex_ get_sex () const;
-        health_ get_health () const;
+        sex get_sex () const;
+        health get_health () const;
         int get_hunting_skill () const;
-        std::string get_name () const;
-        Member (const sex_ its_sex, const std::string& its_name);
+        const Glib::ustring& get_name () const;
+        Member (const sex its_sex, const Glib::ustring& its_name);
 };
 
+typedef std::vector<Member> MemberContainer;
 /// The stars of the show.
 class Party
 {
-    std::vector<Member> members;
-    int food; // in LB
-    int ammo; // in shots
-    int oxen;
-    int money;
-    int speed;
+    MemberContainer _members;
+    int _food; ///<Amount of food the Party has, in LBs
+    unsigned int _ammo; ///<Amount of amunition the Party has, in rounds.
+    unsigned int _oxen;
+    unsigned int _money;
+    unsigned int _speed;
 
     public:
-    const std::vector<Member>* get_members() const;
+    const MemberContainer* get_members() const;
 
-    int get_speed () const;
-    int get_distance () const;
+    unsigned int get_speed () const;
+    unsigned int get_distance () const;
     unsigned int get_ammo () const;
-    unsigned int get_food () const;
+    int get_food () const;
     unsigned int get_money () const;
     unsigned int get_oxen () const;
-    unsigned int eat_food ();
+    int eat_food ();
     unsigned int buy_ammo(const unsigned int amount);
     unsigned int buy_food(const unsigned int amount);
     unsigned int buy_oxen(const unsigned int amount);
