@@ -1,4 +1,4 @@
-Freetrail 0.0.2:
+Freetrail 0.0.2 (20090311):
 ----------
 * Moving in a non-linear fashion is supported.
 * Massive rework of all manhandling code.
