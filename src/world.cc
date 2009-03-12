@@ -6,6 +6,8 @@
 #include <glibmm.h>
 #include <libxml++/libxml++.h>
 
+#include "common.hh"
+#include "parser.hh"
 #include "world.hh"
 
 /**
@@ -19,18 +21,21 @@ static inline Glib::ustring
 extract_name (const xmlpp::Node::NodeList::const_iterator& iter)
 {
     const xmlpp::Node::NodeList name_tag = (*iter)->get_children("name");
-    const xmlpp::Element* nodeElement =
-        dynamic_cast<const xmlpp::Element*> (*(name_tag.begin()));
-    const xmlpp::TextNode* node_text = nodeElement->get_child_text ();
-
     xmlpp::Node::NodeList node_list = (*iter)->get_children ();
+    const xmlpp::Element* nodeElement;
+
+    const xmlpp::TextNode* node_text;
     Glib::ustring name;
 
-    name = node_text->get_content ();
+    nodeElement = dynamic_cast<const xmlpp::Element*> (*(name_tag.begin()));
 
-    // replace these with an exceptions
-    //assert (name_tag.size () == 1);
-    assert (name != "");
+    if (nodeElement->has_child_text () == false)
+        throw MapParsingException ("<name> tag was empty.");
+    if (name_tag.size() != 1)
+        throw MapParsingException ("Expected one (and only one) <name> element.");
+
+    node_text = nodeElement->get_child_text ();
+    name = node_text->get_content ();
 
     // Remove the name tag from our list
     std::remove(node_list.begin(), node_list.end(), *(name_tag.begin()));
@@ -92,7 +97,9 @@ Path* fill_path (const xmlpp::Node::NodeList::const_iterator& stop_iter,
             std::stringstream ss;
             ss << fNode->get_content();
             ss >> path_length;
-            assert (0 < path_length);
+            if (!(path_length > 0))
+                throw MapParsingException
+                    ("A path's length must be greater than zero.");
             continue;
         }
     }
@@ -102,7 +109,7 @@ Path* fill_path (const xmlpp::Node::NodeList::const_iterator& stop_iter,
     else if (type == "winningpath")
         loc = new WinningPath (path_name, path_length);
     else
-        assert (0 && "Path was neither a regular path or a winning on");
+        assert (0 && "Path was neither a regular path or a winning one");
     return loc;
 }
 
@@ -173,10 +180,6 @@ fill_location (const xmlpp::Node::NodeList::const_iterator& iter)
 
     type = (*iter)->get_name ();
 
-#ifndef NDEBUG
-    std::cerr << "Currently processing an element of type " <<
-        type << std::endl;
-#endif
     if (type == "path" || type == "winningpath")
         loc.reset(fill_path (iter, type));
     if (type == "outpost")
@@ -245,10 +248,7 @@ Map::Map (const char filename[])
     // Parse the document
     const xmlpp::Node* rNode = parser.get_document()->get_root_node();
     if (rNode->get_name() != "freetrail")
-    {
-        std::cerr << "Expected root node to be \"freetrail\"!\n";
-        exit(2);
-    }
+        throw MapParsingException ("Expected root node to be \"freetrail\"!");
     
     root_element = dynamic_cast<const xmlpp::Element*>(rNode);
     starting_track = root_element->get_attribute (Glib::ustring("start"));

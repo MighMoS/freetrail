@@ -4,6 +4,7 @@
 
 #include "journey.hh"
 #include "main.hh"
+#include "parser.hh"
 #include "party.hh"
 #include "runners.hh"
 #include "ui.hh"
@@ -12,11 +13,22 @@
 int main (int argc, char *argv[])
 {
     Party* the_party;
-    Map map;
+    Map* the_map;
 
     Glib::set_prgname ("Freetrail");
-    the_party = new Party;
-    Freetrail::Runner::IMapRunner mRun (the_party, &map);
+    try
+    {
+        the_party = new Party;
+        the_map = new Map;
+    }
+    catch (MapParsingException e)
+    {
+        std::cerr << "ERROR LOADING THE MAP because:\n\t";
+        std::cerr << e.what() << std::endl;
+        exit (2);
+    }
+
+    Freetrail::Runner::IMapRunner mRun (the_party, the_map);
     Freetrail::Runner::Status stat;
 
     if (the_party == NULL)
