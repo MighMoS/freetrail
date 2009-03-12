@@ -23,7 +23,6 @@ void user_interface::lose ()
 
 /**
  * @param loc The Fork which we will draw our choices from.
- * @bug Doesn't do input validation.
  */
 const ForkOption* user_interface::prompt_at_fork (const Fork& loc)
 {
@@ -39,7 +38,11 @@ const ForkOption* user_interface::prompt_at_fork (const Fork& loc)
         counter++;
         std::cout << counter << ") " << (*i)->get_description() << "\n";
     }
-    std::cin >> counter;
+    do
+    {
+        std::cin >> counter;
+    } while (counter > fork_vec.size ());
+
     return fork_vec[counter-1].get (); // people count from 1, we don't.
 }
 
