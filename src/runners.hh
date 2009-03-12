@@ -69,10 +69,10 @@ class ITrackRunner : public Runner
 /// Runs a Party through a single Location.
 class ILocationRunner : public Runner
 {
-    const Location* _location;
+    const LocationPtr _location;
 
     public:
-    ILocationRunner (Party* party, const Location* location);
+    ILocationRunner (Party* party, const LocationPtr location);
     /// Moves through a single Location, as defined by its subtype.
     Status run();
 };

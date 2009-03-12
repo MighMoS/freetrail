@@ -82,7 +82,7 @@ Status ITrackRunner::run()
 
 ///@param party: the party we're moving
 ///@param location: the location we're at, where stuff is happening.
-ILocationRunner::ILocationRunner (Party* party, const Location* location) :
+ILocationRunner::ILocationRunner (Party* party, const LocationPtr location) :
     Runner(party), _location(location)
 {
     assert (_location != NULL);

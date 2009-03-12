@@ -165,10 +165,11 @@ fill_fork (const xmlpp::Node::NodeList::const_iterator& iter,
 
 ///Fills out a generic Location by passing types to handlers.
 ///@relates: Location
-static inline Location*
+static inline LocationPtr
 fill_location (const xmlpp::Node::NodeList::const_iterator& iter)
 {
     Glib::ustring type;
+    LocationPtr loc;
 
     type = (*iter)->get_name ();
 
@@ -177,13 +178,13 @@ fill_location (const xmlpp::Node::NodeList::const_iterator& iter)
         type << std::endl;
 #endif
     if (type == "path" || type == "winningpath")
-        return fill_path (iter, type);
+        loc.reset(fill_path (iter, type));
     if (type == "outpost")
-        return fill_outpost (iter);
+        loc.reset(fill_outpost (iter));
     if (type == "userjump" || type == "fixedjump")
-        return fill_fork (iter, type);
+        loc.reset(fill_fork (iter, type));
 
-    return NULL;
+    return loc;
 }
 
 /// Returns a complete, ready to use track
@@ -202,9 +203,7 @@ Track* fill_track (const xmlpp::Node::NodeList::const_iterator& track_iter)
 
     name = extract_name (track_iter);
     new_track = new Track (name);
-#ifndef NDEBUG
-    std::cerr << "Created track " << name << std::endl;
-#endif
+    Freetrail::Debug ("Created track " + name);
 
     // Get all  our children
     for(xmlpp::Node::NodeList::const_iterator
@@ -212,13 +211,11 @@ Track* fill_track (const xmlpp::Node::NodeList::const_iterator& track_iter)
             track_iter != track_list.end(); track_iter++)
     {
         if ((*track_iter)->get_name () == "text") continue;
-        Location* loc = fill_location (track_iter);
+        LocationPtr loc = fill_location (track_iter);
         if (loc != NULL)
         {
             new_track->add_location (loc);
-#ifndef NDEBUG
-            std::cerr << "Filled location " << loc->get_name() << std::endl;
-#endif
+            Freetrail::Debug ("Filled location " + loc->get_name());
         }
     }
 
@@ -293,13 +290,11 @@ Track::Track(const Glib::ustring& name) : _name(name) {};
  * @param[in] loc   Initialized pointer to location which will be added to this track.
  * @note The caller should NOT @c delete the pointer passed in.
  */
-void Track::add_location(Location* loc)
+void Track::add_location(const LocationPtr loc)
 {
     assert(loc != NULL);
 
-    // From this point forward, loc is automatically managed.
-    std::tr1::shared_ptr<Location> shared_loc (loc);
-    _track.push_back(shared_loc);
+    _track.push_back(loc);
 }
 
 bool Track::operator == (const Glib::ustring& rhs) const
@@ -308,13 +303,13 @@ bool Track::operator == (const Glib::ustring& rhs) const
 }
 
 /**
- * Returns the nth location (0 based).
+ * @param pos 0 based integer to retrieve the nth Location.
  * @note caller does not have to @c delete the returned Location*
  */
-const Location* Track::get_stop(const unsigned int pos) const
+const LocationPtr Track::get_stop(const unsigned int pos) const
 {
     assert (pos <= _track.size());
-    return _track[pos].get();
+    return _track[pos];
 }
 
 unsigned int Track::size() const

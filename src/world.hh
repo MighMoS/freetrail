@@ -19,13 +19,14 @@ class Track
     public:
     /// Default constructor, creates a Track with no Locations and the provided name.
     Track (const Glib::ustring& name);
-    const Location* get_stop(const unsigned int pos) const;
+    /// Returns a LocationPtr to the nth stop.
+    const LocationPtr get_stop(const unsigned int pos) const;
     /// Compares a track's name against a string.
     bool operator == (const Glib::ustring& rhs) const;
     /// Needed for std::set
     bool operator < (const Track& rhs) const {return _name < rhs._name;};
     /// Adds the specified Location the end of this track.
-    void add_location(Location* loc);
+    void add_location(const LocationPtr loc);
     /// Returns the name of this track
     const Glib::ustring& get_name () const {return _name;};
     /// Returns how many Locations are stored in this Track.
