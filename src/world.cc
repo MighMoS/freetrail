@@ -15,7 +15,7 @@
  * @param[in,out] iter an Iterator to extract name from. Upon completion,
      it will lack the name tag.
  * @returns the name of what's being parsed.
- * @note the iterator passed in will no longer have the <name> tag.
+ * @note the iterator passed in will no longer have the name element.
  */
 static inline Glib::ustring
 extract_name (const xmlpp::Node::NodeList::const_iterator& iter)
@@ -62,7 +62,7 @@ fill_outpost (const xmlpp::Node::NodeList::const_iterator& iter)
 ///Creates a new location based off the XML pointed to by stop_iter
 ///@relates Path
 /**
- * <path><name>thisPathName</name><length>100</path>
+ *@verbatim <path><name>thisPathName</name><length>100</path> @endverbatim
  * would create a path with a length of 100 called "thisPathName"
  */
 static inline

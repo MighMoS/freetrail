@@ -103,12 +103,14 @@ unsigned int Party::buy_oxen (const unsigned int amount)
     return ++_oxen;
 }
 
-// TODO: Make people hungry if they can't eat.
+/**
+ *@bug Currently there is no penalty if people can't eat.
+ */
 int Party::eat_food ()
 {
     int food_eaten;
-    food_eaten = 3 * _members.size();
-    // Don't descend into negatives, etc.
+    food_eaten = 3 * _members.size ();
+    // Don't descend into negatives
     if (_food - food_eaten < 0)
     {
         _food = 0;
