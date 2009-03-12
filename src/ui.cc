@@ -6,14 +6,12 @@
 #include "ui.hh"
 
 /**
- * Waits the user to press a key.
- * This is used to give the illusion of ``slowly progressing''.
+ * @bug This is braindead and dumb (IE: it does't actually clear).
  */
-void user_interface::wait_for_key()
+void user_interface::clear_screen()
 {
-    char ch;
-    std::cout << "\nPress a key to continue...\n";
-    std::cin.get(ch);
+    for (int i = 0; i < 24; i++)
+        std::cout << "\n";
     std::cout << horizrule;
 }
 
@@ -43,16 +41,6 @@ const ForkOption* user_interface::prompt_at_fork (const Fork& loc)
     }
     std::cin >> counter;
     return fork_vec[counter-1].get (); // people count from 1, we don't.
-}
-
-/**
- * @bug This is braindead and dumb (IE: it does't actually clear).
- */
-void user_interface::clear_screen()
-{
-    for (int i = 0; i < 24; i++)
-        std::cout << "\n";
-    std::cout << horizrule;
 }
 
 /**
@@ -96,18 +84,50 @@ void user_interface::shop(Party& party)
     while (choice);
 }
 
+void user_interface::travel_path_finish (const Glib::ustring& where)
+{
+    std::cout << horizrule;
+    std::cout << "You've arrived at " << where << "\n";
+    wait_for_key ();
+}
+/**
+ *@param party the Party which is traveling
+ *@param speed how far the party went `today'
+ *@param total how far the party has gone so far.
+ */
+void user_interface::travel_path_summery (const Party* party,
+        const unsigned int speed, const unsigned int total)
+{
+    std::cout << "You traveled " << speed << " miles today ("
+        << total << " miles total) and have "
+        << party->get_food () << " lbs of food remaining.\n";
+    wait_for_key ();
+}
+
+/**
+ * Waits the user to press a key.
+ * This is used to give the illusion of ``slowly progressing''.
+ */
+void user_interface::wait_for_key ()
+{
+    char ch;
+    std::cout << "\nPress a key to continue...\n";
+    std::cin.get (ch);
+    std::cout << horizrule;
+}
+
 void user_interface::welcome_new_user()
 {
-    clear_screen();
+    clear_screen ();
     std::cout << "Welcome to FreeTrail. Adventure and fortune awaits you if you "
         "can survive.\n"
         "You set out to gather your party and resources...\n";
-    wait_for_key();
+    wait_for_key ();
 }
 
 void user_interface::win(const Party& party)
 {
     std::cout << "Congratulations, you've won with " <<
-        party.get_members()->size() << " members remaining!\n";
-    wait_for_key();
+        party.get_members ()->size () << " members remaining!\n";
+    wait_for_key ();
 }

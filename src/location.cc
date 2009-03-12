@@ -84,15 +84,10 @@ Freetrail::Runner::Status Path::run(Party* party) const
         distance_traveled += speed;
         food_eaten = party->eat_food();
 
-        std::cout << "You traveled " << speed << " miles today ("
-            << distance_traveled << " miles total) and have "
-            << party->get_food() << " lbs of food remaining.\n";
-        user_interface::wait_for_key();
+        user_interface::travel_path_summery (party, speed, distance_traveled);
     }
 
-    std::cout << horizrule;
-    std::cout << "You've arrived at " << get_name() << std::endl;
-    user_interface::wait_for_key();
+    user_interface::travel_path_finish (get_name ());
 
     return stat;
 }

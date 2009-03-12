@@ -2,10 +2,12 @@ High Priority:
     * 
 
 Medium Priority:
-    * Untangle UI from implementation (very important later)
+    * (WIP) Untangle UI from implementation (very important later)
+      * So we can create a libfreetrail
     * (WIP) Generi-size the XML parsing interface to not be so copy and paste
     * (WIP) Replace many asserts with exceptions, and exception handling mechanisms.
 
 Low Priority:
+    * Don't mix pointers and references in each component. Decide on one and use it.
     * Decide and implement a standard user interface for CLI
     * Write GTK2 interface
