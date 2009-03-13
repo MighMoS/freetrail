@@ -1,3 +1,4 @@
+#include <exception>
 #include <iostream>
 
 #include <glibmm.h>
@@ -24,17 +25,16 @@ int main (int argc, char *argv[])
     {
         std::cerr << "ERROR LOADING THE MAP because:\n\t";
         std::cerr << e.what() << std::endl;
-        exit (2);
+        return 2;
+    }
+    catch (const std::bad_alloc& e)
+    {
+        std::cerr << "\n\n\tI ran out of memory. Sorry.\n";
+        return 1;
     }
 
     Freetrail::Runner::IMapRunner mRun (the_party, the_map);
     Freetrail::Runner::Status stat;
-
-    if (the_party == NULL)
-    {
-        std::cerr << "Could not allocate resources.\n";
-        return 1;
-    }
 
     stat = mRun.run ();
     if (stat.hasWon ())
@@ -42,6 +42,7 @@ int main (int argc, char *argv[])
     else
         user_interface::lose ();
 
+    delete the_map;
     delete the_party;
     return 0;
 }
