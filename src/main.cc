@@ -18,10 +18,11 @@ int main (int argc, char *argv[])
     Glib::set_prgname ("Freetrail");
     try
     {
-        the_party = new Party;
         the_map = new Map;
+        user_interface::welcome_new_user ();
+        the_party = user_interface::init_party ();
     }
-    catch (MapParsingException e)
+    catch (const MapParsingException& e)
     {
         std::cerr << "ERROR LOADING THE MAP because:\n\t";
         std::cerr << e.what() << std::endl;
@@ -36,11 +37,6 @@ int main (int argc, char *argv[])
         std::cerr << "Could not allocate resources.\n";
         return 1;
     }
-
-    user_interface::welcome_new_user ();
-
-    the_party->init_party ();
-    Journey::init (the_party);
 
     stat = mRun.run ();
     if (stat.hasWon ())

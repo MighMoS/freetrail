@@ -1,64 +1,10 @@
-#include <cassert>
-#include <iostream>
-using std::cout;
-using std::cin;
-using std::endl;
-
 #include <glibmm.h>
 
-#include "common.hh"
 #include "party.hh"
-#include "ui.hh"
 
-Party::Party () : _food(100), _ammo (50), _oxen (1), _money (1000)
+Party::Party (const MemberContainer& members) :
+    _members (members), _food(100), _ammo (50), _oxen (1), _money (1000)
 {}
-
-/* Initializes the party with members.
- * The user is prompted for player's sex and names, and they are added.
- * Once the user is done, we confirm to make sure
- * XXX: Presently shop() is called, ideally we would call this elsewhere
- */
-void Party::init_party ()
-{
-    short choice = 0;
-    sex their_sex;
-    std::string name;
-
-    cout << "Who do you want in your party?\n";
-add_members: do 
-    {
-        cout << "\nIs your party member\n1) Male\n2) Female\n";
-        cout << select_one;
-        cin >> choice;
-        if (choice == 1)
-            their_sex = MALE;
-        else
-            their_sex = FEMALE;
-
-        cin.ignore(); // Needed to avoid getline screwing up
-
-        cout << "What is " << (their_sex == MALE ? "his " : "her ") << "name? ";
-        getline (cin, name);
-
-        _members.push_back (Member(their_sex, name));
-        cout << "\nDo you wish to have another member?\n1) Yes\n2) No\n";
-        cout << select_one;
-        cin >> choice;
-    }
-    while (choice == 1);
-    cout << horizrule;
-
-    MemberContainer::iterator iter;
-    cout << "You have the following people in your party:\n";
-    for (iter = _members.begin(); iter != _members.end(); iter++)
-        cout << "\n\t" << iter->get_name();
-    cout << "\n\nAre you sure this is it?\n1) Yes\n2) No\n";
-    cout << select_one;
-    cin >> choice;
-    if (choice == 2)
-        goto add_members; // Goto avoids horrible nested logic. 
-    cout << horizrule;
-}
 
 const MemberContainer* Party::get_members() const
 {

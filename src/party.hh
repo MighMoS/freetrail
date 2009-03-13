@@ -38,6 +38,7 @@ class Party
     unsigned int _speed;
 
     public:
+    Party (const MemberContainer& members);
     const MemberContainer* get_members() const;
 
     unsigned int get_speed () const;
@@ -50,8 +51,5 @@ class Party
     unsigned int buy_ammo(const unsigned int amount);
     unsigned int buy_food(const unsigned int amount);
     unsigned int buy_oxen(const unsigned int amount);
-    void init_party ();
-
-    Party();
 };
 #endif 

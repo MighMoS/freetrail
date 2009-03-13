@@ -1,8 +1,11 @@
 #include <iostream>
 #include <vector>
 
+#include <glibmm.h>
+
 #include "common.hh"
 #include "location.hh"
+#include "party.hh"
 #include "ui.hh"
 
 /**
@@ -19,6 +22,58 @@ void user_interface::lose ()
 {
     std::cout << "You've lose. Better luck next time.\n";
     wait_for_key ();
+}
+
+/**
+ *@returns a full, ready to use Party.
+ */
+Party* user_interface::init_party ()
+{
+    MemberContainer members;
+    Glib::RefPtr<Glib::IOChannel> Gcin (Glib::IOChannel::create_from_fd(0)); // STDIN
+    Glib::ustring name;
+    unsigned short choice;
+    sex their_sex;
+
+    std::cout << "Who do you want in your party?\n";
+
+add_members:
+    do
+    {
+        std::cout << "\nIs your party member\n1) Male\n2) Female\n";
+        std::cout << select_one;
+        std::cin >> choice;
+        if (choice == 1)
+            their_sex = MALE;
+        else
+            their_sex = FEMALE;
+
+        std::cout << "What is " << (their_sex == MALE ? "his " : "her ")
+            << "name? " << std::flush;
+        Gcin->read_line (name);
+        name.erase (name.find ('\n'));
+
+        members.push_back (Member(their_sex, name));
+        std::cout << "\nDo you wish to have another member?\n1) Yes\n2) No\n";
+        std::cout << select_one;
+        std::cin >> choice;
+    }
+    while (choice == 1);
+
+    std::cout << horizrule;
+
+    MemberContainer::iterator iter;
+    std::cout << "You have the following people in your party:\n";
+    for (iter = members.begin(); iter != members.end(); iter++)
+        std::cout << "\n\t" << iter->get_name();
+    std::cout << "\n\nAre you sure this is it?\n1) Yes\n2) No\n";
+    std::cout << select_one;
+    std::cin >> choice;
+    if (choice == 2)
+        goto add_members; // avoid horrible nested logic and indentation.
+    std::cout << horizrule;
+
+    return new Party (members);
 }
 
 /**

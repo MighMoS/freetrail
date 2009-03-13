@@ -1,7 +1,7 @@
 #ifndef UI
 #define UI
 
-#include <vector>
+#include <glibmm.h>
 
 #include "location.hh"
 #include "party.hh"
@@ -13,6 +13,8 @@ class user_interface
 {
 	public:
 	static void clear_screen ();
+    /// Creates a Party for the player to use.
+    static Party* init_party ();
     /// Message to be displayed when the user loses.
     static void lose ();
     /// Allows the user to choose which ForkOption to take.
