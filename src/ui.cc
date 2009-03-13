@@ -1,9 +1,7 @@
 #include <iostream>
-#include <vector>
 
 #include <glibmm.h>
 
-#include "common.hh"
 #include "location.hh"
 #include "party.hh"
 #include "ui.hh"

@@ -3,7 +3,6 @@
 
 #include <glibmm.h>
 
-#include "common.hh"
 #include "location.hh"
 #include "party.hh"
 #include "runners.hh"

@@ -23,7 +23,7 @@ int main (int argc, char *argv[])
     }
     catch (const MapParsingException& e)
     {
-        std::cerr << "ERROR LOADING THE MAP because:\n\t";
+        std::cerr << "ERROR LOADING THE MAP:\n\t";
         std::cerr << e.what() << std::endl;
         return 2;
     }

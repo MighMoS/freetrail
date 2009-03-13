@@ -1,6 +1,8 @@
 #include <cassert>
 
-#include "common.hh"
+#include <glibmm.h>
+
+#include "party.hh"
 #include "runners.hh"
 #include "world.hh"
 

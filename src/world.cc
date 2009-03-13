@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <cassert>
-#include <iostream>
 #include <sstream>
 
 #include <glibmm.h>
@@ -225,6 +224,9 @@ Track* fill_track (const xmlpp::Node::NodeList::const_iterator& track_iter)
     return new_track;
 }
 
+/**
+ *@todo Once we've got everything, make sure that we can go anywhere we need to
+ */
 Map::Map (const char filename[])
 {
     xmlpp::DomParser parser;
@@ -238,17 +240,17 @@ Map::Map (const char filename[])
         parser.set_validate();
         parser.set_substitute_entities();
     }
+    // Swallow any error libxml++ gives us and rethrow it.
     catch (const std::exception& ex)
     {
-        std::cerr << "Exception caught validating the map: "
-            << ex.what() << std::endl;
-        exit (1);
+        MapParsingException e (std::string("error parsing XML:\n\t") + ex.what ());
+        throw e;
     }
 
     // Parse the document
     const xmlpp::Node* rNode = parser.get_document()->get_root_node();
     if (rNode->get_name() != "freetrail")
-        throw MapParsingException ("Expected root node to be \"freetrail\"!");
+        throw MapParsingException ("expected root node to be \"freetrail\"!");
     
     root_element = dynamic_cast<const xmlpp::Element*>(rNode);
     starting_track = root_element->get_attribute (Glib::ustring("start"));
