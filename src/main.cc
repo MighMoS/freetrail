@@ -2,8 +2,6 @@
 
 #include <glibmm.h>
 
-#include "journey.hh"
-#include "main.hh"
 #include "parser.hh"
 #include "party.hh"
 #include "runners.hh"

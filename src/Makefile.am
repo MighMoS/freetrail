@@ -5,7 +5,6 @@ bin_PROGRAMS=freetrail
 freetraildir = src/
 freetrail_SOURCES= \
                    common.cc \
-                   journey.cc \
                    location.cc \
                    main.cc \
                    party.cc \
@@ -14,9 +13,7 @@ freetrail_SOURCES= \
                    world.cc
 freetrail_HEADERS = \
                     common.hh \
-                    journey.hh \
                     location.hh \
-                    main.hh \
                     party.hh \
                     runners.hh \
                     ui.hh \
