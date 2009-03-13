@@ -40,7 +40,9 @@ class Map
     TrackContainer _all_tracks; ///< Container holding everything.
     Glib::ustring _first_track; ///< Name of our starting location.
     public:
-    Map (const char filename[] = "map.xml");
+    /// Constructs a Map from the given file name.
+    ///@par Freetrail will search $INSTALL/share/freetrail/maps by default.
+    Map (const std::string& filename = std::string("example.xml"));
     /// Adds the specified Track to the map.
     void add_track(const Track& track);
     /// Returns a pointer to the specified Track.

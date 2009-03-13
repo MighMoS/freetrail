@@ -50,7 +50,12 @@ AC_C_CONST
 AC_C_INLINE
 AC_C_RESTRICT
 
-# Checks for library functions.
+# Defines so that we know where to look for our various resources (thanks, evolution)
+privdatadir='${datadir}'/freetrail
+AC_SUBST(privdatadir)
+
+mapsdir='${privdatadir}'/maps
+AC_SUBST(mapsdir)
 
 AC_OUTPUT
 echo [$PACKAGE_NAME will be installed to $prefix]

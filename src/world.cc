@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cassert>
 #include <sstream>
+#include <string>
 
 #include <glibmm.h>
 #include <libxml++/libxml++.h>
@@ -226,19 +227,24 @@ Track* fill_track (const xmlpp::Node::NodeList::const_iterator& track_iter)
 
 /**
  *@todo Once we've got everything, make sure that we can go anywhere we need to
+ *@todo Try to load from ./maps and XDG_DATADIR/maps
  */
-Map::Map (const char filename[])
+Map::Map (const std::string& filename)
 {
     xmlpp::DomParser parser;
     xmlpp::Node::NodeList track_list;
     const xmlpp::Element* root_element;
     const xmlpp::Attribute* starting_track;
+    const std::string file_path (FREETRAIL_MAPSDIR); // Defined in configure.ac
+
+    std::string complete_file_name = Glib::build_filename (file_path, filename);
+    Freetrail::Debug ("Loading file: " + complete_file_name);
 
     try
     {
-        parser.parse_file(filename);
-        parser.set_validate();
-        parser.set_substitute_entities();
+        parser.parse_file (complete_file_name);
+        parser.set_validate ();
+        parser.set_substitute_entities ();
     }
     // Swallow any error libxml++ gives us and rethrow it.
     catch (const std::exception& ex)
