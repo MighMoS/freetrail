@@ -7,33 +7,33 @@ AC_INIT([freetrail], [0.0.3], [mighmos@mighmos.org])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([freetrail], [0.0.3])
 
-AC_CONFIG_SRCDIR([src/Makefile.am])
+AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_FILES([Makefile
-                 src/Makefile])
+                 src/Makefile
+                 maps/Makefile])
 
 # Checks for programs.
-AC_PROG_CC
 AC_PROG_CXX
 
 AC_LANG_CPLUSPLUS
 
 AC_MSG_CHECKING(whether to build with debug information)
 
-# create configure parameter and init variable $debuger
-debuger=no
+# create configure parameter and init variable $debugger
+debugger=no
 AC_ARG_ENABLE(debug,
     AC_HELP_STRING(
         [--enable-debug],
         [enable debug data generation (def=no)]
     ),
-    debuger="$enableval"
+    debugger="$enableval"
 )
 
 # resulting value to screen (to complete checking message)
-AC_MSG_RESULT($debuger)
+AC_MSG_RESULT($debugger)
 
 # set DEBUG flag and introduce additional compiler flags
-if test x"$debuger" = x"yes"; then
+if test x"$debugger" = x"yes"; then
     CXXFLAGS="$CXXFLAGS -g3 -O0"
 fi  
 

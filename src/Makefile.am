@@ -2,7 +2,6 @@ INCLUDES = $(LIBXML_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra -Werror -Wno-unused-parameter
 
 bin_PROGRAMS=freetrail
-freetraildir = src/
 freetrail_SOURCES= \
                    common.cc \
                    location.cc \
@@ -11,9 +10,10 @@ freetrail_SOURCES= \
                    runners.cc \
                    ui.cc \
                    world.cc
-freetrail_HEADERS = \
+noinst_HEADERS = \
                     common.hh \
                     location.hh \
+                    parser.hh \
                     party.hh \
                     runners.hh \
                     ui.hh \
