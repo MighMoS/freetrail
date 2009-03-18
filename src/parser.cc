@@ -277,7 +277,9 @@ Map* fill_map (const std::string& filename)
         Freetrail::Debug ("\tAdded " + i->get_name ());
         Freetrail::Debug ("\tCan reference " +
                 (all_tracks.find (i->get_name ()))->get_name());
-        assert (all_tracks.find (i->get_name ()) != all_tracks.end ());
+        if ((all_tracks.find (i->get_name ())) == all_tracks.end ())
+            throw MapParsingException ("The map failed its sanity check (" +
+                    i->get_name () + ")");
     }
 
     return new Map (first_track, all_tracks);
