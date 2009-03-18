@@ -216,3 +216,69 @@ Track* fill_track (const xmlmapIter& track_iter)
     return new_track;
 }
 
+/**
+ *@todo Check that all destinations are reachable
+ */
+Map* fill_map (const std::string& filename)
+{
+    TrackContainer all_tracks;
+    xmlpp::DomParser parser;
+    xmlpp::Node::NodeList track_list;
+    const xmlpp::Element* root_element;
+    const xmlpp::Attribute* starting_track;
+    const std::string file_path (FREETRAIL_MAPSDIR); // Defined in configure.ac
+    Glib::ustring first_track;
+
+    std::string complete_file_name = Glib::build_filename (file_path, filename);
+    Freetrail::Debug ("Loading file: " + complete_file_name);
+
+    try
+    {
+        parser.parse_file (complete_file_name);
+        parser.set_validate ();
+        parser.set_substitute_entities ();
+    }
+    // Swallow any error libxml++ gives us and rethrow it.
+    catch (const std::exception& ex)
+    {
+        MapParsingException e (std::string("error parsing XML:\n\t") + ex.what ());
+        throw e;
+    }
+
+    // Parse the document
+    const xmlpp::Node* rNode = parser.get_document()->get_root_node();
+    if (rNode->get_name() != "freetrail")
+        throw MapParsingException ("expected root node to be \"freetrail\"!");
+
+    root_element = dynamic_cast<const xmlpp::Element*>(rNode);
+    starting_track = root_element->get_attribute (Glib::ustring("start"));
+    first_track = starting_track->get_value ();
+    assert ("" != first_track);
+
+    track_list = rNode->get_children("track");
+
+    // Cannot wait for the auto keyword
+    // Anyway, hop through all the tracks for each of their shits
+    for (xmlpp::Node::NodeList::iterator track_iter = track_list.begin ();
+            track_iter != track_list.end (); track_iter++)
+    {
+        Track* curr_track;
+        curr_track = fill_track (track_iter);
+        assert (curr_track != NULL);
+        all_tracks.insert (all_tracks.begin (), *curr_track);
+        delete (curr_track);
+    }
+
+    // Really there does need to be a better sanity check here.
+    Freetrail::Debug ("Found tracks:");
+    for (TrackContainer::iterator i = all_tracks.begin (); i != all_tracks.end (); i++)
+    {
+        Freetrail::Debug ("Sanity check:");
+        Freetrail::Debug ("\tAdded " + i->get_name ());
+        Freetrail::Debug ("\tCan reference " +
+                (all_tracks.find (i->get_name ()))->get_name());
+        assert (all_tracks.find (i->get_name ()) != all_tracks.end ());
+    }
+
+    return new Map (first_track, all_tracks);
+}

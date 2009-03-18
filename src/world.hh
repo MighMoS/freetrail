@@ -42,7 +42,7 @@ class Map
     public:
     /// Constructs a Map from the given file name.
     ///@par Freetrail will search $INSTALL/share/freetrail/maps by default.
-    Map (const std::string& filename = std::string("example.xml"));
+    Map (const Glib::ustring& first_track, TrackContainer& all_tracks);
     /// Adds the specified Track to the map.
     void add_track(const Track& track);
     /// Returns a pointer to the specified Track.

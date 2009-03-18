@@ -19,6 +19,8 @@ class MapParsingException : public std::runtime_error
 
 typedef const xmlpp::Node::NodeList::const_iterator xmlmapIter;
 
+Map* fill_map (const std::string& filename);
+
 Outpost* fill_outpost (xmlmapIter& iter);
 
 Path* fill_path (xmlmapIter& stop_iter, const Glib::ustring& type);
