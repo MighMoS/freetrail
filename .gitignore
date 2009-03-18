@@ -3,6 +3,8 @@
 *.swp
 .deps
 Makefile
+config.h.in~
+tags
 /aclocal.m4
 /autom4te.cache
 /autoscan.log
