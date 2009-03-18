@@ -7,6 +7,7 @@ freetrail_SOURCES= \
                    location.cc \
                    main.cc \
                    party.cc \
+                   parser.cc \
                    runners.cc \
                    ui.cc \
                    world.cc
