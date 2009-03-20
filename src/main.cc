@@ -17,7 +17,8 @@ int main (int argc, char *argv[])
     Glib::set_prgname ("Freetrail");
     try
     {
-        the_map = fill_map ("example.xml");
+        MapParser data ("example.xml");
+        the_map = data.parse ();
         user_interface::welcome_new_user ();
         the_party = user_interface::init_party ();
     }

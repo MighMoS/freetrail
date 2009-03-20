@@ -16,7 +16,7 @@
  * @returns the name of what's being parsed.
  * @note the iterator passed in will no longer have the name element.
  */
-Glib::ustring extract_name (const xmlmapIter& iter)
+static Glib::ustring extract_name (const xmlmapIter& iter)
 {
     const xmlpp::Node::NodeList name_tag = (*iter)->get_children("name");
     xmlpp::Node::NodeList node_list = (*iter)->get_children ();
@@ -46,7 +46,7 @@ Glib::ustring extract_name (const xmlmapIter& iter)
  * @returns a ready to use Outpost.
  * @relates Outpost
  */
-Outpost* fill_outpost (const xmlmapIter& iter)
+static Outpost* fill_outpost (const xmlmapIter& iter)
 {
     Glib::ustring outpost_name;
 
@@ -62,7 +62,8 @@ Outpost* fill_outpost (const xmlmapIter& iter)
  *@verbatim <path><name>thisPathName</name><length>100</path> @endverbatim
  * would create a path with a length of 100 called "thisPathName"
  */
-Path* fill_path (const xmlmapIter& stop_iter, const Glib::ustring& type)
+static Path*
+fill_path (const xmlmapIter& stop_iter, const Glib::ustring& type)
 {
     xmlpp::Node::NodeList path_children;
     Glib::ustring path_name;
@@ -109,7 +110,7 @@ Path* fill_path (const xmlmapIter& stop_iter, const Glib::ustring& type)
 }
 
 ///@relates: ForkOption
-ForkOptionPtr fill_jump (const xmlmapIter& iter)
+static ForkOptionPtr fill_jump (const xmlmapIter& iter)
 {
     Glib::ustring destination;
     Glib::ustring description;
@@ -129,8 +130,8 @@ ForkOptionPtr fill_jump (const xmlmapIter& iter)
  *@param iter
  *@param type indicates if we are a regular Fork or a FixedJump.
  */
-Fork* fill_fork (const xmlmapIter& iter,
-        const Glib::ustring& type)
+static Fork*
+fill_fork (const xmlmapIter& iter, const Glib::ustring& type)
 {
     xmlpp::Node::NodeList fork_children;
     Glib::ustring fork_name;
@@ -165,7 +166,7 @@ Fork* fill_fork (const xmlmapIter& iter,
 
 ///Fills out a generic Location by passing types to handlers.
 ///@relates: Location
-LocationPtr fill_location (const xmlmapIter& iter)
+static LocationPtr fill_location (const xmlmapIter& iter)
 {
     Glib::ustring type;
     LocationPtr loc;
@@ -189,7 +190,7 @@ LocationPtr fill_location (const xmlmapIter& iter)
  * @todo use exceptions to raise errors about what we expected in the
  * document
  */
-Track* fill_track (const xmlmapIter& track_iter)
+static Track* fill_track (const xmlmapIter& track_iter)
 {
     xmlpp::Node::NodeList track_list = (*track_iter)->get_children ();
     Track* new_track;
@@ -219,7 +220,7 @@ Track* fill_track (const xmlmapIter& track_iter)
 /**
  *@todo Check that all destinations are reachable
  */
-Map* fill_map (const std::string& filename)
+static Map* fill_map (const std::string& filename)
 {
     TrackContainer all_tracks;
     xmlpp::DomParser parser;
@@ -284,3 +285,13 @@ Map* fill_map (const std::string& filename)
 
     return new Map (first_track, all_tracks);
 }
+
+/**
+ @returns a pointer to a newly allocated Map object.
+ @notes the caller is responcible for @c deleting the returned map.
+*/
+Map* MapParser::parse () const
+{
+    return fill_map (_filename);
+}
+
