@@ -1,5 +1,8 @@
-Freetrail "You still can't lose" 0.0.3 (200003??):
+Freetrail "You still can't lose" 0.0.5 (20090320):
 * Load from a real directory.
+* Make non-debug builds work, and enable them.
+* Small cleanups to the code.
+* This release will be the solid code base to build everything from.
 
 Freetrail 0.0.2 (20090311):
 ----------
