@@ -105,7 +105,11 @@ fill_path (const xmlmapIter& stop_iter, const Glib::ustring& type)
     else if (type == "winningpath")
         loc = new WinningPath (path_name, path_length);
     else
+    {
+        loc = NULL; // Avoid a compiler warning
         assert (0 && "Path was neither a regular path or a winning one");
+    }
+
     return loc;
 }
 

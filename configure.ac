@@ -35,7 +35,9 @@ AC_MSG_RESULT($debugger)
 # set DEBUG flag and introduce additional compiler flags
 if test x"$debugger" = x"yes"; then
     CXXFLAGS="$CXXFLAGS -g3 -O0"
-fi  
+else
+    CXXFLAGS="$CXXFLAGS -DNDEBUG"
+fi
 
 # Checks for libraries.
 PKG_CHECK_MODULES([LIBXML], [libxml++-2.6 >= 2.10.0])

@@ -72,7 +72,7 @@ const Track* Map::find (const Glib::ustring& track_name) const
     // Convert the iterator to a regular pointer
     const Track* found = &*(_all_tracks.find (track_name));
     assert (found != &*(_all_tracks.end ()));
-    return &*_all_tracks.find (track_name);
+    return found;
 }
 
 unsigned int Map::size () const
