@@ -3,9 +3,9 @@
 
 AC_PREREQ(2.61)
 
-AC_INIT([freetrail], [0.0.5], [mighmos@mighmos.org])
+AC_INIT([freetrail], [0.0.6], [mighmos@mighmos.org])
 AC_CONFIG_HEADER([config.h])
-AM_INIT_AUTOMAKE([freetrail], [0.0.5])
+AM_INIT_AUTOMAKE([freetrail], [0.0.6])
 
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_FILES([Makefile
