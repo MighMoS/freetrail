@@ -67,7 +67,7 @@ fill_path (const xmlmapIter& stop_iter, const Glib::ustring& type)
 {
     xmlpp::Node::NodeList path_children;
     Glib::ustring path_name;
-    Path* loc;
+    Path* loc = NULL;
     unsigned int path_length;
 
     path_name = extract_name (stop_iter);
@@ -106,7 +106,6 @@ fill_path (const xmlmapIter& stop_iter, const Glib::ustring& type)
         loc = new WinningPath (path_name, path_length);
     else
     {
-        loc = NULL; // Avoid a compiler warning
         assert (0 && "Path was neither a regular path or a winning one");
     }
 
@@ -140,7 +139,7 @@ fill_fork (const xmlmapIter& iter, const Glib::ustring& type)
     xmlpp::Node::NodeList fork_children;
     Glib::ustring fork_name;
     ForkOptionContainer option_list;
-    Fork* fork;
+    Fork* fork = NULL;
 
     fork_name = extract_name (iter);
     fork_children = (*iter)->get_children (Glib::ustring("jump"));
