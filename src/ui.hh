@@ -21,6 +21,8 @@ class user_interface
     static const ForkOption* prompt_at_fork (const Fork& loc);
     /// Allows the Party to purchase additional supplies.
     static void shop (Party& party);
+    /// Informs the player that a party member couldn't eat.
+    static void starving_member (const Member& member);
     /// Annouces to the user that we've arrived.
     static void travel_path_finish (const Glib::ustring& where);
     /// Tells the user what's happened while journying.

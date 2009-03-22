@@ -8,22 +8,44 @@
 #include "common.hh"
 
 enum sex {MALE, FEMALE};
-enum health {DEAD, DYING, POOR, FAIR, GOOD, EXCELLENT};
+
+/// How hungry is someone, are they alive? What sicknesses, etc.
+class Health
+{
+    unsigned int _hunger; ///< How hungry are we, on a scale of 1 -- 7?
+    bool _is_alive; ///< Are we quick or dead?
+
+    public:
+    Health () : _hunger (7), _is_alive (true) {};
+
+    unsigned int get_hunger () const {return _hunger;};
+
+    /// Called when a member eats.
+    unsigned int feed ();
+    /// Called when a member can't eat.
+    unsigned int starve ();
+};
 
 class Member
 {
     private:
         sex _sex;
-        health _health;
+        Health _health;
         int _hunting_skill;
         Glib::ustring _name;
 
     public:
+        Member (const sex its_sex, const Glib::ustring& its_name);
+
+        /// Called when a member eats.
+        unsigned int feed () {return _health.feed ();};
+        unsigned int starve ();
+
         sex get_sex () const;
-        health get_health () const;
+        unsigned int get_hunger () const {return _health.get_hunger ();};
         int get_hunting_skill () const;
         const Glib::ustring& get_name () const;
-        Member (const sex its_sex, const Glib::ustring& its_name);
+
 };
 
 typedef std::vector<Member> MemberContainer;

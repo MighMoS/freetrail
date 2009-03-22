@@ -140,6 +140,19 @@ void user_interface::shop(Party& party)
     while (choice);
 }
 
+void user_interface::starving_member (const Member& member)
+{
+    unsigned int hunger;
+    if (hunger > 0)
+        std::cout << member.get_name () << " couldn't eat today. (health "
+            << hunger () << "/7)\n";
+    else
+    {
+        std::cout << member.get_name () << " died because " <<
+            member.get_sex () == MALE ? "he" : "she" << " coudn't eat.\n";
+    }
+}
+
 void user_interface::travel_path_finish (const Glib::ustring& where)
 {
     std::cout << horizrule;

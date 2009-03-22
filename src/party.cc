@@ -1,6 +1,33 @@
+#include <cassert>
+
 #include <glibmm.h>
 
 #include "party.hh"
+#include "ui.hh"
+
+unsigned int Health::feed ()
+{
+    assert (_hunger != 0);
+    if (_hunger < 7)
+        _hunger++;
+
+    assert (_hunger <= 7);
+
+    return _hunger;
+}
+
+unsigned int Health::starve ()
+{
+    assert (_is_alive == true);
+
+    _hunger--;
+    if (_hunger == 0)
+    {
+        _is_alive = false;
+    }
+
+    return _hunger;
+}
 
 Party::Party (const MemberContainer& members) :
     _members (members), _food(100), _ammo (50), _oxen (1), _money (1000)
@@ -31,6 +58,15 @@ const Glib::ustring& Member::get_name () const
     return _name;
 }
 
+unsigned int Member::starve ()
+{
+    unsigned int health;
+    health = _health.starve ();
+    user_interface::starving_member (*this);
+
+    return health;
+}
+
 unsigned int Party::buy_ammo (const unsigned int amount)
 {
     _money -= amount;
@@ -49,21 +85,33 @@ unsigned int Party::buy_oxen (const unsigned int amount)
     return ++_oxen;
 }
 
+static bool compare_two_members_hunger (const Member&lhs,
+        const Member& rhs)
+{
+    return lhs.get_hunger () < rhs.get_hunger ();
+}
 /**
- *@bug Currently there is no penalty if people can't eat.
+ *
  */
 int Party::eat_food ()
 {
     int food_eaten;
-    food_eaten = 3 * _members.size ();
-    // Don't descend into negatives
-    if (_food - food_eaten < 0)
+    std::sort (_members.begin (), _members.end (),
+            compare_two_members_hunger);
+    for (MemberContainer::iterator i = _members.begin ();
+            i != _members.end (); i++)
     {
-        _food = 0;
-        // XXX If we need to eat 20 lbs and only have 2, this should be penalized.
-        food_eaten = _food;
+        if (_food >= 5)
+        {
+            _food -= 5;
+            food_eaten += 5;
+            i->feed ();
+        }
+        else
+        {
+            i->starve ();
+        }
     }
-    _food -= food_eaten;
 
     return food_eaten;
 }
@@ -87,4 +135,3 @@ unsigned int Party::get_oxen () const
 {
     return _oxen;
 }
-
