@@ -167,7 +167,7 @@ void user_interface::travel_path_summery (const Party* party,
 void user_interface::wait_for_key ()
 {
     char ch;
-    std::cout << "\nPress a key to continue...\n";
+    std::cout << "\nPress enter to continue...\n";
     std::cin.get (ch);
     std::cout << horizrule;
 }
