@@ -1,7 +1,7 @@
 #ifndef PARTY
 #define PARTY
 
-#include <vector>
+#include <set>
 
 #include <glibmm.h>
 
@@ -20,6 +20,8 @@ class Health
 
     unsigned int get_hunger () const {return _hunger;};
 
+    bool is_alive () const {return _is_alive;};
+
     /// Called when a member eats.
     unsigned int feed ();
     /// Called when a member can't eat.
@@ -29,17 +31,20 @@ class Health
 class Member
 {
     private:
-        sex _sex;
+        const sex _sex;
         Health _health;
         int _hunting_skill;
-        Glib::ustring _name;
+        const Glib::ustring _name;
 
     public:
         Member (const sex its_sex, const Glib::ustring& its_name);
         bool operator == (const Member& rhs) const {return _name == rhs._name;};
+        friend bool operator < (const Member& lhs, const Member& rhs);
 
+        bool is_alive () const {return _health.is_alive ();};
         /// Called when a member eats.
-        unsigned int feed () {return _health.feed ();};
+        unsigned int feed ();// {return _health.feed ();};
+        /// Called when a member can't eat.
         unsigned int starve ();
 
         sex get_sex () const;
@@ -49,7 +54,7 @@ class Member
 
 };
 
-typedef std::vector<Member> MemberContainer;
+typedef std::set<Member> MemberContainer;
 /// The stars of the show.
 class Party
 {
@@ -62,7 +67,8 @@ class Party
 
     public:
     Party (const MemberContainer& members);
-    const MemberContainer* get_members() const;
+    const MemberContainer* get_members () const;
+    MemberContainer* get_active_members () const;
 
     unsigned int get_speed () const;
     unsigned int get_distance () const;

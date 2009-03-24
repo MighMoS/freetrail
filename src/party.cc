@@ -47,10 +47,9 @@ unsigned int Party::get_speed() const
     return _oxen * 15;
 }
 
-Member::Member (const sex its_sex, const Glib::ustring& name)
+Member::Member (const sex its_sex, const Glib::ustring& name) :
+    _sex (its_sex), _name (name)
 {
-        _sex = its_sex;
-        _name = name;
 }
 
 const Glib::ustring& Member::get_name () const
@@ -62,7 +61,7 @@ unsigned int Member::starve ()
 {
     unsigned int health;
     health = _health.starve ();
-    user_interface::starving_member (*this);
+    //user_interface::starving_member (*this);
 
     return health;
 }
@@ -85,33 +84,54 @@ unsigned int Party::buy_oxen (const unsigned int amount)
     return ++_oxen;
 }
 
-static bool compare_two_members_hunger (const Member&lhs,
-        const Member& rhs)
+static bool is_member_alive (const Member& lhs)
+{
+    return lhs.is_alive ();
+}
+
+MemberContainer* Party::get_active_members () const
+{
+    MemberContainer* active_members = new MemberContainer;
+    MemberContainer::iterator i
+        = std::find_if (_members.begin (), _members.end (), is_member_alive);
+    while (i != _members.end ())
+    {
+        active_members->insert (*i);
+        i = std::find_if (i, _members.end (), is_member_alive);
+    }
+
+    return active_members;
+}
+
+bool operator < (const Member& lhs, const Member& rhs)
 {
     return lhs.get_hunger () < rhs.get_hunger ();
 }
+
 /**
  *
  */
 int Party::eat_food ()
 {
     int food_eaten;
-    std::sort (_members.begin (), _members.end (),
-            compare_two_members_hunger);
-    for (MemberContainer::iterator i = _members.begin ();
-            i != _members.end (); i++)
+    MemberContainer* active_members = get_active_members ();
+
+    for (MemberContainer::iterator i = active_members->begin ();
+            i != active_members->end (); i++)
     {
         if (_food >= 5)
         {
             _food -= 5;
             food_eaten += 5;
-            i->feed ();
+            //i->feed ();
         }
         else
         {
             i->starve ();
         }
     }
+
+    delete active_members;
 
     return food_eaten;
 }

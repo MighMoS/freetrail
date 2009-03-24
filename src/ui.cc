@@ -51,7 +51,7 @@ add_members:
         Gcin->read_line (name);
         name.erase (name.find ('\n'));
 
-        members.push_back (Member(their_sex, name));
+        members.insert (Member(their_sex, name));
         std::cout << "\nDo you wish to have another member?\n1) Yes\n2) No\n";
         std::cout << select_one;
         std::cin >> choice;
@@ -145,11 +145,11 @@ void user_interface::starving_member (const Member& member)
     unsigned int hunger;
     if (hunger > 0)
         std::cout << member.get_name () << " couldn't eat today. (health "
-            << hunger () << "/7)\n";
+            << hunger << "/7)\n";
     else
     {
-        std::cout << member.get_name () << " died because " <<
-            member.get_sex () == MALE ? "he" : "she" << " coudn't eat.\n";
+        std::cout << member.get_name ()
+            << " died because there wasn't enough food.\n";
     }
 }
 
