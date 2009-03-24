@@ -17,6 +17,19 @@ AC_PROG_CXX
 
 AC_LANG_CPLUSPLUS
 
+# Checks for header files.
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_C_INLINE
+AC_C_RESTRICT
+
+# Checks for libraries.
+PKG_CHECK_MODULES([LIBXML], [libxml++-2.6 >= 2.10.0])
+AC_SUBST(LIBXML_CFLAGS)
+AC_SUBST(LIBXML_LIBS)
+
 AC_MSG_CHECKING(whether to build with debug information)
 
 # create configure parameter and init variable $debugger
@@ -24,7 +37,7 @@ debugger=no
 AC_ARG_ENABLE(debug,
     AC_HELP_STRING(
         [--enable-debug],
-        [enable debug data generation (def=no)]
+        [generate a debug build (default=no)]
     ),
     debugger="$enableval"
 )
@@ -38,19 +51,6 @@ if test x"$debugger" = x"yes"; then
 else
     CXXFLAGS="$CXXFLAGS -DNDEBUG"
 fi
-
-# Checks for libraries.
-PKG_CHECK_MODULES([LIBXML], [libxml++-2.6 >= 2.10.0])
-AC_SUBST(LIBXML_CFLAGS)
-AC_SUBST(LIBXML_LIBS)
-
-# Checks for header files.
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
-AC_C_CONST
-AC_C_INLINE
-AC_C_RESTRICT
 
 # Defines so that we know where to look for our various resources (thanks, evolution)
 privdatadir='${datadir}'/freetrail
