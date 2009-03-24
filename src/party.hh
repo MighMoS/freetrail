@@ -36,6 +36,7 @@ class Member
 
     public:
         Member (const sex its_sex, const Glib::ustring& its_name);
+        bool operator == (const Member& rhs) const {return _name == rhs._name;};
 
         /// Called when a member eats.
         unsigned int feed () {return _health.feed ();};
