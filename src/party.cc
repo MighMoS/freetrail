@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 
 #include <glibmm.h>
@@ -115,21 +116,28 @@ int Party::eat_food ()
 {
     int food_eaten;
     MemberContainer* active_members = get_active_members ();
+    MemberContainer new_members;
 
     for (MemberContainer::iterator i = active_members->begin ();
             i != active_members->end (); i++)
     {
+        Member temp = *i;
         if (_food >= 5)
         {
             _food -= 5;
             food_eaten += 5;
-            //i->feed ();
+            temp.feed ();
         }
         else
         {
-            i->starve ();
+            temp.starve ();
         }
+        active_members->erase (i);
+        active_members->insert (temp);
     }
+    std::set_union (active_members->begin (), active_members->end (),
+            _members.begin (), _members.end (), std::inserter(new_members, new_members.begin ()));
+    _members.swap (new_members);
 
     delete active_members;
 
