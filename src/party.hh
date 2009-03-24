@@ -68,12 +68,15 @@ class Party
     unsigned int _speed;
 
     public:
+    /// I'm not sure which one I want. Architecting would help here.
+    Party ();
     Party (const MemberContainer& members);
     const MemberContainer* get_members () const;
     MemberContainer* get_active_members () const;
 
+    void add_member (const Member& member);
+    unsigned int size () const {return _members.size();};
     unsigned int get_speed () const;
-    unsigned int get_distance () const;
     unsigned int get_ammo () const;
     int get_food () const;
     unsigned int get_money () const;

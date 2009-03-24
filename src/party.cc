@@ -30,9 +30,18 @@ unsigned int Health::starve ()
     return _hunger;
 }
 
-Party::Party (const MemberContainer& members) :
-    _members (members), _food(100), _ammo (50), _oxen (1), _money (1000)
+Party::Party () :
+    _food (100), _ammo (50), _oxen (1), _money (1000)
 {}
+
+Party::Party (const MemberContainer& members) :
+    _members (members), _food (100), _ammo (50), _oxen (1), _money (1000)
+{}
+
+void Party::add_member (const Member& member)
+{
+    _members.insert (_members.begin (), member);
+}
 
 const MemberContainer* Party::get_members() const
 {
