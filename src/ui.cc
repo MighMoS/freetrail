@@ -145,7 +145,7 @@ void user_interface::shop(Party& party)
 
 void user_interface::starving_member (const Member& member)
 {
-    unsigned int hunger;
+    unsigned int hunger = member.get_hunger();
     if (hunger > 0)
         std::cout << member.get_name () << " couldn't eat today. (health "
             << hunger << "/7)\n";

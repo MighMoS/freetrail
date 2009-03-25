@@ -20,6 +20,7 @@ unsigned int Health::feed ()
 unsigned int Health::starve ()
 {
     assert (_is_alive == true);
+    assert (_hunger > 0);
 
     _hunger--;
     if (_hunger == 0)
@@ -99,6 +100,11 @@ static bool is_member_alive (const Member& lhs)
     return lhs.is_alive ();
 }
 
+static bool is_member_not_alive (const Member& lhs)
+{
+    return !lhs.is_alive ();
+}
+
 /// Gets all the party members who aren't dead.
 /**
  *@returns A pointer to a new MemberContainer
@@ -109,6 +115,27 @@ MemberContainer* Party::get_active_members () const
     MemberContainer* active_members = new MemberContainer;
     MemberContainer::const_iterator i
         = std::find_if (_members.begin (), _members.end (), is_member_alive);
+    while (i != _members.end ())
+    {
+        active_members->insert (active_members->begin (), *i);
+        std::advance (i, 1); // Skip over ourselves, or we'll loop.
+        i = std::find_if (i, _members.end (), is_member_alive);
+    }
+
+    return active_members;
+}
+
+/// Gets all the party members who aren't dead.
+/**
+ *@returns A pointer to a new MemberContainer
+ *@notes the caller is responsible for deleting the returned pointer
+ */
+MemberContainer* Party::get_inactive_members () const
+{
+    MemberContainer* active_members = new MemberContainer;
+    MemberContainer::const_iterator i
+        = std::find_if (_members.begin (), _members.end (),
+                is_member_not_alive);
     while (i != _members.end ())
     {
         active_members->insert (active_members->begin (), *i);
@@ -141,6 +168,7 @@ int Party::eat_food ()
 {
     int food_eaten;
     MemberContainer* active_members = get_active_members ();
+    MemberContainer* inactive_members = get_inactive_members ();
     MemberContainer new_members;
 
     for (MemberContainer::iterator i = active_members->begin ();
@@ -160,12 +188,16 @@ int Party::eat_food ()
         active_members->erase (i);
         active_members->insert (active_members->begin (), temp);
     }
+
+
+    // Recombine our updated members with the others we didn't
     std::set_union (active_members->begin (), active_members->end (),
-            _members.begin (), _members.end (),
+            inactive_members->begin (), inactive_members->end (),
             std::inserter(new_members, new_members.begin ()));
     _members.swap (new_members);
 
     delete active_members;
+    delete inactive_members;
 
     return food_eaten;
 }

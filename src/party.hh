@@ -74,6 +74,7 @@ class Party
     Party (const MemberContainer& members);
     const MemberContainer* get_members () const;
     MemberContainer* get_active_members () const;
+    MemberContainer* get_inactive_members () const;
 
     void add_member (const Member& member);
     unsigned int size () const {return _members.size();};
