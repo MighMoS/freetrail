@@ -77,13 +77,14 @@ class Party
     MemberContainer* get_inactive_members () const;
 
     void add_member (const Member& member);
-    unsigned int size () const {return _members.size();};
+    /// Returns the number of members who aren't dead yet.
+    unsigned int size () const;
     unsigned int get_speed () const;
     unsigned int get_ammo () const;
     int get_food () const;
     unsigned int get_money () const;
     unsigned int get_oxen () const;
-    int eat_food ();
+    unsigned int eat_food ();
     unsigned int buy_ammo(const unsigned int amount);
     unsigned int buy_food(const unsigned int amount);
     unsigned int buy_oxen(const unsigned int amount);

@@ -162,30 +162,31 @@ bool operator < (const Member& lhs, const Member& rhs)
 
 /// Consume food, and people get hungry if they can't eat. If they can't eat and are too hungry, they die.
 /**
- *
+ *@returns how many party members left.
  */
-int Party::eat_food ()
+unsigned int Party::eat_food ()
 {
-    int food_eaten;
+    MemberContainer new_members;
     MemberContainer* active_members = get_active_members ();
     MemberContainer* inactive_members = get_inactive_members ();
-    MemberContainer new_members;
+    MemberContainer::iterator i = active_members->begin ();
+    unsigned int remaining_members;
 
-    for (MemberContainer::iterator i = active_members->begin ();
-            i != active_members->end (); i++)
+    while (i != active_members->end ())
     {
         Member temp = *i;
         if (_food >= 5)
         {
             _food -= 5;
-            food_eaten += 5;
             temp.feed ();
         }
         else
         {
             temp.starve ();
         }
-        active_members->erase (i);
+        MemberContainer::iterator e = i;
+        i++;
+        active_members->erase (e);
         active_members->insert (active_members->begin (), temp);
     }
 
@@ -196,10 +197,11 @@ int Party::eat_food ()
             std::inserter(new_members, new_members.begin ()));
     _members.swap (new_members);
 
+    remaining_members = active_members->size ();
     delete active_members;
     delete inactive_members;
 
-    return food_eaten;
+    return remaining_members;
 }
 
 unsigned int Party::get_ammo () const
@@ -220,4 +222,13 @@ unsigned int Party::get_money () const
 unsigned int Party::get_oxen () const
 {
     return _oxen;
+}
+
+unsigned int Party::size () const
+{
+    unsigned int size;
+    MemberContainer* active = get_active_members ();
+    size = active->size ();
+    delete active;
+    return size;
 }

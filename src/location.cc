@@ -69,7 +69,7 @@ Freetrail::Runner::Status Path::run(Party* party) const
     Freetrail::Runner::Status stat;
     unsigned int speed = party->get_speed();
     unsigned int distance_traveled = 0;
-    unsigned int food_eaten;
+    unsigned int members_left;
     bool reached_landmark = false;
 
     while (reached_landmark == false)
@@ -81,9 +81,14 @@ Freetrail::Runner::Status Path::run(Party* party) const
         }
 
         distance_traveled += speed;
-        food_eaten = party->eat_food();
 
         user_interface::travel_path_summery (party, speed, distance_traveled);
+
+        members_left = party->eat_food();
+        if (members_left == 0)
+        {
+            stat.setStatus (Freetrail::Runner::LOSE);
+        }
     }
 
     user_interface::travel_path_finish (get_name ());
