@@ -38,10 +38,11 @@ class Member
 
     public:
         Member (const sex its_sex, const Glib::ustring& its_name);
-        bool operator == (const Member& rhs) const {return _name == rhs._name;};
-        Member& operator = (const Member& rhs);
-
         friend bool operator < (const Member& lhs, const Member& rhs);
+        friend bool operator == (const Member& lhs, const Member& rhs)
+        {
+            return lhs._name == rhs._name;
+        }
 
         bool is_alive () const {return _health.is_alive ();};
         /// Called when a member eats.

@@ -102,11 +102,11 @@ static bool is_member_alive (const Member& lhs)
 MemberContainer* Party::get_active_members () const
 {
     MemberContainer* active_members = new MemberContainer;
-    MemberContainer::iterator i
+    MemberContainer::const_iterator i
         = std::find_if (_members.begin (), _members.end (), is_member_alive);
     while (i != _members.end ())
     {
-        active_members->insert (*i);
+        active_members->insert (active_members->begin (), *i);
         i = std::find_if (i, _members.end (), is_member_alive);
     }
 
@@ -115,7 +115,13 @@ MemberContainer* Party::get_active_members () const
 
 bool operator < (const Member& lhs, const Member& rhs)
 {
-    return lhs.get_hunger () < rhs.get_hunger ();
+    if (lhs.get_hunger () < rhs.get_hunger ())
+        return  true;
+    if (lhs.get_hunger () > rhs.get_hunger ())
+        return false;
+
+    // The two are equal.
+    return lhs.get_name () < rhs.get_name();
 }
 
 /**
@@ -142,7 +148,7 @@ int Party::eat_food ()
             temp.starve ();
         }
         active_members->erase (i);
-        active_members->insert (temp);
+        active_members->insert (active_members->begin (), temp);
     }
     std::set_union (active_members->begin (), active_members->end (),
             _members.begin (), _members.end (), std::inserter(new_members, new_members.begin ()));
