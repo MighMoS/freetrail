@@ -112,6 +112,7 @@ MemberContainer* Party::get_active_members () const
     while (i != _members.end ())
     {
         active_members->insert (active_members->begin (), *i);
+        std::advance (i, 1); // Skip over ourselves, or we'll loop.
         i = std::find_if (i, _members.end (), is_member_alive);
     }
 
@@ -129,7 +130,7 @@ bool operator < (const Member& lhs, const Member& rhs)
     // The two are equally hungry. Determine which one is more important the
     // way God meant: alphabetically
     // ~ Adam
-    return lhs.get_name () < rhs.get_name();
+    return lhs.get_name () < rhs.get_name ();
 }
 
 /// Consume food, and people get hungry if they can't eat. If they can't eat and are too hungry, they die.
