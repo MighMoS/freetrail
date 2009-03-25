@@ -71,7 +71,7 @@ unsigned int Member::starve ()
 {
     unsigned int health;
     health = _health.starve ();
-    //user_interface::starving_member (*this);
+    user_interface::starving_member (*this);
 
     return health;
 }
@@ -99,6 +99,11 @@ static bool is_member_alive (const Member& lhs)
     return lhs.is_alive ();
 }
 
+/// Gets all the party members who aren't dead.
+/**
+ *@returns A pointer to a new MemberContainer
+ *@notes the caller is responsible for deleting the returned pointer
+ */
 MemberContainer* Party::get_active_members () const
 {
     MemberContainer* active_members = new MemberContainer;
@@ -113,6 +118,7 @@ MemberContainer* Party::get_active_members () const
     return active_members;
 }
 
+/// Returns which member is more hungry, followed by alphabetical ordering.
 bool operator < (const Member& lhs, const Member& rhs)
 {
     if (lhs.get_hunger () < rhs.get_hunger ())
@@ -120,10 +126,13 @@ bool operator < (const Member& lhs, const Member& rhs)
     if (lhs.get_hunger () > rhs.get_hunger ())
         return false;
 
-    // The two are equal.
+    // The two are equally hungry. Determine which one is more important the
+    // way God meant: alphabetically
+    // ~ Adam
     return lhs.get_name () < rhs.get_name();
 }
 
+/// Consume food, and people get hungry if they can't eat. If they can't eat and are too hungry, they die.
 /**
  *
  */
@@ -151,7 +160,8 @@ int Party::eat_food ()
         active_members->insert (active_members->begin (), temp);
     }
     std::set_union (active_members->begin (), active_members->end (),
-            _members.begin (), _members.end (), std::inserter(new_members, new_members.begin ()));
+            _members.begin (), _members.end (),
+            std::inserter(new_members, new_members.begin ()));
     _members.swap (new_members);
 
     delete active_members;
