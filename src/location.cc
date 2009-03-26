@@ -87,7 +87,7 @@ Freetrail::Runner::Status Path::run(Party* party) const
         if (members_left == 0)
         {
             stat.setStatus (Freetrail::Runner::LOSE);
-            break;
+            return stat;
         }
 
         user_interface::travel_path_summery (party, speed, distance_traveled);
@@ -122,7 +122,7 @@ std::ostream& operator << (std::ostream& os, const Location& loc)
 #endif
 
 /**
- *@param[in,out] name what this outpost is called.
+ *@param name what this outpost is called.
  */
 Outpost::Outpost (const Glib::ustring& name) :
     Location (name)

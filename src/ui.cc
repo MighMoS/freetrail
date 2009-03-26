@@ -25,6 +25,7 @@ void user_interface::lose ()
 
 /**
  *@returns a full, ready to use Party.
+ *@todo check to see if the member already exists, then handle gracefully.
  */
 Party* user_interface::init_party ()
 {
@@ -143,6 +144,9 @@ void user_interface::shop(Party& party)
     while (choice);
 }
 
+/**
+ *@param member A party member who's whining we should tell the user about.
+ */
 void user_interface::starving_member (const Member& member)
 {
     unsigned int hunger = member.get_hunger();
@@ -156,6 +160,9 @@ void user_interface::starving_member (const Member& member)
     }
 }
 
+/**
+ *@param where Where we've just gotten to after traveling down a long <s>road</s> Path
+ */
 void user_interface::travel_path_finish (const Glib::ustring& where)
 {
     std::cout << horizrule;
