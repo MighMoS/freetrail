@@ -82,13 +82,15 @@ Freetrail::Runner::Status Path::run(Party* party) const
 
         distance_traveled += speed;
 
-        user_interface::travel_path_summery (party, speed, distance_traveled);
-
         members_left = party->eat_food();
+
         if (members_left == 0)
         {
             stat.setStatus (Freetrail::Runner::LOSE);
+            break;
         }
+
+        user_interface::travel_path_summery (party, speed, distance_traveled);
     }
 
     user_interface::travel_path_finish (get_name ());

@@ -54,7 +54,7 @@ add_members:
         Gcin->read_line (name);
         name.erase (name.find ('\n'));
 
-        ret = members.insert (Member(their_sex, name));
+        ret = members.insert (Member(name, their_sex));
         std::cout << "\nDo you wish to have another member?\n1) Yes\n2) No\n";
         std::cout << select_one;
         std::cin >> choice;
@@ -173,6 +173,8 @@ void user_interface::travel_path_summery (const Party* party,
     std::cout << "You traveled " << speed << " miles today ("
         << total << " miles total) and have "
         << party->get_food () << " lbs of food remaining.\n";
+
+    std::cout << "Your party consists of " << party->size() << " members.\n";
     wait_for_key ();
 }
 

@@ -17,6 +17,9 @@ unsigned int Health::feed ()
     return _hunger;
 }
 
+/**
+ *@notes this may kill the member.
+ */
 unsigned int Health::starve ()
 {
     assert (_is_alive == true);
@@ -39,17 +42,24 @@ Party::Party (const MemberContainer& members) :
     _members (members), _food (100), _ammo (50), _oxen (1), _money (1000)
 {}
 
+/**
+ *@param member a fully initialized member who will join the party.
+ */
 void Party::add_member (const Member& member)
 {
     _members.insert (_members.begin (), member);
 }
 
-const MemberContainer* Party::get_members() const
+/**
+ *@notes The caller should not @c delete the returned pointer.
+ */
+const MemberContainer* Party::get_members () const
 {
     return &_members;
 }
 
-/* In the future this will calculate speed base on some formula
+/**
+ * In the future this will calculate speed base on some formula
  *   I'm thinking (oxen * 15)-(weight * 0.3), or something of that nature
  * Right now, just travel us oxen * 15
  */
@@ -58,8 +68,12 @@ unsigned int Party::get_speed() const
     return _oxen * 15;
 }
 
-Member::Member (const sex its_sex, const Glib::ustring& name) :
-    _sex (its_sex), _name (name)
+/**
+ *@param name The unique name of this party member, may contain spaces.
+ *@param its_sex girl or boy?
+ */
+Member::Member (const Glib::ustring& name, const sex its_sex) :
+    _name (name), _sex (its_sex)
 {
 }
 
@@ -132,18 +146,18 @@ MemberContainer* Party::get_active_members () const
  */
 MemberContainer* Party::get_inactive_members () const
 {
-    MemberContainer* active_members = new MemberContainer;
+    MemberContainer* inactive_members = new MemberContainer;
     MemberContainer::const_iterator i
         = std::find_if (_members.begin (), _members.end (),
                 is_member_not_alive);
     while (i != _members.end ())
     {
-        active_members->insert (active_members->begin (), *i);
+        inactive_members->insert (inactive_members->begin (), *i);
         std::advance (i, 1); // Skip over ourselves, or we'll loop.
-        i = std::find_if (i, _members.end (), is_member_alive);
+        i = std::find_if (i, _members.end (), is_member_not_alive);
     }
 
-    return active_members;
+    return inactive_members;
 }
 
 /// Returns which member is more hungry, followed by alphabetical ordering.
@@ -160,7 +174,6 @@ bool operator < (const Member& lhs, const Member& rhs)
     return lhs.get_name () < rhs.get_name ();
 }
 
-/// Consume food, and people get hungry if they can't eat. If they can't eat and are too hungry, they die.
 /**
  *@returns how many party members left.
  */
@@ -189,7 +202,6 @@ unsigned int Party::eat_food ()
         active_members->erase (e);
         active_members->insert (active_members->begin (), temp);
     }
-
 
     // Recombine our updated members with the others we didn't
     std::set_union (active_members->begin (), active_members->end (),
