@@ -6,6 +6,9 @@
 #include "party.hh"
 #include "ui.hh"
 
+/**
+ *@returns how hungry the party member is now.
+ */
 unsigned int Health::feed ()
 {
     assert (_hunger != 0);
@@ -18,7 +21,8 @@ unsigned int Health::feed ()
 }
 
 /**
- *@notes this may kill the member.
+ *@returns how hungry the party member is now.
+ *@note this may kill the member.
  */
 unsigned int Health::starve ()
 {
@@ -38,6 +42,9 @@ Party::Party () :
     _food (100), _ammo (50), _oxen (1), _money (1000)
 {}
 
+/**
+ *@param members Fully initialized MemberContainer
+ */
 Party::Party (const MemberContainer& members) :
     _members (members), _food (100), _ammo (50), _oxen (1), _money (1000)
 {}
@@ -51,7 +58,7 @@ void Party::add_member (const Member& member)
 }
 
 /**
- *@notes The caller should not @c delete the returned pointer.
+ *@note The caller should not @c delete the returned pointer.
  */
 const MemberContainer* Party::get_members () const
 {
@@ -122,7 +129,7 @@ static bool is_member_not_alive (const Member& lhs)
 /// Gets all the party members who aren't dead.
 /**
  *@returns A pointer to a new MemberContainer
- *@notes the caller is responsible for deleting the returned pointer
+ *@note the caller is responsible for deleting the returned pointer
  */
 MemberContainer* Party::get_active_members () const
 {
@@ -142,7 +149,7 @@ MemberContainer* Party::get_active_members () const
 /// Gets all the party members who aren't dead.
 /**
  *@returns A pointer to a new MemberContainer
- *@notes the caller is responsible for deleting the returned pointer
+ *@note the caller is responsible for deleting the returned pointer
  */
 MemberContainer* Party::get_inactive_members () const
 {

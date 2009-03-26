@@ -291,7 +291,7 @@ static Map* fill_map (const std::string& filename)
 
 /**
  @returns a pointer to a newly allocated Map object.
- @notes the caller is responcible for @c deleting the returned map.
+ @note the caller is responcible for @c deleting the returned map.
 */
 Map* MapParser::parse () const
 {

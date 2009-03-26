@@ -18,6 +18,7 @@ class Health
     public:
     Health () : _hunger (7), _is_alive (true) {};
 
+    /// A number 1 -- 7, detailing how hungry the member is.
     unsigned int get_hunger () const {return _hunger;};
 
     /// Are we quick or dead?

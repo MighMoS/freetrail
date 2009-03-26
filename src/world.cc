@@ -19,7 +19,10 @@ Map::Map (const Glib::ustring& first_track, TrackContainer& all_tracks) :
 {
 }
 
-Track::Track(const Glib::ustring& name) : _name(name) {};
+/**
+ *@param name the name this track will be referenced by
+ */
+Track::Track (const Glib::ustring& name) : _name(name) {};
 
 /**
  * Add a Location to this Track.
