@@ -1,6 +1,5 @@
 High Priority:
-    * Write a method to get all the members who are alive.
-    * Write a method to update ALL members' status with the list above.
+    *
 
 Medium Priority:
     * (WIP) Untangle UI from implementation (very important later)
