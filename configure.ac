@@ -10,10 +10,12 @@ AM_INIT_AUTOMAKE([freetrail], [0.0.6])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_FILES([Makefile
                  src/Makefile
-                 maps/Makefile])
+                 maps/Makefile
+                 ])
 
 # Checks for programs.
 AC_PROG_CXX
+AC_PROG_RANLIB
 
 AC_LANG_CPLUSPLUS
 
@@ -29,6 +31,13 @@ AC_C_RESTRICT
 PKG_CHECK_MODULES([LIBXML], [libxml++-2.6 >= 2.10.0])
 AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
+
+PKG_CHECK_MODULES([LIBCPPTEST], [libcpptest], [havecpptest=true], [havecpptest=false])
+AC_SUBST(LIBCPPTEST_CFLAGS)
+AC_SUBST(LIBCPPTEST_LIBS)
+if test "x$havecpptest"="xtrue"; then
+    AC_CONFIG_FILES([test/Makefile])
+fi
 
 AC_MSG_CHECKING(whether to build with debug information)
 
@@ -60,5 +69,7 @@ AC_SUBST(privdatadir)
 mapsdir='${privdatadir}'/maps
 AC_SUBST(mapsdir)
 
+testdir=test/
+AC_SUBST(testdir)
 AC_OUTPUT
 echo [$PACKAGE_NAME will be installed to $prefix]

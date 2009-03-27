@@ -5,9 +5,12 @@ AM_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter \
 
 bin_PROGRAMS=freetrail
 freetrail_SOURCES= \
+                   main.cc
+noinst_LIBRARIES = \
+                   libfreetrail.a
+libfreetrail_a_SOURCES = \
                    common.cc \
                    location.cc \
-                   main.cc \
                    party.cc \
                    parser.cc \
                    runners.cc \
@@ -22,4 +25,4 @@ noinst_HEADERS = \
                     ui.hh \
                     world.hh
 
-freetrail_LDADD = $(LIBXML_LIBS)
+freetrail_LDADD = libfreetrail.a $(LIBXML_LIBS)

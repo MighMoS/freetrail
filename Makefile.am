@@ -1,2 +1,2 @@
-SUBDIRS = src maps
+SUBDIRS = src maps test
 EXTRA_DIST = AUTHORS INSTALL NEWS README
