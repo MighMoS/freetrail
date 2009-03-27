@@ -47,10 +47,11 @@ AC_MSG_RESULT($debugger)
 
 # set DEBUG flag and introduce additional compiler flags
 if test x"$debugger" = x"yes"; then
-    CXXFLAGS="$CXXFLAGS -g3 -O0"
+    CXXDEBUG="-g3 -O0"
 else
-    CXXFLAGS="$CXXFLAGS -DNDEBUG"
+    CXXDEBUG="-DNDEBUG"
 fi
+AC_SUBST(CXXDEBUG)
 
 # Defines so that we know where to look for our various resources (thanks, evolution)
 privdatadir='${datadir}'/freetrail

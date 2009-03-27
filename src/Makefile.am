@@ -1,5 +1,7 @@
 INCLUDES = $(LIBXML_CFLAGS)
-AM_CXXFLAGS = -Wall -Wextra -Werror -Wno-unused-parameter -DFREETRAIL_MAPSDIR=\"$(mapsdir)\"
+AM_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter \
+              -DFREETRAIL_MAPSDIR=\"$(mapsdir)\" \
+              $(CXXDEBUG)
 
 bin_PROGRAMS=freetrail
 freetrail_SOURCES= \
