@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cassert>
+#include <memory>
 
 #include <glibmm.h>
 
@@ -131,9 +132,9 @@ static bool is_member_not_alive (const Member& lhs)
  *@returns A pointer to a new MemberContainer
  *@note the caller is responsible for deleting the returned pointer
  */
-MemberContainer* Party::get_active_members () const
+std::auto_ptr<MemberContainer> Party::get_active_members () const
 {
-    MemberContainer* active_members = new MemberContainer;
+    std::auto_ptr<MemberContainer> active_members (new MemberContainer);
     MemberContainer::const_iterator i
         = std::find_if (_members.begin (), _members.end (), is_member_alive);
     while (i != _members.end ())
@@ -151,9 +152,9 @@ MemberContainer* Party::get_active_members () const
  *@returns A pointer to a new MemberContainer
  *@note the caller is responsible for deleting the returned pointer
  */
-MemberContainer* Party::get_inactive_members () const
+std::auto_ptr<MemberContainer> Party::get_inactive_members () const
 {
-    MemberContainer* inactive_members = new MemberContainer;
+    std::auto_ptr<MemberContainer> inactive_members (new MemberContainer);
     MemberContainer::const_iterator i
         = std::find_if (_members.begin (), _members.end (),
                 is_member_not_alive);
@@ -187,10 +188,9 @@ bool operator < (const Member& lhs, const Member& rhs)
 unsigned int Party::eat_food ()
 {
     MemberContainer new_members;
-    MemberContainer* active_members = get_active_members ();
-    MemberContainer* inactive_members = get_inactive_members ();
+    std::auto_ptr<MemberContainer> active_members (get_active_members ());
+    std::auto_ptr<MemberContainer> inactive_members (get_inactive_members ());
     MemberContainer::iterator i = active_members->begin ();
-    unsigned int remaining_members;
 
     while (i != active_members->end ())
     {
@@ -216,11 +216,7 @@ unsigned int Party::eat_food ()
             std::inserter(new_members, new_members.begin ()));
     _members.swap (new_members);
 
-    remaining_members = active_members->size ();
-    delete active_members;
-    delete inactive_members;
-
-    return remaining_members;
+    return active_members->size ();
 }
 
 unsigned int Party::get_ammo () const
@@ -245,9 +241,5 @@ unsigned int Party::get_oxen () const
 
 unsigned int Party::size () const
 {
-    unsigned int size;
-    MemberContainer* active = get_active_members ();
-    size = active->size ();
-    delete active;
-    return size;
+    return get_active_members ()->size ();
 }

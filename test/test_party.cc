@@ -44,6 +44,7 @@ void TestParty::TestAddMember ()
 void TestParty::TestActivity ()
 {
     Party some_party;
+    std::auto_ptr<MemberContainer> actives;
 
     some_party.add_member (Member("John", MALE));
     some_party.add_member (Member("Mary", FEMALE));
@@ -51,13 +52,11 @@ void TestParty::TestActivity ()
 
     TEST_ASSERT (some_party.size () == 3);
 
-    MemberContainer* actives = some_party.get_active_members ();
+    actives = some_party.get_active_members ();
     TEST_ASSERT (actives->size () == 3);
-    delete actives;
 
     actives = some_party.get_inactive_members ();
     TEST_ASSERT (actives->size () == 0);
-    delete actives;
 
     Member kenny ("Kenny", MALE);
     for (unsigned int i = 0; i < 7; i++) kenny.starve ();
@@ -66,10 +65,8 @@ void TestParty::TestActivity ()
     TEST_ASSERT (some_party.size () == 3);
     actives = some_party.get_active_members ();
     TEST_ASSERT (actives->size () == 3);
-    delete actives;
     actives = some_party.get_inactive_members ();
     TEST_ASSERT (actives->size () == 1);
-    delete actives;
 }
 
 int main ()

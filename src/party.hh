@@ -1,6 +1,7 @@
 #ifndef PARTY
 #define PARTY
 
+#include <memory>
 #include <set>
 
 #include <glibmm.h>
@@ -84,9 +85,9 @@ class Party
     /// Get everyone who's traveling with us.
     const MemberContainer* get_members () const;
     /// Get everyone who's not dead.
-    MemberContainer* get_active_members () const;
+    std::auto_ptr<MemberContainer> get_active_members () const;
     /// Get everyone who's dead.
-    MemberContainer* get_inactive_members () const;
+    std::auto_ptr<MemberContainer> get_inactive_members () const;
 
     /// Add someone to the party.
     void add_member (const Member& member);
