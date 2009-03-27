@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.61)
 
-AC_INIT([freetrail], [0.0.6], [mighmos@mighmos.org])
+AC_INIT([freetrail],[0.0.6],[mighmos@mighmos.org])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([freetrail], [0.0.6])
 
@@ -35,7 +35,7 @@ AC_MSG_CHECKING(whether to build with debug information)
 # create configure parameter and init variable $debugger
 debugger=no
 AC_ARG_ENABLE(debug,
-    AC_HELP_STRING(
+    AS_HELP_STRING(
         [--enable-debug],
         [generate a debug build (default=no)]
     ),

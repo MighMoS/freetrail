@@ -1,4 +1,4 @@
-INCLUDES = $(LIBXML_CFLAGS)
+AM_CPPFLAGS = $(LIBXML_CFLAGS)
 AM_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter \
               -DFREETRAIL_MAPSDIR=\"$(mapsdir)\" \
               $(CXXDEBUG)
