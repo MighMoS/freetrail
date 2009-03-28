@@ -16,3 +16,5 @@ tags
 /doc
 /stamp-h1
 /src/freetrail
+test/test_map
+test/test_party

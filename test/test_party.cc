@@ -9,6 +9,7 @@ class TestParty : public Test::Suite
     void TestConstructor ();
     void TestAddMember ();
     void TestActivity ();
+
     public:
     TestParty()
     {
