@@ -130,11 +130,10 @@ static bool is_member_not_alive (const Member& lhs)
 /// Gets all the party members who aren't dead.
 /**
  *@returns A pointer to a new MemberContainer
- *@note the caller is responsible for deleting the returned pointer
  */
-std::auto_ptr<MemberContainer> Party::get_active_members () const
+MemberContainerPtr Party::get_active_members () const
 {
-    std::auto_ptr<MemberContainer> active_members (new MemberContainer);
+    MemberContainerPtr active_members (new MemberContainer);
     MemberContainer::const_iterator i
         = std::find_if (_members.begin (), _members.end (), is_member_alive);
     while (i != _members.end ())
@@ -150,11 +149,10 @@ std::auto_ptr<MemberContainer> Party::get_active_members () const
 /// Gets all the party members who aren't dead.
 /**
  *@returns A pointer to a new MemberContainer
- *@note the caller is responsible for deleting the returned pointer
  */
-std::auto_ptr<MemberContainer> Party::get_inactive_members () const
+MemberContainerPtr Party::get_inactive_members () const
 {
-    std::auto_ptr<MemberContainer> inactive_members (new MemberContainer);
+    MemberContainerPtr inactive_members (new MemberContainer);
     MemberContainer::const_iterator i
         = std::find_if (_members.begin (), _members.end (),
                 is_member_not_alive);
@@ -188,8 +186,8 @@ bool operator < (const Member& lhs, const Member& rhs)
 unsigned int Party::eat_food ()
 {
     MemberContainer new_members;
-    std::auto_ptr<MemberContainer> active_members (get_active_members ());
-    std::auto_ptr<MemberContainer> inactive_members (get_inactive_members ());
+    MemberContainerPtr active_members (get_active_members ());
+    MemberContainerPtr inactive_members (get_inactive_members ());
     MemberContainer::iterator i = active_members->begin ();
 
     while (i != active_members->end ())

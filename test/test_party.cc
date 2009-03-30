@@ -45,7 +45,7 @@ void TestParty::TestAddMember ()
 void TestParty::TestActivity ()
 {
     Party some_party;
-    std::auto_ptr<MemberContainer> actives;
+    MemberContainerPtr actives;
 
     some_party.add_member (Member("John", MALE));
     some_party.add_member (Member("Mary", FEMALE));

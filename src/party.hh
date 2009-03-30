@@ -67,6 +67,7 @@ class Member
 };
 
 typedef std::set<Member> MemberContainer;
+typedef std::auto_ptr<MemberContainer> MemberContainerPtr;
 /// The stars of the show.
 class Party
 {
@@ -85,9 +86,9 @@ class Party
     /// Get everyone who's traveling with us.
     const MemberContainer* get_members () const;
     /// Get everyone who's not dead.
-    std::auto_ptr<MemberContainer> get_active_members () const;
+    MemberContainerPtr get_active_members () const;
     /// Get everyone who's dead.
-    std::auto_ptr<MemberContainer> get_inactive_members () const;
+    MemberContainerPtr get_inactive_members () const;
 
     /// Add someone to the party.
     void add_member (const Member& member);
