@@ -94,7 +94,6 @@ unsigned int Member::starve ()
 {
     unsigned int health;
     health = _health.starve ();
-    user_interface::starving_member (*this);
 
     return health;
 }
@@ -201,6 +200,7 @@ unsigned int Party::eat_food ()
         else
         {
             temp.starve ();
+            user_interface::starving_member (temp);
         }
         MemberContainer::iterator e = i;
         i++;
