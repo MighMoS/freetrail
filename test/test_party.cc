@@ -9,6 +9,7 @@ class TestParty : public Test::Suite
     void TestConstructor ();
     void TestAddMember ();
     void TestActivity ();
+    void TestEatFood ();
 
     public:
     TestParty()
@@ -16,6 +17,7 @@ class TestParty : public Test::Suite
         TEST_ADD(TestParty::TestConstructor);
         TEST_ADD(TestParty::TestAddMember);
         TEST_ADD(TestParty::TestActivity);
+        TEST_ADD(TestParty::TestEatFood);
     };
 };
 
@@ -68,6 +70,47 @@ void TestParty::TestActivity ()
     TEST_ASSERT (actives->size () == 3);
     actives = some_party.get_inactive_members ();
     TEST_ASSERT (actives->size () == 1);
+}
+
+///todo This test is horribly fragile.
+void TestParty::TestEatFood ()
+{
+    Party some_party;
+    MemberContainerPtr actives;
+    TEST_ASSERT (some_party.get_food () == 100);
+
+    Member John ("John", MALE);
+    Member Mary ("Mary", FEMALE);
+    Mary.starve ();
+    Member Steve ("Steve", MALE);
+    Steve.starve ();
+    Steve.starve ();
+    Member Ann ("Ann", FEMALE);
+    Ann.starve ();
+    Ann.starve ();
+    Ann.starve ();
+
+    // John should be at 7, Mary at 6, and Steve at 5, and Ann at 4.
+
+    some_party.add_member (John);
+    some_party.add_member (Mary);
+    some_party.add_member (Steve);
+    some_party.add_member (Ann);
+    TEST_ASSERT (some_party.size () == 4);
+
+    // (4 members * 5lbs / day) * 5 = 100 (default food)
+    for (unsigned int i = 0; i < 5; i++) some_party.eat_food ();
+    TEST_ASSERT (some_party.size () == 4);
+    TEST_ASSERT (some_party.get_food () == 0);
+    for (unsigned int i = 0; i < 5; i++) some_party.eat_food ();
+    TEST_ASSERT (some_party.size () == 4);
+    TEST_ASSERT (some_party.get_food () == 0);
+    // Member should be throughly starved now, ironically, except Ann
+    // As she got the first bits of food to nurse her back to health.
+    some_party.eat_food ();
+    TEST_ASSERT (some_party.size () == 1);
+    some_party.eat_food ();
+    TEST_ASSERT (some_party.size () == 0);
 }
 
 int main ()
