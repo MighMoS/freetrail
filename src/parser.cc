@@ -220,6 +220,39 @@ static Track* fill_track (const xmlmapIter& track_iter)
     return new_track;
 }
 
+/// Gets the full path for filename
+/**
+ * @param filename filename to look for, ex "example.xml"
+ * @returns full path to the file name
+ * @throws MapParsingException if the file couldn't be found.
+ * @todo Check to see if filename is a complete path
+ */
+static inline std::string find_map_file (const std::string& filename)
+{
+    static const std::string data_dir =
+        Glib::get_user_data_dir () + "/freetrail";
+    // The following is defined in configure.ac
+    static const std::string file_path (FREETRAIL_MAPSDIR);
+    // Places to look for the given filename
+    static const std::string search_paths[] = {"./", data_dir, file_path};
+    std::string complete_file_name;
+    bool really_exists = false;
+
+    for (unsigned int i = 0;
+            i < sizeof(search_paths)/sizeof(search_paths[0]) &&
+            really_exists == false; i++)
+    {
+        complete_file_name = Glib::build_filename (search_paths[i], filename);
+        Freetrail::Debug (std::string("Checking ") + complete_file_name);
+        really_exists =
+            Glib::file_test(complete_file_name, Glib::FILE_TEST_EXISTS);
+    }
+    if (really_exists == false)
+        throw MapParsingException ("Could not find map called " + filename);
+
+    return complete_file_name;
+}
+
 /**
  *@todo Check that all destinations are reachable
  */
@@ -230,10 +263,9 @@ static Map* fill_map (const std::string& filename)
     xmlpp::Node::NodeList track_list;
     const xmlpp::Element* root_element;
     const xmlpp::Attribute* starting_track;
-    const std::string file_path (FREETRAIL_MAPSDIR); // Defined in configure.ac
     Glib::ustring first_track;
+    const std::string complete_file_name = find_map_file (filename);
 
-    std::string complete_file_name = Glib::build_filename (file_path, filename);
     Freetrail::Debug ("Loading file: " + complete_file_name);
 
     try
