@@ -223,18 +223,22 @@ static Track* fill_track (const xmlmapIter& track_iter)
 /// Gets the full path for filename
 /**
  * @param filename filename to look for, ex "example.xml"
+ * @param additional_path pathname for location of the file (optional)
  * @returns full path to the file name
  * @throws MapParsingException if the file couldn't be found.
+ *
  * @todo Check to see if filename is a complete path
  */
-static inline std::string find_map_file (const std::string& filename)
+static inline std::string find_map_file (const std::string& filename,
+        const std::string& additional_path = std::string("./"))
 {
     static const std::string data_dir =
         Glib::get_user_data_dir () + "/freetrail";
     // The following is defined in configure.ac
     static const std::string file_path (FREETRAIL_MAPSDIR);
     // Places to look for the given filename
-    static const std::string search_paths[] = {"./", data_dir, file_path};
+    static const std::string search_paths[] =
+        {additional_path, data_dir, file_path};
     std::string complete_file_name;
     bool really_exists = false;
 
