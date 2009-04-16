@@ -229,8 +229,8 @@ static Track* fill_track (const xmlmapIter& track_iter)
  *
  * @todo Check to see if filename is a complete path
  */
-static inline std::string find_map_file (const std::string& filename,
-        const std::string& additional_path = std::string("./"))
+static inline std::string
+find_map_file (const std::string& filename, const std::string& additional_path)
 {
     static const std::string data_dir =
         Glib::get_user_data_dir () + "/freetrail";
@@ -258,9 +258,11 @@ static inline std::string find_map_file (const std::string& filename,
 }
 
 /**
- *@todo Check that all destinations are reachable
- */
-static Map* fill_map (const std::string& filename)
+ @returns a pointer to a newly allocated Map object.
+ @note the caller is responcible for @c deleting the returned map.
+ @todo Check that all destinations are reachable
+*/
+Map* MapParser::parse () const
 {
     TrackContainer all_tracks;
     xmlpp::DomParser parser;
@@ -268,7 +270,8 @@ static Map* fill_map (const std::string& filename)
     const xmlpp::Element* root_element;
     const xmlpp::Attribute* starting_track;
     Glib::ustring first_track;
-    const std::string complete_file_name = find_map_file (filename);
+    const std::string complete_file_name =
+        find_map_file (_filename, _filepath);
 
     Freetrail::Debug ("Loading file: " + complete_file_name);
 
@@ -323,14 +326,5 @@ static Map* fill_map (const std::string& filename)
     }
 
     return new Map (first_track, all_tracks);
-}
-
-/**
- @returns a pointer to a newly allocated Map object.
- @note the caller is responcible for @c deleting the returned map.
-*/
-Map* MapParser::parse () const
-{
-    return fill_map (_filename);
 }
 
