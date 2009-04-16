@@ -28,7 +28,7 @@ class Location
     bool can_hunt; ///<Can we hunt here?
 
     public:
-    Location(const Glib::ustring& name) : _name(name) {};
+    Location(const Glib::ustring& name) : _name(name), can_hunt(false) {};
     /// Returns a friendly name for this place.
     Glib::ustring get_name () const {return _name;};
     virtual bool operator == (const Glib::ustring& rhs) const;
@@ -58,7 +58,7 @@ class Path : public Location
     Path (const Glib::ustring& name, const unsigned int distance) :
         Location(name), _next_distance(distance) {};
     /// How far away is the next location, from start to finish.
-    unsigned int get_next_distance () const {return _next_distance;};
+    unsigned int length () const {return _next_distance;};
     /// Should only be called by map parser.
     void set_next_location(Location* next_location);
     /// Moves a party step by step through a path, possibly over several turns.

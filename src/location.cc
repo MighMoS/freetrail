@@ -74,9 +74,9 @@ Freetrail::Runner::Status Path::run(Party* party) const
 
     while (reached_landmark == false)
     {
-        if (get_next_distance() <= speed + distance_traveled)
+        if (_next_distance <= speed + distance_traveled)
         {
-            speed = get_next_distance() - distance_traveled;
+            speed = _next_distance - distance_traveled;
             reached_landmark = true;
         }
 
