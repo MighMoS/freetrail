@@ -20,7 +20,7 @@ class Track
     /// Default constructor, creates a Track with no Locations and the provided name.
     Track (const Glib::ustring& name);
     /// Returns a LocationPtr to the nth stop.
-    const LocationPtr get_stop(const unsigned int pos) const;
+    const LocationPtr operator[](const unsigned int pos) const;
     /// Compares a track's name against a string.
     bool operator == (const Glib::ustring& rhs) const;
     /// Needed for std::set
@@ -46,7 +46,7 @@ class Map
     /// Adds the specified Track to the map.
     void add_track(const Track& track);
     /// Returns a pointer to the specified Track.
-    const Track* find (const Glib::ustring& track_name) const;
+    const Track& find (const Glib::ustring& track_name) const;
     /// Gets the first Track of the map. This must exist and can not fail.
     const Glib::ustring& getStartTrack() const;
     /// Returns the number of tracks held.

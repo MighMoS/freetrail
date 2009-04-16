@@ -174,14 +174,14 @@ void user_interface::travel_path_finish (const Glib::ustring& where)
  *@param speed how far the party went `today'
  *@param total how far the party has gone so far.
  */
-void user_interface::travel_path_summery (const Party* party,
+void user_interface::travel_path_summery (const Party& party,
         const unsigned int speed, const unsigned int total)
 {
     std::cout << "You traveled " << speed << " miles today ("
         << total << " miles total) and have "
-        << party->get_food () << " lbs of food remaining.\n";
+        << party.get_food () << " lbs of food remaining.\n";
 
-    std::cout << "Your party consists of " << party->size() << " members.\n";
+    std::cout << "Your party consists of " << party.size() << " members.\n";
     wait_for_key ();
 }
 

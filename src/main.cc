@@ -34,7 +34,7 @@ int main (int argc, char *argv[])
         return 1;
     }
 
-    Freetrail::Runner::IMapRunner mRun (the_party, the_map);
+    Freetrail::Runner::IMapRunner mRun (*the_party, the_map);
     Freetrail::Runner::Status stat;
 
     stat = mRun.run ();

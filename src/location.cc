@@ -22,13 +22,13 @@ bool Location::operator == (const Glib::ustring& rhs) const
  */
 Fork::Fork (const Glib::ustring& name,
         const ForkOptionContainer& jump_locations):
-    Location(name), _jump_locations(jump_locations)
+    Location (name), _jump_locations (jump_locations)
 {};
 
 /**
- *@param[in,out] party Party to ask where to go.
+ *@param[in,out] party unused.
  */
-Freetrail::Runner::Status Fork::run (Party* party) const
+Freetrail::Runner::Status Fork::run (Party& party) const
 {
     Freetrail::Runner::Status stat;
     Glib::ustring destination;
@@ -47,13 +47,13 @@ Freetrail::Runner::Status Fork::run (Party* party) const
  */
 FixedJump::FixedJump (const Glib::ustring& name,
         const ForkOptionContainer& jump_locations):
-    Fork(name, jump_locations)
+    Fork (name, jump_locations)
 {};
 
 /**
  *@param party unused
  */
-Freetrail::Runner::Status FixedJump::run (Party* party) const
+Freetrail::Runner::Status FixedJump::run (Party& party) const
 {
     Freetrail::Runner::Status stat;
     stat.setNextTrack ((*get_jumps().begin ())->get_destination ());
@@ -64,10 +64,10 @@ Freetrail::Runner::Status FixedJump::run (Party* party) const
 /**
  *@param[in,out] party Party to subject to this Location.
  */
-Freetrail::Runner::Status Path::run(Party* party) const
+Freetrail::Runner::Status Path::run (Party& party) const
 {
     Freetrail::Runner::Status stat;
-    unsigned int speed = party->get_speed();
+    unsigned int speed = party.get_speed();
     unsigned int distance_traveled = 0;
     unsigned int members_left;
     bool reached_landmark = false;
@@ -82,7 +82,7 @@ Freetrail::Runner::Status Path::run(Party* party) const
 
         distance_traveled += speed;
 
-        members_left = party->eat_food();
+        members_left = party.eat_food();
 
         if (members_left == 0)
         {
@@ -101,7 +101,7 @@ Freetrail::Runner::Status Path::run(Party* party) const
 /**
  *@see Path::run ()
  */
-Freetrail::Runner::Status WinningPath::run (Party* party) const
+Freetrail::Runner::Status WinningPath::run (Party& party) const
 {
     Freetrail::Runner::Status stat;
 
@@ -131,8 +131,8 @@ Outpost::Outpost (const Glib::ustring& name) :
 /**
  *@param[in,out] party Party to subject to this Location.
  */
-Freetrail::Runner::Status Outpost::run (Party* party) const
+Freetrail::Runner::Status Outpost::run (Party& party) const
 {
-    user_interface::shop(*party);
+    user_interface::shop (party);
     return Freetrail::Runner::Status();
 }

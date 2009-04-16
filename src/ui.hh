@@ -26,7 +26,7 @@ class user_interface
     /// Annouces to the user that we've arrived.
     static void travel_path_finish (const Glib::ustring& where);
     /// Tells the user what's happened while journying.
-    static void travel_path_summery (const Party* party,
+    static void travel_path_summery (const Party& party,
             const unsigned int speed, const unsigned int total);
 	static void wait_for_key ();
     /// Intro dialog.

@@ -30,15 +30,9 @@ void Status::setStatus (const state new_state)
     _state = new_state;
 }
 
-///Abstract constructor.
-Runner::Runner (Party* party) : _party(party)
-{
-    assert (party != NULL);
-}
-
 ///@param party the party we're moving.
 ///@param map the map we're moving the party through.
-IMapRunner::IMapRunner (Party* party, const Map* map) :
+IMapRunner::IMapRunner (Party& party, const Map* map) :
     Runner::Runner(party), _map(map)
 {
     assert (map != NULL);
@@ -47,12 +41,11 @@ IMapRunner::IMapRunner (Party* party, const Map* map) :
 Status IMapRunner::run()
 {
     Status stat;
-    const Track* _curr_track;
     stat.setNextTrack (_map->getStartTrack ());
 
     while (stat.KeepRunning()) // Default value
     {
-        _curr_track = _map->find (stat.getNextTrack ());
+        const Track& _curr_track = _map->find (stat.getNextTrack ());
         ITrackRunner tRun (_party, _curr_track);
         stat = tRun.run ();
     }
@@ -62,10 +55,9 @@ Status IMapRunner::run()
 
 ///@param party: the party we're moving.
 ///@param track: the track we're moving the party through.
-ITrackRunner::ITrackRunner (Party* party, const Track* track) :
+ITrackRunner::ITrackRunner (Party& party, const Track& track) :
     Runner(party), _track(track)
 {
-    assert (_track != NULL);
 }
 
 ///Runs a party through all the Locations in the Track.
@@ -73,9 +65,9 @@ ITrackRunner::ITrackRunner (Party* party, const Track* track) :
 Status ITrackRunner::run()
 {
     Status stat;
-    for (unsigned int i = 0; i < _track->size () && stat.KeepRunning(); i++)
+    for (unsigned int i = 0; i < _track.size () && stat.KeepRunning(); i++)
     {
-        ILocationRunner lRun (_party, _track->get_stop (i));
+        ILocationRunner lRun (_party, _track[i]);
         stat = lRun.run ();
     }
 
@@ -84,7 +76,7 @@ Status ITrackRunner::run()
 
 ///@param party: the party we're moving
 ///@param location: the location we're at, where stuff is happening.
-ILocationRunner::ILocationRunner (Party* party, const LocationPtr location) :
+ILocationRunner::ILocationRunner (Party& party, const LocationPtr location) :
     Runner(party), _location(location)
 {
     assert (_location != NULL);

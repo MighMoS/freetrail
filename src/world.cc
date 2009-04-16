@@ -45,7 +45,7 @@ bool Track::operator == (const Glib::ustring& rhs) const
  * @param pos 0 based integer to retrieve the nth Location.
  * @note caller does not have to @c delete the returned Location*
  */
-const LocationPtr Track::get_stop(const unsigned int pos) const
+const LocationPtr Track::operator[](const unsigned int pos) const
 {
     assert (pos <= _track.size());
     return _track[pos];
@@ -70,12 +70,12 @@ const Glib::ustring& Map::getStartTrack () const
  * @param track_name the name of the Track to retrieve.
  * @note The caller should NOT @c delete the returned Track.
  */
-const Track* Map::find (const Glib::ustring& track_name) const
+const Track& Map::find (const Glib::ustring& track_name) const
 {
     // Convert the iterator to a regular pointer
     const Track* found = &*(_all_tracks.find (track_name));
     assert (found != &*(_all_tracks.end ()));
-    return found;
+    return *found;
 }
 
 unsigned int Map::size () const

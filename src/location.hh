@@ -33,7 +33,7 @@ class Location
     Glib::ustring get_name () const {return _name;};
     virtual bool operator == (const Glib::ustring& rhs) const;
     /// Does something with the party while they're here.
-    virtual Freetrail::Runner::Status run (Party* party) const = 0;
+    virtual Freetrail::Runner::Status run (Party& party) const = 0;
 
 #ifndef NDEBUG
     friend std::ostream& operator <<(std::ostream& os, const Location& loc);
@@ -46,7 +46,7 @@ class Outpost : public Location
     public:
     Outpost (const Glib::ustring& name);
     /// Allows the party to rest and purchase supplies.
-    Freetrail::Runner::Status run (Party* party) const;
+    Freetrail::Runner::Status run (Party& party) const;
 };
 
 /// A road to travel, the most common type of location.
@@ -62,7 +62,7 @@ class Path : public Location
     /// Should only be called by map parser.
     void set_next_location(Location* next_location);
     /// Moves a party step by step through a path, possibly over several turns.
-    Freetrail::Runner::Status run (Party* party) const;
+    Freetrail::Runner::Status run (Party& party) const;
 };
 
 /// Completing this Path will win the game for the user.
@@ -72,7 +72,7 @@ class WinningPath : public Path
     WinningPath (const Glib::ustring& name, const unsigned int distance) :
         Path (name, distance) {};
     /// Functions just like Path::run, but win if we get through it.
-    Freetrail::Runner::Status run (Party* party) const;
+    Freetrail::Runner::Status run (Party& party) const;
 };
 
 /// Container object holding a location, and a "how to get there".
@@ -103,7 +103,7 @@ class Fork : public Location
           const ForkOptionContainer& jump_locations);
 
     /// Allows the user to make a decision of where to go.
-    Freetrail::Runner::Status run (Party* party) const;
+    Freetrail::Runner::Status run (Party& party) const;
     /// Returns possible locations to go to.
     const ForkOptionContainer& get_jumps () const
         {return _jump_locations;};
@@ -116,7 +116,7 @@ class FixedJump : public Fork
     FixedJump (const Glib::ustring& name,
           const ForkOptionContainer& jump_locations);
     /// Jump somewhere, no questions asked.
-    Freetrail::Runner::Status run (Party* party) const;
+    Freetrail::Runner::Status run (Party& party) const;
 };
 
 #endif // LOCATION_H
