@@ -82,7 +82,8 @@ Freetrail::Runner::Status Path::run (Party& party) const
 
         distance_traveled += speed;
 
-        members_left = party.eat_food();
+        user_interface::displayStarvedMembers (party.eat());
+        members_left = party.size();
 
         if (members_left == 0)
         {

@@ -100,7 +100,7 @@ class Party
     unsigned int get_money () const;
     unsigned int get_oxen () const;
     /// Consume food, and face the consequences if we can't.
-    unsigned int eat_food ();
+    MemberContainer eat ();
     unsigned int buy_ammo(const unsigned int amount);
     unsigned int buy_food(const unsigned int amount);
     unsigned int buy_oxen(const unsigned int amount);

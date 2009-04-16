@@ -99,17 +99,17 @@ void TestParty::TestEatFood ()
     TEST_ASSERT (some_party.size () == 4);
 
     // (4 members * 5lbs / day) * 5 = 100 (default food)
-    for (unsigned int i = 0; i < 5; i++) some_party.eat_food ();
+    for (unsigned int i = 0; i < 5; i++) some_party.eat ();
     TEST_ASSERT (some_party.size () == 4);
     TEST_ASSERT (some_party.get_food () == 0);
-    for (unsigned int i = 0; i < 5; i++) some_party.eat_food ();
+    for (unsigned int i = 0; i < 5; i++) some_party.eat ();
     TEST_ASSERT (some_party.size () == 4);
     TEST_ASSERT (some_party.get_food () == 0);
     // Member should be throughly starved now, ironically, except Ann
     // As she got the first bits of food to nurse her back to health.
-    some_party.eat_food ();
+    some_party.eat ();
     TEST_ASSERT (some_party.size () == 1);
-    some_party.eat_food ();
+    some_party.eat ();
     TEST_ASSERT (some_party.size () == 0);
 }
 

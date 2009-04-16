@@ -180,32 +180,33 @@ bool operator < (const Member& lhs, const Member& rhs)
 }
 
 /**
- *@returns how many party members left.
+ *@returns A MemberConatiner of every party member which couldn't eat.
  */
-unsigned int Party::eat_food ()
+MemberContainer Party::eat ()
 {
     MemberContainer new_members;
+    MemberContainer starved_members;
     MemberContainerPtr active_members (get_active_members ());
     MemberContainerPtr inactive_members (get_inactive_members ());
     MemberContainer::iterator i = active_members->begin ();
 
     while (i != active_members->end ())
     {
-        Member temp = *i;
+        Member curr_member = *i;
         if (_food >= 5)
         {
             _food -= 5;
-            temp.feed ();
+            curr_member.feed ();
         }
         else
         {
-            temp.starve ();
-            user_interface::starving_member (temp);
+            curr_member.starve ();
+            starved_members.insert (curr_member);
         }
         MemberContainer::iterator e = i;
         i++;
         active_members->erase (e);
-        active_members->insert (active_members->begin (), temp);
+        active_members->insert (active_members->begin (), curr_member);
     }
 
     // Recombine our updated members with the others we didn't
@@ -214,7 +215,7 @@ unsigned int Party::eat_food ()
             std::inserter(new_members, new_members.begin ()));
     _members.swap (new_members);
 
-    return active_members->size ();
+    return starved_members;
 }
 
 unsigned int Party::get_ammo () const

@@ -147,7 +147,7 @@ void user_interface::shop(Party& party)
 /**
  *@param member A party member who's whining we should tell the user about.
  */
-void user_interface::starving_member (const Member& member)
+static void starving_member (const Member& member)
 {
     unsigned int hunger = member.get_hunger();
     if (hunger > 0)
@@ -157,6 +157,19 @@ void user_interface::starving_member (const Member& member)
     {
         std::cout << member.get_name ()
             << " died because there wasn't enough food.\n";
+    }
+}
+
+/**
+ *@param hungry_members A container holding every member which couldn't eat.
+ */
+void
+user_interface::displayStarvedMembers (const MemberContainer& hungry_members)
+{
+    for (MemberContainer::const_iterator i = hungry_members.begin ();
+            i != hungry_members.end (); i++)
+    {
+        starving_member (*i);
     }
 }
 
