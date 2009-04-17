@@ -59,8 +59,6 @@ class Path : public Location
         Location(name), _next_distance(distance) {};
     /// How far away is the next location, from start to finish.
     unsigned int length () const {return _next_distance;};
-    /// Should only be called by map parser.
-    void set_next_location(Location* next_location);
     /// Moves a party step by step through a path, possibly over several turns.
     Freetrail::Runner::Status run (Party& party) const;
 };
