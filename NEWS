@@ -1,4 +1,15 @@
+Freetrail "You're a loser, now" X.Y.Z (200904??):
+----------
+o Full playable map.
+o Costs can be associated with pathing options.
+* Search harder for maps, groundwork of user map choosing.
+* Members now actually require food. As such, they can die.
+* Adjust the speed to not be so round, using party size.
+* Internal design refinements.
+* Test suite to help guarantee correctness.
+
 Freetrail "You still can't lose" 0.0.5 (20090320):
+----------
 * Load from a real directory.
 * Make non-debug builds work, and enable them.
 * Small cleanups to the code.
