@@ -37,15 +37,11 @@ typedef std::set<Track> TrackContainer;
 /// Container holding tracks, which in turn hold locations.
 class Map
 {
-    TrackContainer _all_tracks; ///< Container holding everything.
-    Glib::ustring _first_track; ///< Name of our starting location.
+    const TrackContainer _all_tracks; ///< Container holding everything.
+    const Glib::ustring _first_track; ///< Name of our starting location.
     public:
-    /// Constructs a Map from the given file name.
-    ///@par Freetrail will search $INSTALL/share/freetrail/maps by default.
-    Map (const Glib::ustring& first_track, TrackContainer& all_tracks);
-    /// Adds the specified Track to the map.
-    void add_track(const Track& track);
-    /// Returns a pointer to the specified Track.
+    Map (const Glib::ustring& first_track, const TrackContainer& all_tracks);
+    /// Returns the specified Track.
     const Track& find (const Glib::ustring& track_name) const;
     /// Gets the first Track of the map. This must exist and can not fail.
     const Glib::ustring& getStartTrack() const;

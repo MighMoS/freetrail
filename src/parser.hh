@@ -30,7 +30,7 @@ class MapParser
         _filename (filename), _filepath (filepath) {};
 
     /// Process the XML into a usable Map object.
-    Map* parse () const;
+    const Map parse () const;
 };
 
 

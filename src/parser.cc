@@ -262,7 +262,7 @@ find_map_file (const std::string& filename, const std::string& additional_path)
  @note the caller is responcible for @c deleting the returned map.
  @todo Check that all destinations are reachable
 */
-Map* MapParser::parse () const
+const Map MapParser::parse () const
 {
     TrackContainer all_tracks;
     xmlpp::DomParser parser;
@@ -284,7 +284,8 @@ Map* MapParser::parse () const
     // Swallow any error libxml++ gives us and rethrow it.
     catch (const std::exception& ex)
     {
-        MapParsingException e (std::string("error parsing XML:\n\t") + ex.what ());
+        MapParsingException e (std::string("error parsing XML:\n\t") +
+                ex.what ());
         throw e;
     }
 
@@ -325,6 +326,6 @@ Map* MapParser::parse () const
                     i->get_name () + ")");
     }
 
-    return new Map (first_track, all_tracks);
+    return Map (first_track, all_tracks);
 }
 

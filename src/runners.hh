@@ -47,10 +47,10 @@ class Runner
 /// Runs a Party through the whole Map.
 class IMapRunner : public Runner
 {
-    const Map* _map;
+    const Map& _map;
 
     public:
-    IMapRunner (Party& party, const Map* map);
+    IMapRunner (Party& party, const Map& map);
     /// Plays the game. Won't stop until there is no where else to go.
     Status run();
 };

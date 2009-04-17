@@ -53,12 +53,10 @@ void TestMap::TestConstructor ()
 
 void TestMap::TestSimpleMap ()
 {
-    std::auto_ptr<Map> map;
-    MapParser simple_map_parser ("simple_map.xml");
-    map.reset (simple_map_parser.parse());
+    Map map = MapParser ("simple_map.xml").parse();
 
     // First track has two outposts, two paths, and a fork
-    const Track& track1 = map->find ("First");
+    const Track& track1 = map.find ("First");
     TEST_ASSERT (track1.size() == 5);
     TEST_ASSERT (track1[0]->get_name() == "Fort Intro");
     TEST_ASSERT (track1[1]->get_name() == "Wild Plains");
@@ -78,7 +76,7 @@ void TestMap::TestSimpleMap ()
     TEST_ASSERT (foc1[1]->get_destination() == "Second part2");
 
     // Second Track has one path and a fixedjump
-    const Track& track2 = map->find ("Second part1");
+    const Track& track2 = map.find ("Second part1");
     TEST_ASSERT (track2.size() == 2);
     TEST_ASSERT (track2[0]->get_name() == "Left - there's nothing here");
     TEST_ASSERT (track2[1]->get_name() == "We're almost there");
@@ -90,7 +88,7 @@ void TestMap::TestSimpleMap ()
 
     // Skip 3, its the same as 2.
     // Fourth track is just a winning path.
-    const Track& track4 = map->find ("Last Track");
+    const Track& track4 = map.find ("Last Track");
     TEST_ASSERT (track4[0]->get_name() == "You're almost there");
     TEST_ASSERT (dynamic_cast<const WinningPath*>
             (track4[0].get())->length() == 20);

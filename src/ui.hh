@@ -5,6 +5,7 @@
 
 #include "location.hh"
 #include "party.hh"
+#include "world.hh"
 
 const char horizrule[] = "--------------------------------------------------------------------------------\n";
 const char select_one[] = "Select an option: ";
@@ -12,13 +13,15 @@ const char select_one[] = "Select an option: ";
 class user_interface
 {
 	public:
-	static void clear_screen ();
     /// Creates a Party for the player to use.
-    static Party* init_party ();
+    static Party createParty ();
+	static void clear_screen ();
     /// Message to be displayed when the user loses.
     static void lose ();
     /// Allows the user to choose which ForkOption to take.
     static const ForkOption& getForkChoice (const Fork& loc);
+    /// Ask the user which game they want to play
+    static const Map getMapChoice ();
     /// Informs the player that some party members couldn't eat.
     static void displayStarvedMembers (const MemberContainer& hungry_members);
     /// Allows the Party to purchase additional supplies.

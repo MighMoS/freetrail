@@ -32,20 +32,19 @@ void Status::setStatus (const state new_state)
 
 ///@param party the party we're moving.
 ///@param map the map we're moving the party through.
-IMapRunner::IMapRunner (Party& party, const Map* map) :
+IMapRunner::IMapRunner (Party& party, const Map& map) :
     Runner::Runner(party), _map(map)
 {
-    assert (map != NULL);
 }
 
 Status IMapRunner::run()
 {
     Status stat;
-    stat.setNextTrack (_map->getStartTrack ());
+    stat.setNextTrack (_map.getStartTrack ());
 
     while (stat.KeepRunning()) // Default value
     {
-        const Track& _curr_track = _map->find (stat.getNextTrack ());
+        const Track& _curr_track = _map.find (stat.getNextTrack ());
         ITrackRunner tRun (_party, _curr_track);
         stat = tRun.run ();
     }

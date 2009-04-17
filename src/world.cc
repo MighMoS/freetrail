@@ -11,11 +11,11 @@
 #include "world.hh"
 
 /**
- *@todo Once we've got everything, make sure that we can go anywhere we need to
- *@todo Try to load from ./maps and XDG_DATADIR/maps
+ *@param first_track Where the user will start his/her journey.
+ *@param all_tracks Container to everything this map should hold.
  */
-Map::Map (const Glib::ustring& first_track, TrackContainer& all_tracks) :
-    _all_tracks(all_tracks), _first_track (first_track)
+Map::Map (const Glib::ustring& first_track, const TrackContainer& all_tracks)
+    : _all_tracks(all_tracks), _first_track (first_track)
 {
 }
 
@@ -54,11 +54,6 @@ const LocationPtr Track::operator[](const unsigned int pos) const
 unsigned int Track::size() const
 {
     return _track.size();
-}
-
-void Map::add_track(const Track& track)
-{
-    _all_tracks.insert (track);
 }
 
 const Glib::ustring& Map::getStartTrack () const

@@ -11,40 +11,22 @@
 
 int main (int argc, char *argv[])
 {
-    Party* the_party;
-    Map* the_map;
-
     Glib::set_prgname ("Freetrail");
-    try
-    {
-        MapParser data ("example.xml");
-        the_map = data.parse ();
-        user_interface::welcome_new_user ();
-        the_party = user_interface::init_party ();
-    }
-    catch (const MapParsingException& e)
-    {
-        std::cerr << "ERROR LOADING THE MAP:\n\t";
-        std::cerr << e.what() << std::endl;
-        return 2;
-    }
-    catch (const std::bad_alloc& e)
-    {
-        std::cerr << "\n\n\tI ran out of memory. Sorry.\n";
-        return 1;
-    }
 
-    Freetrail::Runner::IMapRunner mRun (*the_party, the_map);
+    user_interface::welcome_new_user ();
+
+    const Map the_map = user_interface::getMapChoice ();
+    Party the_party = user_interface::createParty ();
+
+    Freetrail::Runner::IMapRunner mRun (the_party, the_map);
     Freetrail::Runner::Status stat;
 
     stat = mRun.run ();
     if (stat.hasWon ())
-        user_interface::win (*the_party);
+        user_interface::win (the_party);
     else
         user_interface::lose ();
 
-    delete the_map;
-    delete the_party;
     return 0;
 }
 

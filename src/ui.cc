@@ -4,8 +4,10 @@
 #include <glibmm.h>
 
 #include "location.hh"
+#include "parser.hh"
 #include "party.hh"
 #include "ui.hh"
+#include "world.hh"
 
 /**
  * @bug This is braindead and dumb (IE: it does't actually clear).
@@ -27,9 +29,10 @@ void user_interface::lose ()
  *@returns a full, ready to use Party.
  *@todo check to see if the member already exists, then handle gracefully.
  */
-Party* user_interface::init_party ()
+Party user_interface::createParty ()
 {
-    Glib::RefPtr<Glib::IOChannel> Gcin (Glib::IOChannel::create_from_fd(0)); // STDIN
+    // The following just opens up stdin for a convienience function
+    Glib::RefPtr<Glib::IOChannel> Gcin (Glib::IOChannel::create_from_fd(0));
     unsigned short choice;
     MemberContainer members;
 
@@ -75,7 +78,7 @@ add_members:
         goto add_members; // avoid horrible nested logic and indentation.
     std::cout << horizrule;
 
-    return new Party (members);
+    return Party (members);
 }
 
 /**
@@ -103,6 +106,23 @@ const ForkOption& user_interface::getForkChoice (const Fork& loc)
     return *fork_vec[counter-1]; // people count from 1, we don't.
 }
 
+/**
+ *@todo actually ask the user what they want to load
+ *@todo should we recurse if we can't load the map?
+ */
+const Map user_interface::getMapChoice ()
+{
+    try
+    {
+        return MapParser("example.xml").parse ();
+    }
+    catch (const MapParsingException& e)
+    {
+        std::cerr << "ERROR LOADING THE MAP:\n\t";
+        std::cerr << e.what() << std::endl;
+        return getMapChoice ();
+    }
+}
 /**
  * @param[in,out] party the party to purchase supplies.
  */
