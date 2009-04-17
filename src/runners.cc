@@ -53,15 +53,15 @@ Status IMapRunner::run()
     return stat;
 }
 
-///@param party: the party we're moving.
-///@param track: the track we're moving the party through.
+///@param party the party we're moving.
+///@param track the track we're moving the party through.
 ITrackRunner::ITrackRunner (Party& party, const Track& track) :
     Runner(party), _track(track)
 {
 }
 
 ///Runs a party through all the Locations in the Track.
-///@relates: Track
+///@relates Track
 Status ITrackRunner::run()
 {
     Status stat;
@@ -74,8 +74,8 @@ Status ITrackRunner::run()
     return stat;
 }
 
-///@param party: the party we're moving
-///@param location: the location we're at, where stuff is happening.
+///@param party the party we're moving
+///@param location the location we're at, where stuff is happening.
 ILocationRunner::ILocationRunner (Party& party, const LocationPtr location) :
     Runner(party), _location(location)
 {

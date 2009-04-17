@@ -20,12 +20,7 @@ AC_PROG_RANLIB
 AC_LANG_CPLUSPLUS
 
 # Checks for header files.
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
-AC_C_CONST
-AC_C_INLINE
-AC_C_RESTRICT
+AC_CHECK_HEADERS([tr1/memory])
 
 # Checks for libraries.
 PKG_CHECK_MODULES([LIBXML], [libxml++-2.6 >= 2.10.0])

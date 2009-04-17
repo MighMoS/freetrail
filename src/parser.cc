@@ -112,7 +112,7 @@ fill_path (const xmlmapIter& stop_iter, const Glib::ustring& type)
     return loc;
 }
 
-///@relates: ForkOption
+///@relates ForkOption
 static ForkOptionPtr fill_jump (const xmlmapIter& iter)
 {
     Glib::ustring destination;
@@ -168,7 +168,7 @@ fill_fork (const xmlmapIter& iter, const Glib::ustring& type)
 }
 
 ///Fills out a generic Location by passing types to handlers.
-///@relates: Location
+///@relates Location
 static LocationPtr fill_location (const xmlmapIter& iter)
 {
     Glib::ustring type;
@@ -257,7 +257,6 @@ find_map_file (const std::string& filename, const std::string& additional_path)
 
 /**
  @returns a pointer to a newly allocated Map object.
- @note the caller is responcible for @c deleting the returned map.
  @todo Check that all destinations are reachable
 */
 const Map MapParser::parse () const
@@ -273,13 +272,13 @@ const Map MapParser::parse () const
 
     Freetrail::Debug ("Loading file: " + complete_file_name);
 
+    // Swallow any error libxml++ gives us and rethrow it.
     try
     {
         parser.parse_file (complete_file_name);
         parser.set_validate ();
         parser.set_substitute_entities ();
     }
-    // Swallow any error libxml++ gives us and rethrow it.
     catch (const std::exception& ex)
     {
         MapParsingException e (std::string("error parsing XML:\n\t") +
