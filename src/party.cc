@@ -58,12 +58,9 @@ void Party::add_member (const Member& member)
     _members.insert (_members.begin (), member);
 }
 
-/**
- *@note The caller should not @c delete the returned pointer.
- */
-const MemberContainer* Party::get_members () const
+const MemberContainer& Party::get_members () const
 {
-    return &_members;
+    return _members;
 }
 
 /**

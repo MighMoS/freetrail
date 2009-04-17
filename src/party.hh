@@ -84,7 +84,7 @@ class Party
     /// Construct a new party with the given members and default parameters.
     Party (const MemberContainer& members);
     /// Get everyone who's traveling with us.
-    const MemberContainer* get_members () const;
+    const MemberContainer& get_members () const;
     /// Get everyone who's not dead.
     MemberContainerPtr get_active_members () const;
     /// Get everyone who's dead.

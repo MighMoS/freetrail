@@ -193,14 +193,12 @@ static LocationPtr fill_location (const xmlmapIter& iter)
  * @todo use exceptions to raise errors about what we expected in the
  * document
  */
-static Track* fill_track (const xmlmapIter& track_iter)
+static inline Track fill_track (const xmlmapIter& track_iter)
 {
     xmlpp::Node::NodeList track_list = (*track_iter)->get_children ();
-    Track* new_track;
-    Glib::ustring name;
+    Glib::ustring name (extract_name (track_iter));
+    Track new_track (name);
 
-    name = extract_name (track_iter);
-    new_track = new Track (name);
     Freetrail::Debug ("Created track " + name);
 
     // Get all  our children
@@ -212,7 +210,7 @@ static Track* fill_track (const xmlmapIter& track_iter)
         LocationPtr loc = fill_location (track_iter);
         if (loc != NULL)
         {
-            new_track->add_location (loc);
+            new_track.add_location (loc);
             Freetrail::Debug ("Filled location " + loc->get_name());
         }
     }
@@ -306,11 +304,7 @@ const Map MapParser::parse () const
     for (xmlpp::Node::NodeList::iterator track_iter = track_list.begin ();
             track_iter != track_list.end (); track_iter++)
     {
-        Track* curr_track;
-        curr_track = fill_track (track_iter);
-        assert (curr_track != NULL);
-        all_tracks.insert (all_tracks.begin (), *curr_track);
-        delete (curr_track);
+        all_tracks.insert (all_tracks.begin (), fill_track (track_iter));
     }
 
     // Really there does need to be a better sanity check here.
