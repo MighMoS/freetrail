@@ -32,11 +32,8 @@ Freetrail::Runner::Status Fork::run (Party& party) const
 {
     Freetrail::Runner::Status stat;
     Glib::ustring destination;
-    const ForkOption* chosen;
 
-    chosen = user_interface::prompt_at_fork (*this);
-    destination = chosen->get_destination ();
-    stat.setNextTrack (destination);
+    stat.setNextTrack (user_interface::getForkChoice (*this).get_destination());
 
     return stat;
 }

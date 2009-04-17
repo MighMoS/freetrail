@@ -81,7 +81,7 @@ add_members:
 /**
  * @param loc The Fork which we will draw our choices from.
  */
-const ForkOption* user_interface::prompt_at_fork (const Fork& loc)
+const ForkOption& user_interface::getForkChoice (const Fork& loc)
 {
     ForkOptionContainer fork_vec = loc.get_jumps ();
     unsigned int counter = 0; ///<Which number are we displaying? What does the user want?
@@ -100,7 +100,7 @@ const ForkOption* user_interface::prompt_at_fork (const Fork& loc)
         std::cin >> counter;
     } while (counter > fork_vec.size ());
 
-    return fork_vec[counter-1].get (); // people count from 1, we don't.
+    return *fork_vec[counter-1]; // people count from 1, we don't.
 }
 
 /**

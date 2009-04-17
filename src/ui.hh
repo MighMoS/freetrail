@@ -18,7 +18,7 @@ class user_interface
     /// Message to be displayed when the user loses.
     static void lose ();
     /// Allows the user to choose which ForkOption to take.
-    static const ForkOption* prompt_at_fork (const Fork& loc);
+    static const ForkOption& getForkChoice (const Fork& loc);
     /// Informs the player that some party members couldn't eat.
     static void displayStarvedMembers (const MemberContainer& hungry_members);
     /// Allows the Party to purchase additional supplies.
