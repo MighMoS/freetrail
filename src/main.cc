@@ -1,5 +1,4 @@
 #include <exception>
-#include <iostream>
 
 #include <glibmm.h>
 

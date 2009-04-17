@@ -1,5 +1,5 @@
-#ifndef PARTY
-#define PARTY
+#ifndef PARTY_H
+#define PARTY_H
 
 #include <memory>
 #include <set>
@@ -105,4 +105,4 @@ class Party
     unsigned int buy_food(const unsigned int amount);
     unsigned int buy_oxen(const unsigned int amount);
 };
-#endif 
+#endif // PARTY_H

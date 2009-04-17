@@ -23,9 +23,9 @@ Track::Track (const Glib::ustring& name) : _name(name) {};
 
 /**
  * Add a Location to this Track.
- * @param[in] loc   Initialized pointer to location which will be added to this track.
+ * @param loc   Initialized pointer to location which will be added to this track.
  */
-void Track::add_location(const LocationPtr loc)
+void Track::add_location (const LocationPtr loc)
 {
     assert(loc != NULL);
 
@@ -40,7 +40,7 @@ bool Track::operator == (const Glib::ustring& rhs) const
 /**
  * @param pos 0 based integer to retrieve the nth Location.
  */
-const LocationPtr Track::operator[](const unsigned int pos) const
+const LocationPtr Track::operator[] (const unsigned int pos) const
 {
     assert (pos <= _track.size());
     return _track[pos];

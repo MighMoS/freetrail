@@ -1,5 +1,5 @@
-#ifndef COMMON
-#define COMMON
+#ifndef COMMON_H
+#define COMMON_H
 
 enum weather {CLOUDY, PARTLY_CLOUDY, SUNNY, RAINY};
 
@@ -10,4 +10,4 @@ namespace Freetrail
     void Debug (const Glib::ustring& msg);
 }
 
-#endif //COMMON
+#endif //COMMON_H

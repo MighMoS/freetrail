@@ -1,5 +1,5 @@
-#ifndef PARSERH
-#define PARSERH
+#ifndef PARSER_H
+#define PARSER_H
 #include <stdexcept>
 #include <string>
 
@@ -17,6 +17,9 @@ class MapParsingException : public std::runtime_error
     {};
 };
 
+/**
+ *@relates Map
+ */
 class MapParser
 {
     const Glib::ustring _filename; ///< name of the file we'll load.
@@ -24,16 +27,14 @@ class MapParser
 
     public:
     /// Construct a new parser that will parse the map called [filename].
-    ///@param filename name of the file (not the full path) to load.
     MapParser (const Glib::ustring& filename,
-            const std::string& filepath = std::string ("./")) :
-        _filename (filename), _filepath (filepath) {};
+            const std::string& filepath = std::string ("./"));
 
-    /// Process the XML into a usable Map object.
+    /// Process filename into a usable Map object.
     const Map parse () const;
 };
 
 
 typedef const xmlpp::Node::NodeList::const_iterator xmlmapIter;
 
-#endif
+#endif // PARSER_H

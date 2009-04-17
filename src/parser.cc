@@ -256,6 +256,16 @@ find_map_file (const std::string& filename, const std::string& additional_path)
 }
 
 /**
+ *@param filename name of the file (not the full path) to load.
+ *@param filepath additional path to search for @c filename
+ */
+MapParser::MapParser (const Glib::ustring& filename,
+        const std::string& filepath) :
+    _filename (filename), _filepath (filepath)
+{
+}
+
+/**
  @returns a pointer to a newly allocated Map object.
  @todo Check that all destinations are reachable
 */

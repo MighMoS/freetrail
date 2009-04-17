@@ -1,5 +1,5 @@
-#ifndef WORLD
-#define WORLD
+#ifndef WORLD_H
+#define WORLD_H
 #include <tr1/memory>
 
 #include <set>
@@ -49,4 +49,4 @@ class Map
     unsigned int size() const;
 };
 
-#endif
+#endif // WORLD_H

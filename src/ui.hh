@@ -1,5 +1,5 @@
-#ifndef UI
-#define UI
+#ifndef UI_H
+#define UI_H
 
 #include <glibmm.h>
 
@@ -37,4 +37,4 @@ class user_interface
     /// Message to be displayed when the user wins.
     static void win (const Party& party);
 };
-#endif
+#endif // UI_H

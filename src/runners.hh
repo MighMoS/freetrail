@@ -1,5 +1,5 @@
-#ifndef RUNNERH
-#define RUNNERH
+#ifndef RUNNER_H
+#define RUNNER_H
 
 #include "party.hh"
 #include "world.hh"
@@ -79,4 +79,4 @@ class ILocationRunner : public Runner
 } // namespace Runner
 } // namespace Freetrail
 
-#endif // RUNNERH
+#endif // RUNNER_H
