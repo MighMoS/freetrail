@@ -19,9 +19,8 @@
 static Glib::ustring extract_name (const xmlmapIter& iter)
 {
     const xmlpp::Node::NodeList name_tag = (*iter)->get_children("name");
-    xmlpp::Node::NodeList node_list = (*iter)->get_children ();
+    xmlpp::Node::NodeList complete_list = (*iter)->get_children ();
     const xmlpp::Element* nodeElement;
-
     const xmlpp::TextNode* node_text;
     Glib::ustring name;
 
@@ -36,7 +35,7 @@ static Glib::ustring extract_name (const xmlmapIter& iter)
     name = node_text->get_content ();
 
     // Remove the name tag from our list
-    std::remove(node_list.begin(), node_list.end(), *(name_tag.begin()));
+    std::remove(complete_list.begin(), complete_list.end(), *(name_tag.begin()));
 
     return name;
 }
@@ -118,11 +117,10 @@ static ForkOptionPtr fill_jump (const xmlmapIter& iter)
     Glib::ustring destination;
     Glib::ustring description;
     const xmlpp::Element* jump = dynamic_cast<const xmlpp::Element*> (*iter);
-    const xmlpp::TextNode* description_text = jump->get_child_text ();
-    xmlpp::Attribute* jump_dest = jump->get_attribute(Glib::ustring("dest"));
+    const xmlpp::Attribute* jump_dest = jump->get_attribute(Glib::ustring("dest"));
 
     destination = jump_dest->get_value ();
-    description = description_text->get_content ();
+    description = extract_name (iter);
 
     ForkOptionPtr ptr (new ForkOption(description, destination));
     return ptr;

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<freetrail version="0.2" start="First">
+<track endtype="user">
+    <name>First</name>
+    <outpost>
+        <name>Fort Intro</name>
+    </outpost>
+    <path>
+        <name>Wild Plains</name>
+        <length>150</length>
+    </path>
+    <path>
+        <name>Swamps</name>
+        <length>68</length>
+    </path>
+    <outpost>
+        <name>Encampment Halo</name>
+    </outpost>
+    <userjump>
+        <name>Its a fork in the road!</name>
+        <jump dest="Second part1">
+            <name>Go left</name>
+            <cost item="money">100</cost>
+        </jump>
+        <jump dest="Second part2"><name>Go right</name></jump>
+    </userjump>
+</track>
+<track end="fixed">
+    <name>Second part1</name>
+    <path>
+        <name>Left - there's nothing here</name>
+        <length>40</length>
+    </path>
+    <fixedjump>
+        <name>We're almost there</name>
+        <jump dest="Last Track">
+            <name>You could have gotten here some other way...</name>
+        </jump>
+    </fixedjump>
+</track>
+<track end="fixed">
+    <name>Second part2</name>
+    <path>
+        <name>Right - there's something here</name>
+        <length>80</length>
+    </path>
+    <fixedjump>
+        <name>We're almost there</name>
+        <jump dest="Last Track">
+            <name>You could have gotten here some other way...</name>
+        </jump>
+    </fixedjump>
+</track>
+<track end="win">
+    <name>Last Track</name>
+    <winningpath>
+        <name>You're almost there</name>
+        <length>20</length>
+    </winningpath>
+</track>
+</freetrail>
