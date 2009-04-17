@@ -242,6 +242,6 @@ void user_interface::welcome_new_user()
 void user_interface::win(const Party& party)
 {
     std::cout << "Congratulations, you've won with " <<
-        party.get_members ()->size () << " members remaining!\n";
+        party.size () << " members remaining!\n";
     wait_for_key ();
 }

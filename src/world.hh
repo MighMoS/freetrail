@@ -15,7 +15,7 @@ typedef std::vector<LocationPtr> LocationContainer;
 class Track
 {
     LocationContainer _track; ///< Holds a list of our Locations
-    Glib::ustring _name; ///< Friendly name describing this area
+    const Glib::ustring _name; ///< Friendly name describing this area
     public:
     /// Default constructor, creates a Track with no Locations and the provided name.
     Track (const Glib::ustring& name);

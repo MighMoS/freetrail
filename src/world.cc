@@ -4,10 +4,7 @@
 #include <string>
 
 #include <glibmm.h>
-#include <libxml++/libxml++.h>
 
-#include "common.hh"
-#include "parser.hh"
 #include "world.hh"
 
 /**
@@ -27,7 +24,6 @@ Track::Track (const Glib::ustring& name) : _name(name) {};
 /**
  * Add a Location to this Track.
  * @param[in] loc   Initialized pointer to location which will be added to this track.
- * @note The caller should NOT @c delete the pointer passed in.
  */
 void Track::add_location(const LocationPtr loc)
 {
@@ -43,7 +39,6 @@ bool Track::operator == (const Glib::ustring& rhs) const
 
 /**
  * @param pos 0 based integer to retrieve the nth Location.
- * @note caller does not have to @c delete the returned Location*
  */
 const LocationPtr Track::operator[](const unsigned int pos) const
 {
@@ -63,7 +58,7 @@ const Glib::ustring& Map::getStartTrack () const
 
 /**
  * @param track_name the name of the Track to retrieve.
- * @note The caller should NOT @c delete the returned Track.
+ * @todo don't assert, but throw something if we don't find what we want.
  */
 const Track& Map::find (const Glib::ustring& track_name) const
 {

@@ -37,6 +37,7 @@ IMapRunner::IMapRunner (Party& party, const Map& map) :
 {
 }
 
+///@relates Map
 Status IMapRunner::run()
 {
     Status stat;

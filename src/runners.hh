@@ -34,7 +34,6 @@ namespace Freetrail{
     };
 
 /// Abstract class for moving the party through places.
-/// @todo: Can this be done with templates?
 class Runner
 {
     protected:

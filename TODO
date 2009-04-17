@@ -1,12 +1,10 @@
 High Priority:
-    *
+    * Design some maps.
 
 Medium Priority:
-    * (WIP) Untangle UI from implementation (very important later)
-      * So we can create a libfreetrail
+    * Create a libfreetrail so different UIs are not so hard.
     * (WIP) Generi-size the XML parsing interface to not be so copy and paste
 
 Low Priority:
-    * Don't mix pointers and references in each component. Decide on one and use it.
     * Decide and implement a standard user interface for CLI
     * Write GTK2 interface

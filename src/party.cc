@@ -44,7 +44,7 @@ Party::Party () :
 {}
 
 /**
- *@param members Fully initialized MemberContainer
+ *@param members Everyone who will initially be a part of the group.
  */
 Party::Party (const MemberContainer& members) :
     _members (members), _food (100), _ammo (50), _oxen (1), _money (1000)
@@ -70,7 +70,7 @@ const MemberContainer& Party::get_members () const
  */
 unsigned int Party::get_speed() const
 {
-    return _oxen * 15;
+    return _oxen * 15 - size() * 2;
 }
 
 /**
