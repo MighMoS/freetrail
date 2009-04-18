@@ -3,7 +3,6 @@ High Priority:
 
 Medium Priority:
     * Create a libfreetrail so different UIs are not so hard.
-    * (WIP) Generi-size the XML parsing interface to not be so copy and paste
 
 Low Priority:
     * Decide and implement a standard user interface for CLI

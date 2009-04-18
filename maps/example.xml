@@ -18,8 +18,10 @@
     </outpost>
     <userjump>
         <name>Its a fork in the road!</name>
-        <jump dest="Second part1">Go left</jump>
-        <jump dest="Second part2">Go right</jump>
+        <jump dest="Second part1">
+            <name>Go left</name>
+        </jump>
+        <jump dest="Second part2"><name>Go right</name></jump>
     </userjump>
 </track>
 <track end="fixed">
@@ -30,7 +32,9 @@
     </path>
     <fixedjump>
         <name>We're almost there</name>
-        <jump dest="Last Track">You could have gotten here some other way...</jump>
+        <jump dest="Last Track">
+            <name>You could have gotten here some other way...</name>
+        </jump>
     </fixedjump>
 </track>
 <track end="fixed">
@@ -41,7 +45,9 @@
     </path>
     <fixedjump>
         <name>We're almost there</name>
-        <jump dest="Last Track">You could have gotten here some other way...</jump>
+        <jump dest="Last Track">
+            <name>You could have gotten here some other way...</name>
+        </jump>
     </fixedjump>
 </track>
 <track end="win">

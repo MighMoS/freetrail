@@ -1,43 +1,70 @@
 #include <cassert>
 #include <sstream>
+#include <vector>
 
 #include <glibmm.h>
 #include <libxml++/libxml++.h>
 
+#include "common.hh"
 #include "location.hh"
 #include "parser.hh"
 #include "world.hh"
 
 
+template <typename T>
+static inline T convert_extraced_input (const xmlpp::TextNode* node_text)
+{
+    std::stringstream ss;
+    T object;
+    ss << node_text->get_content();
+    ss >> object;
+    return object;
+}
+
+template <>
+inline Glib::ustring convert_extraced_input<Glib::ustring> (const xmlpp::TextNode* node_text)
+{
+    Glib::ustring object (node_text->get_content());
+    return object;
+}
+
 /**
  * Extracts the name tag from an element.
- * @param[in,out] iter an Iterator to extract name from. Upon completion,
-     it will lack the name tag.
- * @returns the name of what's being parsed.
- * @note the iterator passed in will no longer have the name element.
+ * @param[in,out] iter an Iterator to extract name from.
+ * @param name name of the element to look for.
+ * @param preserve if false, remove the element after finding it.
+ * @returns first element found matching description.
  */
-static Glib::ustring extract_name (const xmlmapIter& iter)
+template <typename T>
+static T extract_tag (const xmlmapIter& iter,
+        const Glib::ustring& name, const bool preserve = false)
 {
-    const xmlpp::Node::NodeList name_tag = (*iter)->get_children("name");
-    xmlpp::Node::NodeList complete_list = (*iter)->get_children ();
-    const xmlpp::Element* nodeElement;
+    const xmlpp::Node::NodeList name_tag = (*iter)->get_children(name);
     const xmlpp::TextNode* node_text;
-    Glib::ustring name;
+    xmlpp::Node::NodeList::const_iterator i = name_tag.begin();
 
-    nodeElement = dynamic_cast<const xmlpp::Element*> (*(name_tag.begin()));
+    do
+    {
+        const xmlpp::Element* nodeElement =
+            dynamic_cast<const xmlpp::Element*> (*(name_tag.begin()));
 
-    if (nodeElement->has_child_text () == false)
-        throw MapParsingException ("<name> tag was empty.");
-    if (name_tag.size() != 1)
-        throw MapParsingException ("Expected one (and only one) <name> element.");
+        if (nodeElement->has_child_text () == false)
+            throw MapParsingException (name + " tag was empty.");
 
-    node_text = nodeElement->get_child_text ();
-    name = node_text->get_content ();
+        node_text = nodeElement->get_child_text ();
+    } while (i++ != name_tag.end () && node_text && !node_text->is_white_space ());
+
+    if (i == name_tag.end ())
+        throw MapParsingException (name + ": could not find any elements.");
 
     // Remove the name tag from our list
-    std::remove(complete_list.begin(), complete_list.end(), *(name_tag.begin()));
+    if (!preserve)
+    {
+        xmlpp::Node::NodeList complete_list = (*iter)->get_children ();
+        std::remove(complete_list.begin(), complete_list.end(), *i);
+    }
 
-    return name;
+    return T (convert_extraced_input<T>(node_text));
 }
 
 /**
@@ -49,7 +76,7 @@ static Outpost* fill_outpost (const xmlmapIter& iter)
 {
     Glib::ustring outpost_name;
 
-    outpost_name = extract_name (iter);
+    outpost_name = extract_tag <Glib::ustring>(iter, "name");
     Outpost* loc = new Outpost (outpost_name);
 
     return loc;
@@ -62,42 +89,15 @@ static Outpost* fill_outpost (const xmlmapIter& iter)
  * would create a path with a length of 100 called "thisPathName"
  */
 static Path*
-fill_path (const xmlmapIter& stop_iter, const Glib::ustring& type)
+fill_path (const xmlmapIter& iter, const Glib::ustring& type)
 {
     xmlpp::Node::NodeList path_children;
     Glib::ustring path_name;
     Path* loc = NULL;
     unsigned int path_length;
 
-    path_name = extract_name (stop_iter);
-    path_children = (*stop_iter)->get_children ();
-
-    // Process child nodes and text
-    for (xmlpp::Node::NodeList::const_iterator
-            substop_iter = path_children.begin ();
-            substop_iter != path_children.end (); substop_iter++)
-    {
-        const xmlpp::TextNode* nodeText =
-            dynamic_cast<const xmlpp::TextNode*>(*substop_iter);
-
-        if (nodeText && nodeText->is_white_space()) continue;
-
-        const Glib::ustring element_name = (*substop_iter)->get_name ();
-        const xmlpp::Element* nodeElement =
-            dynamic_cast<const xmlpp::Element*>(*substop_iter);
-        const xmlpp::TextNode* fNode = nodeElement->get_child_text ();
-
-        if (element_name == "length")
-        {
-            std::stringstream ss;
-            ss << fNode->get_content();
-            ss >> path_length;
-            if (!(path_length > 0))
-                throw MapParsingException
-                    ("A path's length must be greater than zero.");
-            continue;
-        }
-    }
+    path_name = extract_tag <Glib::ustring>(iter, "name");
+    path_length = extract_tag <unsigned int>(iter, "length");
 
     if (type == "path")
         loc = new Path (path_name, path_length);
@@ -120,7 +120,7 @@ static ForkOptionPtr fill_jump (const xmlmapIter& iter)
     const xmlpp::Attribute* jump_dest = jump->get_attribute(Glib::ustring("dest"));
 
     destination = jump_dest->get_value ();
-    description = extract_name (iter);
+    description = extract_tag <Glib::ustring>(iter, "name");
 
     ForkOptionPtr ptr (new ForkOption(description, destination));
     return ptr;
@@ -139,7 +139,7 @@ fill_fork (const xmlmapIter& iter, const Glib::ustring& type)
     ForkOptionContainer option_list;
     Fork* fork = NULL;
 
-    fork_name = extract_name (iter);
+    fork_name = extract_tag <Glib::ustring>(iter, "name");
     fork_children = (*iter)->get_children (Glib::ustring("jump"));
 
     // Process child nodes and text
@@ -175,11 +175,11 @@ static LocationPtr fill_location (const xmlmapIter& iter)
     type = (*iter)->get_name ();
 
     if (type == "path" || type == "winningpath")
-        loc.reset(fill_path (iter, type));
-    if (type == "outpost")
-        loc.reset(fill_outpost (iter));
-    if (type == "userjump" || type == "fixedjump")
-        loc.reset(fill_fork (iter, type));
+        loc.reset (fill_path (iter, type));
+    else if (type == "outpost")
+        loc.reset (fill_outpost (iter));
+    else if (type == "userjump" || type == "fixedjump")
+        loc.reset (fill_fork (iter, type));
 
     return loc;
 }
@@ -194,7 +194,7 @@ static LocationPtr fill_location (const xmlmapIter& iter)
 static inline Track fill_track (const xmlmapIter& track_iter)
 {
     xmlpp::Node::NodeList track_list = (*track_iter)->get_children ();
-    Glib::ustring name (extract_name (track_iter));
+    Glib::ustring name (extract_tag <Glib::ustring>(track_iter, "name"));
     Track new_track (name);
 
     Freetrail::Debug ("Created track " + name);
