@@ -7,6 +7,7 @@
 #include <tr1/memory>
 
 #include <glibmm.h>
+#include <vector>
 
 #include "party.hh"
 
@@ -73,11 +74,30 @@ class WinningPath : public Path
     Freetrail::Runner::Status run (Party& party) const;
 };
 
+class Cost
+{
+    protected:
+    unsigned int _amt;
+    public:
+    Cost (unsigned int amt) : _amt (amt) {};
+    virtual bool canPay (const Party& party) = 0;
+};
+
+class CostsMoney : public Cost
+{
+    public:
+    CostsMoney (unsigned int amt) : Cost (amt) {};
+    bool canPay (const Party & party);
+};
+
+typedef std::tr1::shared_ptr<Cost> CostPtr;
+typedef std::vector<CostPtr> CostContainer;
 /// Container object holding a location, and a "how to get there".
 class ForkOption
 {
     const Glib::ustring _description; ///<A friendly description of what's here.
     const Glib::ustring _destination; ///< Name of the destination track.
+    const CostContainer _cost;
 
     public:
     ForkOption (const Glib::ustring& desc, const Glib::ustring& dest) :
@@ -87,6 +107,7 @@ class ForkOption
     const Glib::ustring& get_description () const {return _description;};
     /// Returns an int pointing to the track to jump to
     const Glib::ustring& get_destination () const {return _destination;};
+    bool canPay (const Party& party) const;
 };
 
 typedef std::tr1::shared_ptr<ForkOption> ForkOptionPtr;

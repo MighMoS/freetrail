@@ -8,12 +8,28 @@
 #include "runners.hh"
 #include "ui.hh"
 
+bool CostsMoney::canPay (const Party& party)
+{
+    return party.get_money () > _amt;
+}
+
 /**
  *@param rhs a Glib::ustring to compare this Location to.
  */
 bool Location::operator == (const Glib::ustring& rhs) const
 {
     return _name == rhs;
+}
+
+bool ForkOption::canPay (const Party& party) const
+{
+    for (CostContainer::const_iterator i = _cost.begin();
+            i != _cost.end (); i++)
+    {
+        if (!(*i)->canPay (party))
+            return false;
+    }
+    return true;
 }
 
 /**
