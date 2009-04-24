@@ -8,7 +8,7 @@
 #include "runners.hh"
 #include "ui.hh"
 
-bool CostsMoney::canPay (const Party& party)
+bool CostsMoney::canPay (const Party& party) const
 {
     return party.get_money () > _amt;
 }

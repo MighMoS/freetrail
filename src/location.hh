@@ -77,17 +77,19 @@ class WinningPath : public Path
 class Cost
 {
     protected:
-    unsigned int _amt;
+    const unsigned int _amt;
+    const Glib::ustring _description;
     public:
-    Cost (unsigned int amt) : _amt (amt) {};
-    virtual bool canPay (const Party& party) = 0;
+    Cost (unsigned int amt, const Glib::ustring& description) : _amt (amt) {};
+    virtual bool canPay (const Party& party) const = 0;
+    const Glib::ustring& description () const {return _description;};
 };
 
 class CostsMoney : public Cost
 {
     public:
-    CostsMoney (unsigned int amt) : Cost (amt) {};
-    bool canPay (const Party & party);
+    CostsMoney (unsigned int amt) : Cost (amt, "dollars") {};
+    bool canPay (const Party & party) const;
 };
 
 typedef std::tr1::shared_ptr<Cost> CostPtr;
@@ -100,8 +102,9 @@ class ForkOption
     const CostContainer _cost;
 
     public:
-    ForkOption (const Glib::ustring& desc, const Glib::ustring& dest) :
-        _description(desc), _destination(dest)
+    ForkOption (const Glib::ustring& desc, const Glib::ustring& dest,
+            const CostContainer& cost) :
+        _description(desc), _destination(dest), _cost (cost)
     {};
     /// Returns what's special about this path
     const Glib::ustring& get_description () const {return _description;};

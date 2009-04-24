@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<freetrail version="0.2" start="First">
+<freetrail version="0.3" start="First">
 <track endtype="user">
     <name>First</name>
     <outpost>
@@ -20,7 +20,9 @@
         <name>Its a fork in the road!</name>
         <jump dest="Second part1">
             <name>Go left</name>
-            <cost item="money">100</cost>
+            <cost>
+                <money>100</money>
+            </cost>
         </jump>
         <jump dest="Second part2"><name>Go right</name></jump>
     </userjump>

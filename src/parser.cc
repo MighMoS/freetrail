@@ -22,28 +22,27 @@ static inline T convert_extraced_input (const xmlpp::TextNode* node_text)
 }
 
 template <>
-inline Glib::ustring convert_extraced_input<Glib::ustring> (const xmlpp::TextNode* node_text)
+inline Glib::ustring
+convert_extraced_input<Glib::ustring> (const xmlpp::TextNode* node_text)
 {
     Glib::ustring object (node_text->get_content());
     return object;
 }
 
 /**
- * Extracts the name tag from an element.
- * @param[in,out] iter an Iterator to extract name from.
- * @param name name of the element to look for.
- * @param preserve if false, remove the element after finding it.
- * @returns first element found matching description.
+ * I may have slightly over engineered this. Perhaps not, either way,
+ it either does too much or not enough.
  */
 template <typename T>
-static T extract_tag (const xmlmapIter& iter,
+static std::vector<T> extract_tag_list (const xmlmapIter& iter,
         const Glib::ustring& name, const bool preserve = false)
 {
     const xmlpp::Node::NodeList name_tag = (*iter)->get_children(name);
     const xmlpp::TextNode* node_text;
     xmlpp::Node::NodeList::const_iterator i = name_tag.begin();
+    std::vector<T> found_items;
 
-    do
+    for (; i != name_tag.end (); i++)
     {
         const xmlpp::Element* nodeElement =
             dynamic_cast<const xmlpp::Element*> (*(name_tag.begin()));
@@ -52,19 +51,45 @@ static T extract_tag (const xmlmapIter& iter,
             throw MapParsingException (name + " tag was empty.");
 
         node_text = nodeElement->get_child_text ();
-    } while (i++ != name_tag.end () && node_text && !node_text->is_white_space ());
-
-    if (i == name_tag.end ())
-        throw MapParsingException (name + ": could not find any elements.");
-
-    // Remove the name tag from our list
-    if (!preserve)
-    {
-        xmlpp::Node::NodeList complete_list = (*iter)->get_children ();
-        std::remove(complete_list.begin(), complete_list.end(), *i);
+        if (!node_text || node_text->is_white_space ())
+            continue;
+        found_items.push_back (convert_extraced_input<T>(node_text));
     }
 
-    return T (convert_extraced_input<T>(node_text));
+    return found_items;
+}
+
+/**
+ * Extracts the name tag from an element.
+ * @param[in,out] iter an Iterator to extract name from.
+ * @param name name of the element to look for.
+ * @returns first element found matching description.
+ *
+ * @todo don't throw an exception, but allow things to be optional.
+ */
+template <typename T>
+static T extract_tag (const xmlmapIter& iter, const Glib::ustring& name)
+{
+    std::vector<T> tags (extract_tag_list<T>(iter, name));
+    if (tags.empty())
+        throw MapParsingException (name + " tags was not found");
+    return tags[0];
+}
+
+static CostContainer extract_costs (const xmlmapIter& iter)
+{
+    CostContainer costs;
+    try
+    {
+    unsigned int amount = extract_tag<unsigned int> (iter, "money");
+    costs.push_back (CostPtr (new CostsMoney (amount)));
+    }
+    catch (MapParsingException ex)
+    {
+        // Probably didn't find anything and that's okay.
+    }
+
+    return costs;
 }
 
 /**
@@ -118,11 +143,13 @@ static ForkOptionPtr fill_jump (const xmlmapIter& iter)
     Glib::ustring description;
     const xmlpp::Element* jump = dynamic_cast<const xmlpp::Element*> (*iter);
     const xmlpp::Attribute* jump_dest = jump->get_attribute(Glib::ustring("dest"));
+    CostContainer costs;
 
     destination = jump_dest->get_value ();
     description = extract_tag <Glib::ustring>(iter, "name");
+    costs = extract_costs (iter);
 
-    ForkOptionPtr ptr (new ForkOption(description, destination));
+    ForkOptionPtr ptr (new ForkOption(description, destination, costs));
     return ptr;
 }
 
