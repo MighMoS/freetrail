@@ -80,7 +80,8 @@ class Cost
     const unsigned int _amt;
     const Glib::ustring _description;
     public:
-    Cost (unsigned int amt, const Glib::ustring& description) : _amt (amt) {};
+    Cost (unsigned int amt, const Glib::ustring& description)
+        : _amt (amt) _description(description) {};
     virtual bool canPay (const Party& party) const = 0;
     const Glib::ustring& description () const {return _description;};
 };
