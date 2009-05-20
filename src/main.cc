@@ -1,7 +1,6 @@
 #include <exception>
 
-#include <glibmm.h>
-
+#include "main.hh"
 #include "parser.hh"
 #include "party.hh"
 #include "runners.hh"
@@ -10,7 +9,8 @@
 
 int main (int argc, char *argv[])
 {
-    Glib::set_prgname ("Freetrail");
+    // As long as this IEnvironment persists, everything will work as expected.
+    Freetrail::IEnvironment workingEnvironment;
 
     user_interface::welcome_new_user ();
 

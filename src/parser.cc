@@ -1,4 +1,5 @@
 #include <cassert>
+#include <iostream>
 #include <sstream>
 #include <vector>
 
@@ -224,7 +225,7 @@ static inline Track fill_track (const xmlmapIter& track_iter)
     Glib::ustring name (extract_tag <Glib::ustring>(track_iter, "name"));
     Track new_track (name);
 
-    Freetrail::Debug ("Created track " + name);
+    std::clog << "\tCreated track: " << name << std::endl;;
 
     // Get all  our children
     for(xmlpp::Node::NodeList::const_iterator
@@ -236,7 +237,7 @@ static inline Track fill_track (const xmlmapIter& track_iter)
         if (loc != NULL)
         {
             new_track.add_location (loc);
-            Freetrail::Debug ("Filled location " + loc->get_name());
+            std::clog << "\t\tFilled location: " << loc->get_name() << std::endl;
         }
     }
 
@@ -270,7 +271,7 @@ find_map_file (const std::string& filename, const std::string& additional_path)
             really_exists == false; i++)
     {
         complete_file_name = Glib::build_filename (search_paths[i], filename);
-        Freetrail::Debug (std::string("Checking ") + complete_file_name);
+        std::clog << "Checking " << complete_file_name << std::endl;
         really_exists =
             Glib::file_test(complete_file_name, Glib::FILE_TEST_EXISTS);
     }
@@ -305,7 +306,7 @@ const Map MapParser::parse () const
     const std::string complete_file_name =
         find_map_file (_filename, _filepath);
 
-    Freetrail::Debug ("Loading file: " + complete_file_name);
+    std::clog << "Loading file: " << complete_file_name << std::endl;
 
     // Swallow any error libxml++ gives us and rethrow it.
     try
@@ -342,7 +343,6 @@ const Map MapParser::parse () const
     }
 
     // Really there does need to be a better sanity check here.
-    Freetrail::Debug ("Found tracks:");
     for (TrackContainer::iterator i = all_tracks.begin (); i != all_tracks.end (); i++)
     {
         Freetrail::Debug ("Sanity check:");
